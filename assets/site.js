@@ -702,6 +702,31 @@
     });
   }
 
+  function setupIndexAvatarSecret() {
+    if (!isIndexPage()) return;
+    var avatar = document.querySelector('.profile-photo');
+    if (!avatar || avatar.dataset.sbSecretBound === 'true') return;
+    avatar.dataset.sbSecretBound = 'true';
+    avatar.addEventListener('click', function () {
+      var host = avatar.closest('.intro-grid') || avatar.parentNode || document.body;
+      var existing = host.querySelector('.avatar-secret-message');
+      if (existing) existing.remove();
+      var message = document.createElement('div');
+      message.className = 'avatar-secret-message';
+      message.textContent = "You've found a secret message! Congratulations!";
+      host.appendChild(message);
+      window.requestAnimationFrame(function () {
+        message.classList.add('is-visible');
+      });
+      window.setTimeout(function () {
+        message.classList.remove('is-visible');
+      }, 1700);
+      window.setTimeout(function () {
+        if (message && message.parentNode) message.parentNode.removeChild(message);
+      }, 2200);
+    });
+  }
+
   function setupButtonMotion() {
     var selector = '.button, .sidebar-nav a, .sidebar-linkedin-button, .hero-linkedin-button, .theme-toggle, .lightbox-close, .lightbox-prev, .lightbox-next';
 
@@ -763,6 +788,7 @@
     setupThemeToggle();
     setupLightbox();
     setupVideoPlayback();
+    setupIndexAvatarSecret();
     setupRevealAnimations();
     setupButtonMotion();
   }

@@ -1117,3 +1117,28 @@ body{background-color:var(--bg);background-repeat:repeat;background-size:192px 1
     transform:none !important;
   }
 }
+
+
+.avatar-secret-message{
+  position:fixed;
+  left:50%;
+  top:2rem;
+  transform:translate3d(-50%,-8px,0);
+  padding:.6rem .9rem;
+  border:1px solid var(--line-strong);
+  background:var(--surface);
+  color:var(--text);
+  box-shadow:0 10px 24px rgba(0,0,0,.16);
+  font-size:.95rem;
+  font-weight:600;
+  letter-spacing:.01em;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .18s ease, transform .18s ease;
+  z-index:1200;
+}
+
+.avatar-secret-message.is-visible{
+  opacity:1;
+  transform:translate3d(-50%,0,0);
+}
