@@ -2,6 +2,8 @@
   var STORAGE_KEY = 'sb-theme';
   var SEED_KEY = 'sb-bg-seed';
   var BROKEN_KEY = 'sb-theme-toggle-broken';
+  var NAV_REVEAL_ONCE_KEY = 'sb-nav-reveal-once';
+  var BURNOUT_COOLDOWN_UNTIL_KEY = 'sb-burnout-cooldown-until';
   var BURNOUT_SOUND = 'assets/ui/switch-burnout.wav';
   var TOGGLE_SOUND = 'assets/ui/ToggleSwitch.wav';
   var FUSE_INSERT_SOUND = 'assets/ui/Fuse-Insert.wav';
@@ -75,6 +77,35 @@
     setBroken(false);
   }
 
+  function pickNavRevealPlayed() {
+    try {
+      return localStorage.getItem(NAV_REVEAL_ONCE_KEY) === 'true';
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function setNavRevealPlayed() {
+    try {
+      localStorage.setItem(NAV_REVEAL_ONCE_KEY, 'true');
+    } catch (e) {}
+  }
+
+  function pickBurnoutCooldownUntil() {
+    try {
+      return Number(localStorage.getItem(BURNOUT_COOLDOWN_UNTIL_KEY) || '0') || 0;
+    } catch (e) {
+      return 0;
+    }
+  }
+
+  function setBurnoutCooldownUntil(value) {
+    try {
+      if (value && value > 0) localStorage.setItem(BURNOUT_COOLDOWN_UNTIL_KEY, String(value));
+      else localStorage.removeItem(BURNOUT_COOLDOWN_UNTIL_KEY);
+    } catch (e) {}
+  }
+
   function isIndexPage() {
     var path = (window.location.pathname || '').toLowerCase();
     return path === '/' || path.endsWith('/index.html') || path === '/index.html';
@@ -122,6 +153,34 @@
           if (node && node.parentNode) node.parentNode.removeChild(node);
         };
       }(particle), 820);
+    }
+  }
+
+  function emitNameDust(target) {
+    if (!target) return;
+    var layer = ensureFxLayer();
+    var rect = target.getBoundingClientRect();
+    var count = 10;
+    var viewportMid = Math.max(window.innerHeight * 0.48, rect.top + rect.height + 180);
+    var availableFall = Math.max(160, viewportMid - rect.top);
+
+    for (var i = 0; i < count; i += 1) {
+      var particle = document.createElement('span');
+      particle.className = 'name-dust-particle';
+      particle.style.left = (rect.right - 8 + Math.random() * 18).toFixed(2) + 'px';
+      particle.style.top = (rect.top + rect.height * (0.18 + Math.random() * 0.34)).toFixed(2) + 'px';
+      particle.style.setProperty('--dust-drift-x', (16 + Math.random() * 34).toFixed(2) + 'px');
+      particle.style.setProperty('--dust-fall-y', (availableFall * (0.82 + Math.random() * 0.16)).toFixed(2) + 'px');
+      particle.style.setProperty('--dust-curve-x', ((Math.random() * 18) - 9).toFixed(2) + 'px');
+      particle.style.setProperty('--dust-delay', (Math.random() * 0.08).toFixed(3) + 's');
+      particle.style.setProperty('--dust-scale', (0.9 + Math.random() * 0.42).toFixed(2));
+      particle.style.setProperty('--dust-duration', (2.9 + Math.random() * 0.8).toFixed(2) + 's');
+      layer.appendChild(particle);
+      window.setTimeout(function (node) {
+        return function () {
+          if (node && node.parentNode) node.parentNode.removeChild(node);
+        };
+      }(particle), 4200);
     }
   }
 
@@ -186,6 +245,12 @@
       if (ev.button !== 0) return;
       if (ev.metaKey || ev.ctrlKey || ev.shiftKey || ev.altKey) return;
       ev.preventDefault();
+      link.classList.remove('sb-press');
+      void link.offsetWidth;
+      link.classList.add('sb-press');
+      window.setTimeout(function () {
+        link.classList.remove('sb-press');
+      }, 180);
       try {
         var audio = new Audio(TOGGLE_SOUND);
         audio.preload = 'auto';
@@ -433,12 +498,20 @@
         }
         playAudio(stack._toggleSound);
         var now = Date.now();
+        var burnoutCooldownUntil = pickBurnoutCooldownUntil();
+        if (burnoutCooldownUntil > now) {
+          clickTimes = [];
+          var cooldownTheme = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+          applyTheme(cooldownTheme);
+          return;
+        }
         clickTimes = clickTimes.filter(function (time) { return now - time < stack._burnWindowMs; });
         clickTimes.push(now);
         if (clickTimes.length >= stack._burnThreshold) {
           ev.preventDefault();
           ev.stopPropagation();
           clickTimes = [];
+          setBurnoutCooldownUntil(now + (randomInt(60, 100) * 1000));
           setBroken(true);
           applyTheme('dark');
           panel.dataset.state = 'closed';
@@ -556,6 +629,108 @@
   }
 
 
+
+  function userPrefersReducedMotion() {
+    return !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  }
+
+  function setupRevealAnimations() {
+    var playNavReveal = !pickNavRevealPlayed();
+    var groups = [
+      { selector: '.site-name, .site-role, .site-location, .sidebar-linkedin-button, .theme-toggle-stack', mode: 'left', baseDelay: 0.02, step: 0.05, immediate: true, once: true },
+      { selector: '.sidebar-nav a', mode: 'left', baseDelay: 0.08, step: 0.035, immediate: true, once: true },
+      { selector: '.page-header, .project-hero, .resume-item, .media-card, .video-frame, .info-grid > div, .gallery-item, .section', mode: 'up', baseDelay: 0, step: 0.045, immediate: false, once: false }
+    ];
+
+    var allTargets = [];
+
+    groups.forEach(function (group) {
+      var nodes = Array.from(document.querySelectorAll(group.selector));
+      nodes.forEach(function (node, index) {
+        if (!node || node.dataset.sbRevealBound === 'true') return;
+        node.dataset.sbRevealBound = 'true';
+
+        if (group.once && !playNavReveal) {
+          node.classList.add('is-visible');
+          return;
+        }
+
+        node.classList.add(group.mode === 'left' ? 'sb-reveal-left' : (group.mode === 'right' ? 'sb-reveal-right' : 'sb-reveal-up'));
+        node.style.setProperty('--sb-reveal-delay', (group.baseDelay + (index * group.step)).toFixed(3) + 's');
+        allTargets.push({ node: node, immediate: !!group.immediate });
+      });
+    });
+
+    if (playNavReveal && !userPrefersReducedMotion()) {
+      var siteName = document.querySelector('.site-name');
+      if (siteName) {
+        window.setTimeout(function () {
+          emitNameDust(siteName);
+        }, 700);
+      }
+    }
+
+    if (playNavReveal) setNavRevealPlayed();
+
+    if (!allTargets.length) return;
+
+    if (userPrefersReducedMotion() || !('IntersectionObserver' in window)) {
+      allTargets.forEach(function (item) { item.node.classList.add('is-visible'); });
+      return;
+    }
+
+    window.requestAnimationFrame(function () {
+      allTargets.forEach(function (item) {
+        if (item.immediate) item.node.classList.add('is-visible');
+      });
+    });
+
+    var observer = new IntersectionObserver(function (entries, obs) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('is-visible');
+        obs.unobserve(entry.target);
+      });
+    }, {
+      rootMargin: '0px 0px -10% 0px',
+      threshold: 0.12
+    });
+
+    allTargets.forEach(function (item) {
+      if (item.immediate) return;
+      observer.observe(item.node);
+    });
+  }
+
+  function setupButtonMotion() {
+    var selector = '.button, .sidebar-nav a, .sidebar-linkedin-button, .hero-linkedin-button, .theme-toggle, .lightbox-close, .lightbox-prev, .lightbox-next';
+
+    document.querySelectorAll(selector).forEach(function (node) {
+      if (!node || node.dataset.sbPressBound === 'true') return;
+      node.dataset.sbPressBound = 'true';
+
+      function pulse() {
+        node.classList.remove('sb-press');
+        void node.offsetWidth;
+        node.classList.add('sb-press');
+        window.setTimeout(function () {
+          node.classList.remove('sb-press');
+        }, 180);
+      }
+
+      node.addEventListener('pointerdown', function (ev) {
+        if (ev.pointerType === 'mouse' && ev.button !== 0) return;
+        pulse();
+      });
+
+      node.addEventListener('keydown', function (ev) {
+        if (ev.key === 'Enter' || ev.key === ' ') {
+          pulse();
+        }
+      });
+    });
+  }
+
   function relocateLocationLine() {
     var role = document.querySelector('.site-role');
     if (!role) return;
@@ -588,6 +763,8 @@
     setupThemeToggle();
     setupLightbox();
     setupVideoPlayback();
+    setupRevealAnimations();
+    setupButtonMotion();
   }
 
   if (document.readyState === 'loading') {
