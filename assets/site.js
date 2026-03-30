@@ -95,9 +95,32 @@
           audio.volume = 0.2;
           audio.play().catch(function () {});
         } catch (e) {}
+        emitDust(link);
         resetBrokenState();
       });
     });
+  }
+
+  function emitDust(link) {
+    if (!link || !body) return;
+    var rect = link.getBoundingClientRect();
+    var count = 12;
+    for (var i = 0; i < count; i += 1) {
+      var particle = document.createElement('span');
+      particle.className = 'linkedin-dust-particle';
+      particle.style.setProperty('--dust-x', ((Math.random() * 74) - 37).toFixed(2) + 'px');
+      particle.style.setProperty('--dust-y', (-28 - Math.random() * 42).toFixed(2) + 'px');
+      particle.style.setProperty('--dust-delay', (Math.random() * 0.08).toFixed(3) + 's');
+      particle.style.setProperty('--dust-scale', (0.85 + Math.random() * 1.15).toFixed(2));
+      particle.style.left = (rect.left + rect.width * (0.16 + Math.random() * 0.68)).toFixed(2) + 'px';
+      particle.style.top = (rect.top + rect.height * (0.5 + Math.random() * 0.24)).toFixed(2) + 'px';
+      body.appendChild(particle);
+      window.setTimeout(function (node) {
+        return function () {
+          if (node && node.parentNode) node.parentNode.removeChild(node);
+        };
+      }(particle), 820);
+    }
   }
 
   function updateThemeAssets(theme) {
@@ -156,6 +179,14 @@
         stack.appendChild(panel);
       }
 
+      var burnoutBurst = stack.querySelector('.burnout-burst');
+      if (!burnoutBurst) {
+        burnoutBurst = document.createElement('span');
+        burnoutBurst.className = 'burnout-burst';
+        burnoutBurst.setAttribute('aria-hidden', 'true');
+        stack.appendChild(burnoutBurst);
+      }
+
       var panelImage = panel.querySelector('.fuse-panel-image');
       var fallingFuse = panel.querySelector('.fuse-falling-image');
       var replacementFuse = panel.querySelector('.fuse-replacement-image');
@@ -200,6 +231,15 @@
         window.setTimeout(function () {
           stack.classList.remove('fuse-spark');
         }, 550);
+      }
+
+      function triggerBurnoutBurst() {
+        stack.classList.remove('burnout-flash');
+        void stack.offsetWidth;
+        stack.classList.add('burnout-flash');
+        window.setTimeout(function () {
+          stack.classList.remove('burnout-flash');
+        }, 820);
       }
 
       function setPanelImage(src) {
@@ -338,6 +378,7 @@
           syncBrokenUi();
           playAudio(stack._burnoutSound);
           pulseSparks();
+          triggerBurnoutBurst();
           window.setTimeout(function () {
             if (!pickBroken()) return;
             playAudio(stack._insertSound);
