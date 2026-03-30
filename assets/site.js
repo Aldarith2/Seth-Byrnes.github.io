@@ -11,6 +11,7 @@
 
   function pickTheme() {
     try {
+      if (pickBroken()) return 'dark';
       return localStorage.getItem(STORAGE_KEY) || 'dark';
     } catch (e) {
       return 'dark';
@@ -88,6 +89,12 @@
       if (link.dataset.breakResetBound === 'true') return;
       link.dataset.breakResetBound = 'true';
       link.addEventListener('click', function () {
+        try {
+          var audio = new Audio(TOGGLE_SOUND);
+          audio.preload = 'auto';
+          audio.volume = 0.2;
+          audio.play().catch(function () {});
+        } catch (e) {}
         resetBrokenState();
       });
     });
@@ -303,7 +310,8 @@
           setBroken(false);
           setRandomBurnSettings();
           clickTimes = [];
-          stack.classList.remove('is-resetting');
+          stack.classList.remove('is-resetting', 'fuse-panel-open');
+          panel.dataset.state = 'closed';
           syncBrokenUi();
         }, 1000);
       }
@@ -324,6 +332,7 @@
           ev.stopPropagation();
           clickTimes = [];
           setBroken(true);
+          applyTheme('dark');
           panel.dataset.state = 'closed';
           setPanelImage('assets/ui/Fusebox-Burntout.png');
           syncBrokenUi();
