@@ -756,29 +756,204 @@ body{background-color:var(--bg);background-repeat:repeat;background-size:192px 1
 }
 
 
-/* 2026-03-30 visibility fix for burnout and linkedin effects */
-.burnout-burst{
-  position:absolute;
-  left:50%;
-  top:auto;
-  bottom:-0.15rem;
-  width:11rem;
-  height:11rem;
+/* 2026-03-30 Edge-compatible effects patch */
+.fx-overlay-layer{
+  position:fixed;
+  inset:0;
   pointer-events:none;
-  opacity:1;
-  transform:translateX(-50%);
-  z-index:6;
   overflow:visible;
+  z-index:2147483647;
+}
+
+.burnout-burst{
+  position:fixed;
+  width:1px;
+  height:1px;
+  pointer-events:none;
 }
 .burnout-burst::before,
 .burnout-burst::after{
-  z-index:6;
+  content:'';
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  border-radius:999px;
+  opacity:0;
+}
+.burnout-burst::before{
+  width:112px;
+  height:112px;
+  background:radial-gradient(circle, rgba(255,247,210,.98) 0%, rgba(255,206,110,.92) 26%, rgba(133,221,255,.7) 52%, rgba(133,221,255,0) 76%);
+  animation:burnoutFlashCore .84s ease-out forwards;
+}
+.burnout-burst::after{
+  width:168px;
+  height:168px;
+  background:radial-gradient(circle, rgba(255,228,145,.6) 0%, rgba(255,228,145,.18) 48%, rgba(255,228,145,0) 72%);
+  animation:burnoutFlashHalo .84s ease-out forwards;
+}
+.burnout-spark-particle{
+  position:fixed;
+  width:7px;
+  height:36px;
+  margin-left:-3.5px;
+  margin-top:-18px;
+  border-radius:999px;
+  pointer-events:none;
+  opacity:0;
+  background:linear-gradient(to bottom, rgba(255,252,237,1) 0%, rgba(255,226,140,.98) 28%, rgba(123,214,255,.86) 72%, rgba(123,214,255,0) 100%);
+  box-shadow:0 0 10px rgba(255,214,112,.55);
+  transform-origin:50% 80%;
+  animation:burnoutSparkFly .88s cubic-bezier(.18,.7,.18,1) forwards;
+  animation-delay:var(--spark-delay,0s);
 }
 .linkedin-dust-particle{
   position:fixed;
-  z-index:10001;
-  width:.72rem;
-  height:.72rem;
-  mix-blend-mode:screen;
-  will-change:transform, opacity;
+  width:9px;
+  height:9px;
+  margin-left:-4.5px;
+  margin-top:-4.5px;
+  border-radius:999px;
+  pointer-events:none;
+  opacity:0;
+  background:radial-gradient(circle, rgba(214,207,191,.95) 0%, rgba(188,177,151,.78) 52%, rgba(188,177,151,0) 76%);
+  box-shadow:0 0 8px rgba(120,110,92,.18);
+  transform:scale(var(--dust-scale,1));
+  animation:linkedinDustFixed 1.18s cubic-bezier(.2,.72,.18,1) forwards;
+  animation-delay:var(--dust-delay,0s);
+}
+@keyframes burnoutFlashCore{
+  0%{opacity:0;transform:translate(-50%,-50%) scale(.2);}
+  14%{opacity:1;transform:translate(-50%,-50%) scale(1);}
+  100%{opacity:0;transform:translate(-50%,-50%) scale(1.7);}
+}
+@keyframes burnoutFlashHalo{
+  0%{opacity:0;transform:translate(-50%,-50%) scale(.35);}
+  20%{opacity:.72;transform:translate(-50%,-50%) scale(1);}
+  100%{opacity:0;transform:translate(-50%,-50%) scale(1.35);}
+}
+@keyframes burnoutSparkFly{
+  0%{opacity:0;transform:translate(0,0) rotate(var(--spark-rot,0deg)) scale(.7);}
+  18%{opacity:1;}
+  100%{opacity:0;transform:translate(var(--spark-x,0px), var(--spark-y,0px)) rotate(var(--spark-rot,0deg)) scale(1.2);}
+}
+@keyframes linkedinDustFixed{
+  0%{opacity:0;transform:scale(calc(var(--dust-scale,1) * .7));}
+  16%{opacity:.92;}
+  100%{opacity:0;transform:translate(var(--dust-x,0px), var(--dust-y,-24px)) scale(calc(var(--dust-scale,1) * 1.35));}
+}
+
+
+/* 2026-03-30 Edge background and effect refinement patch */
+:root[data-theme="light"]{
+  --bg:#f8f8f3;
+  --surface:#ffffff;
+  --sidebar:#6b6c72;
+  --line:#d6d8dc;
+  --line-strong:#a3a7af;
+  --text:#121316;
+  --muted:#2c2f35;
+  --link:#121316;
+}
+
+:root[data-theme="dark"]{
+  --bg:#4f5d3f;
+  --surface:#2f3727;
+  --sidebar:#36402d;
+  --line:#56634a;
+  --line-strong:#7a8a6b;
+  --text:#eef2e9;
+  --muted:#ccd5c2;
+  --link:#f1f7e9;
+}
+
+:root[data-theme="light"] body{
+  background-color:var(--bg) !important;
+}
+
+:root[data-theme="dark"] body{
+  background-color:var(--bg) !important;
+}
+
+:root[data-theme="light"] .content,
+:root[data-theme="light"] .page,
+:root[data-theme="light"] .project-hero .hero-image,
+:root[data-theme="light"] .info-grid div,
+:root[data-theme="light"] .media-card,
+:root[data-theme="light"] .sample-card,
+:root[data-theme="light"] .gallery-item,
+:root[data-theme="light"] .design-placeholder,
+:root[data-theme="light"] .video-frame,
+:root[data-theme="light"] .hero-copy{
+  background-color:var(--surface) !important;
+}
+
+:root[data-theme="dark"] .content,
+:root[data-theme="dark"] .page,
+:root[data-theme="dark"] .project-hero .hero-image,
+:root[data-theme="dark"] .info-grid div,
+:root[data-theme="dark"] .media-card,
+:root[data-theme="dark"] .sample-card,
+:root[data-theme="dark"] .gallery-item,
+:root[data-theme="dark"] .design-placeholder,
+:root[data-theme="dark"] .video-frame,
+:root[data-theme="dark"] .hero-copy{
+  background-color:var(--surface) !important;
+}
+
+.burnout-burst::before{
+  width:118px;
+  height:118px;
+  background:radial-gradient(circle, rgba(235,248,255,.98) 0%, rgba(150,223,255,.96) 26%, rgba(52,151,255,.82) 52%, rgba(52,151,255,0) 76%) !important;
+}
+
+.burnout-burst::after{
+  width:172px;
+  height:172px;
+  background:radial-gradient(circle, rgba(126,212,255,.46) 0%, rgba(72,170,255,.22) 48%, rgba(72,170,255,0) 74%) !important;
+}
+
+.burnout-spark-particle{
+  width:10px;
+  height:10px;
+  margin-left:-5px;
+  margin-top:-5px;
+  border-radius:0 !important;
+  background:rgba(160,229,255,.96) !important;
+  box-shadow:0 0 10px rgba(74,174,255,.52) !important;
+}
+
+.linkedin-dust-particle{
+  width:6px;
+  height:6px;
+  margin-left:-3px;
+  margin-top:-3px;
+  border-radius:0 !important;
+  background:rgba(214,208,196,.46) !important;
+  box-shadow:none !important;
+}
+
+@keyframes linkedinDustFixed{
+  0%{opacity:0;transform:translate(0,0) scale(calc(var(--dust-scale,1) * .72));}
+  10%{opacity:.42;}
+  26%{opacity:.42;transform:translate(var(--dust-rise-x,0px), var(--dust-rise-y,-42px)) scale(calc(var(--dust-scale,1) * 1.1));}
+  100%{opacity:0;transform:translate(calc(var(--dust-rise-x,0px) + var(--dust-fall-x,0px)), calc(var(--dust-rise-y,-42px) + var(--dust-fall-y,18px))) scale(calc(var(--dust-scale,1) * 1.02));}
+}
+
+.overlay-falling-fuse{
+  position:fixed;
+  width:70px;
+  height:auto;
+  pointer-events:none;
+  z-index:2147483647;
+  filter:drop-shadow(0 10px 18px rgba(0,0,0,.36));
+  transform-origin:50% 15%;
+  animation:overlayFuseFall 3.9s cubic-bezier(.18,.7,.18,1) forwards;
+}
+
+@keyframes overlayFuseFall{
+  0%{opacity:1;transform:translate(-50%, 0) rotate(-8deg) scale(1);}
+  68%{opacity:1;transform:translate(calc(-50% - 18px), 62vh) rotate(132deg) scale(.98);}
+  100%{opacity:0;transform:translate(calc(-50% - 28px), 112vh) rotate(226deg) scale(.92);}
 }

@@ -86,41 +86,123 @@
     }
 
     document.querySelectorAll('.sidebar-linkedin-button, .hero-linkedin-button').forEach(function (link) {
-      if (link.dataset.breakResetBound === 'true') return;
-      link.dataset.breakResetBound = 'true';
-      link.addEventListener('click', function () {
-        try {
-          var audio = new Audio(TOGGLE_SOUND);
-          audio.preload = 'auto';
-          audio.volume = 0.2;
-          audio.play().catch(function () {});
-        } catch (e) {}
-        emitDust(link);
-        resetBrokenState();
-      });
+      bindLinkedinFxNavigation(link);
     });
   }
 
+  var fxLayer = null;
+
+  function ensureFxLayer() {
+    if (fxLayer && fxLayer.parentNode) return fxLayer;
+    fxLayer = document.createElement('div');
+    fxLayer.className = 'fx-overlay-layer';
+    document.body.appendChild(fxLayer);
+    return fxLayer;
+  }
+
   function emitDust(link) {
-    if (!link || !body) return;
+    if (!link) return;
+    var layer = ensureFxLayer();
     var rect = link.getBoundingClientRect();
     var count = 12;
     for (var i = 0; i < count; i += 1) {
       var particle = document.createElement('span');
       particle.className = 'linkedin-dust-particle';
-      particle.style.setProperty('--dust-x', ((Math.random() * 74) - 37).toFixed(2) + 'px');
-      particle.style.setProperty('--dust-y', (-28 - Math.random() * 42).toFixed(2) + 'px');
-      particle.style.setProperty('--dust-delay', (Math.random() * 0.08).toFixed(3) + 's');
-      particle.style.setProperty('--dust-scale', (0.85 + Math.random() * 1.15).toFixed(2));
       particle.style.left = (rect.left + rect.width * (0.16 + Math.random() * 0.68)).toFixed(2) + 'px';
-      particle.style.top = (rect.top + rect.height * (0.5 + Math.random() * 0.24)).toFixed(2) + 'px';
-      body.appendChild(particle);
+      particle.style.top = (rect.top + 1 + Math.random() * 3).toFixed(2) + 'px';
+      particle.style.setProperty('--dust-rise-x', ((Math.random() * 34) - 17).toFixed(2) + 'px');
+      particle.style.setProperty('--dust-rise-y', (-34 - Math.random() * 26).toFixed(2) + 'px');
+      particle.style.setProperty('--dust-fall-x', ((Math.random() * 26) - 13).toFixed(2) + 'px');
+      particle.style.setProperty('--dust-fall-y', (16 + Math.random() * 18).toFixed(2) + 'px');
+      particle.style.setProperty('--dust-delay', (Math.random() * 0.04).toFixed(3) + 's');
+      particle.style.setProperty('--dust-scale', (1.02 + Math.random() * 0.48).toFixed(2));
+      layer.appendChild(particle);
       window.setTimeout(function (node) {
         return function () {
           if (node && node.parentNode) node.parentNode.removeChild(node);
         };
       }(particle), 820);
     }
+  }
+
+  function emitBurnoutBurst(target) {
+    if (!target) return;
+    var layer = ensureFxLayer();
+    var rect = target.getBoundingClientRect();
+    var flash = document.createElement('span');
+    flash.className = 'burnout-burst';
+    flash.style.left = (rect.left + rect.width * 0.5).toFixed(2) + 'px';
+    flash.style.top = (rect.top + rect.height * 0.5).toFixed(2) + 'px';
+    layer.appendChild(flash);
+
+    for (var i = 0; i < 14; i += 1) {
+      var spark = document.createElement('span');
+      var angle = (Math.PI * 2 * i) / 14 + (Math.random() - 0.5) * 0.18;
+      var distance = 58 + Math.random() * 44;
+      spark.className = 'burnout-spark-particle';
+      spark.style.left = flash.style.left;
+      spark.style.top = flash.style.top;
+      spark.style.setProperty('--spark-x', (Math.cos(angle) * distance).toFixed(2) + 'px');
+      spark.style.setProperty('--spark-y', (Math.sin(angle) * distance).toFixed(2) + 'px');
+      spark.style.setProperty('--spark-rot', (-24 + Math.random() * 48).toFixed(2) + 'deg');
+      spark.style.setProperty('--spark-delay', (Math.random() * 0.04).toFixed(3) + 's');
+      layer.appendChild(spark);
+      window.setTimeout(function (node) {
+        return function () {
+          if (node && node.parentNode) node.parentNode.removeChild(node);
+        };
+      }(spark), 980);
+    }
+
+    window.setTimeout(function () {
+      if (flash && flash.parentNode) flash.parentNode.removeChild(flash);
+    }, 920);
+  }
+
+  function emitFallingFuse(target) {
+    if (!target) return;
+    var layer = ensureFxLayer();
+    var rect = target.getBoundingClientRect();
+    var fuse = document.createElement('img');
+    fuse.className = 'overlay-falling-fuse';
+    fuse.src = 'assets/ui/fuse-burnedout.png';
+    fuse.alt = '';
+    fuse.setAttribute('aria-hidden', 'true');
+    fuse.style.left = (rect.left + rect.width * 0.56).toFixed(2) + 'px';
+    fuse.style.top = (rect.top + rect.height * 0.2).toFixed(2) + 'px';
+    layer.appendChild(fuse);
+    window.setTimeout(function () {
+      if (fuse && fuse.parentNode) fuse.parentNode.removeChild(fuse);
+    }, 4200);
+  }
+
+  function bindLinkedinFxNavigation(link) {
+    if (!link || link.dataset.fxNavBound === 'true') return;
+    link.dataset.fxNavBound = 'true';
+    link.addEventListener('click', function (ev) {
+      var href = link.getAttribute('href');
+      if (!href) return;
+      if (ev.defaultPrevented) return;
+      if (ev.button !== 0) return;
+      if (ev.metaKey || ev.ctrlKey || ev.shiftKey || ev.altKey) return;
+      ev.preventDefault();
+      try {
+        var audio = new Audio(TOGGLE_SOUND);
+        audio.preload = 'auto';
+        audio.volume = 0.2;
+        audio.play().catch(function () {});
+      } catch (e) {}
+      emitDust(link);
+      resetBrokenState();
+      var target = (link.getAttribute('target') || '').toLowerCase();
+      window.setTimeout(function () {
+        if (target === '_blank') {
+          window.open(href, '_blank', 'noopener');
+        } else {
+          window.location.href = href;
+        }
+      }, 1000);
+    });
   }
 
   function updateThemeAssets(theme) {
@@ -179,14 +261,6 @@
         stack.appendChild(panel);
       }
 
-      var burnoutBurst = stack.querySelector('.burnout-burst');
-      if (!burnoutBurst) {
-        burnoutBurst = document.createElement('span');
-        burnoutBurst.className = 'burnout-burst';
-        burnoutBurst.setAttribute('aria-hidden', 'true');
-        stack.appendChild(burnoutBurst);
-      }
-
       var panelImage = panel.querySelector('.fuse-panel-image');
       var fallingFuse = panel.querySelector('.fuse-falling-image');
       var replacementFuse = panel.querySelector('.fuse-replacement-image');
@@ -234,12 +308,7 @@
       }
 
       function triggerBurnoutBurst() {
-        stack.classList.remove('burnout-flash');
-        void stack.offsetWidth;
-        stack.classList.add('burnout-flash');
-        window.setTimeout(function () {
-          stack.classList.remove('burnout-flash');
-        }, 820);
+        emitBurnoutBurst(btn);
       }
 
       function setPanelImage(src) {
@@ -334,8 +403,7 @@
         panel.dataset.state = 'opened-removed';
         setPanelImage('assets/ui/fusebox-fuse-removed.png');
         stack.classList.remove('fuse-falling');
-        void stack.offsetWidth;
-        stack.classList.add('fuse-falling');
+        emitFallingFuse(panelImage || panel || btn);
         playAudio(stack._removeFuseSound);
       }
 
