@@ -72,7 +72,7 @@
 <p class="site-role">Game Designer</p>
 <p class="site-location">Milwaukee, Wisconsin</p>
 <a aria-label="LinkedIn" class="sidebar-linkedin-button" href="https://www.linkedin.com/in/seth-byrnes-85003268/" rel="noopener noreferrer" target="_blank"><img alt="LinkedIn" src="assets/ui/linkedin-button-bgDark.png"/></a>
-<nav class="sidebar-nav"><a href="index.html">Home</a><a href="cv.html">CV / Resume</a><p class="nav-group-title">Featured Work</p><a href="the-deep.html">The Deep: Beyond the Reef</a><a class="active" href="dinohab.html">DinoHab</a><a href="monster-simulator-3000.html">Monster Simulator 3000</a><p class="nav-group-title">Additional Work</p><a href="civitas.html">Civatlas</a><a href="battle-cry-of-freedom.html">Battle Cry of Freedom</a><a href="b17-flying-fortress.html">B-17: Flying Fortress The Bloody 100th</a><a href="dune-sea.html">Dune Sea</a><a href="roll-together.html">Roll Together</a><a href="half-rats-parasomnia.html">Half-Rats: Parasomnia</a><a href="mount-and-blade-community-maps.html">Mount &amp; Blade Community Maps</a><a href="red-meat-games.html">First Impact / Onslaught</a></nav>
+<nav class="sidebar-nav"><a href="index.html">Home</a><a href="cv.html">CV / Resume</a><p class="nav-group-title">Featured Work</p><a class="featured-link" href="the-deep.html">The Deep: Beyond the Reef</a><a class="active featured-link" href="dinohab.html">DinoHab</a><a class="featured-link" href="monster-simulator-3000.html">Monster Simulator 3000</a><a class="featured-link" href="b17-flying-fortress.html">B-17: Flying Fortress The Bloody 100th</a><p class="nav-group-title">Additional Work</p><a href="civitas.html">Civatlas</a><a href="battle-cry-of-freedom.html">Battle Cry of Freedom</a><a href="dune-sea.html">Dune Sea</a><a href="roll-together.html">Roll Together</a><a href="half-rats-parasomnia.html">Half-Rats: Parasomnia</a><a href="mount-and-blade-community-maps.html">Mount &amp; Blade Community Maps</a><a href="red-meat-games.html">First Impact / Onslaught</a></nav>
 <button aria-label="Toggle light and dark mode" aria-pressed="false" class="theme-toggle" type="button"><img alt="Dark mode" class="theme-toggle-image" src="assets/ui/theme-toggle-dark.png"/></button><div class="sidebar-meta"></div>
 </div>
 </aside>
@@ -117,27 +117,43 @@
 <section class="section"><h2>Examples</h2><p>These samples show the work from two angles. The cards below explain the design problems I was trying to solve and why I approached them the way I did. The PDF examples that follow are the implementation-facing documents behind that work.</p>
 <div style="display:grid;gap:1rem;margin:1.25rem 0 1.5rem;">
 <article style="padding:1rem 1.125rem;border:1px solid rgba(127,127,127,0.22);border-radius:18px;">
-<h3>Built creature and buddy behaviours that taught the game naturally</h3>
-<p>One of the risks in a habitat game like this is leaning too hard on UI and losing the fantasy of caring for living creatures. I wanted the dinosaurs to feel readable, but I did not want them to feel like vending machines with moods attached. That pushed me toward explicit state logic for hunger, water, rest, social, satisfaction, trust, growth, and player interaction, so the creatures could react consistently without feeling scripted in a flat way.</p>
-<p>The buddy was especially useful because it let me solve onboarding more organically. Instead of relying on constant prompts, I used follow behaviour, playful hops, objective-leading, and special MR rules so the companion could pull the player toward the next useful action and stay emotionally present across transitions. I liked this because it made guidance feel like part of the relationship rather than a layer floating on top of the game.</p>
-<div class="example-media-grid">
+<h3>Turned harmony, fungi, and waste into one visible ecosystem loop</h3>
+<div class="example-media-single" style="margin:0.875rem 0 1rem;">
+<figure class="example-figure">
+<a class="example-media-link" href="assets/media/dinohab/anecdote-harmony-loop.gif" rel="noopener noreferrer" target="_blank">
+<img alt="DinoHab harmony loop gameplay gif" class="example-thumb" loading="lazy" src="assets/media/dinohab/anecdote-harmony-loop.gif"/>
+</a>
+</figure>
+</div>
+<p>A lot of ecology games end up abstracting the interesting part away. Waste becomes a cleanup chore, harmony becomes a mystery number, and the player is left guessing which action actually matters. I wanted DinoHab to make that loop legible. Fungi and waste were where I spent a lot of that effort, because they let me close the circle between what dinosaurs consume, what they produce, and how the habitat recovers.</p>
+<div class="example-media-single">
 <figure class="example-figure">
 <a class="example-media-link" href="assets/media/dinohab/anecdote-creature-hatchling.png" rel="noopener noreferrer" target="_blank">
 <img alt="Baby dinosaur hatching in DinoHab" class="example-thumb" loading="lazy" src="assets/media/dinohab/anecdote-creature-hatchling.png"/>
 </a>
 <figcaption>Early creature life stages helped the habitat feel inhabited rather than purely simulated.</figcaption>
 </figure>
+</div>
+<p>By making mycelium ranges, compost transfer, and harmony feedback visible, I could give the player a clear read on why the ecosystem was healthy or unstable. The nice part was that this solved both a design problem and a UX problem at once: it made dung strategically useful instead of just gross, and it gave the player a fast way to understand whether they needed more flora, more fungi, or a different layout.</p>
+
+<div class="example-media-grid">
 <figure class="example-figure">
-<a class="example-media-link" href="assets/media/dinohab/anecdote-creature-adult.png" rel="noopener noreferrer" target="_blank">
-<img alt="In-game dinosaur behaviour screenshot" class="example-thumb" loading="lazy" src="assets/media/dinohab/anecdote-creature-adult.png"/>
+<a class="example-media-link" href="assets/media/dinohab/anecdote-plant-lifecycle.png" rel="noopener noreferrer" target="_blank">
+<img alt="Plant lifecycle diagram showing planted, seedling, immature, and mature nutrient stages" class="example-thumb" loading="lazy" src="assets/media/dinohab/anecdote-plant-lifecycle.png"/>
 </a>
-<figcaption>Readable creature posture and proximity cues helped player care actions feel grounded.</figcaption>
+<figcaption>Plant lifecycle thresholds clarified how nutrient generation pushed flora from planted to mature states.</figcaption>
 </figure>
 <figure class="example-figure">
-<a class="example-media-link" href="assets/media/dinohab/anecdote-buddy-state-tree-crop.png" rel="noopener noreferrer" target="_blank">
-<img alt="Buddy behaviour tree design diagram" class="example-thumb" loading="lazy" src="assets/media/dinohab/anecdote-buddy-state-tree-crop.png"/>
+<a class="example-media-link" href="assets/media/dinohab/anecdote-growth-regression.png" rel="noopener noreferrer" target="_blank">
+<img alt="Plant growth and regression diagram showing dinosaur interaction and nutrient flow" class="example-thumb" loading="lazy" src="assets/media/dinohab/anecdote-growth-regression.png"/>
 </a>
-<figcaption>Buddy behaviour tree for need checks, trust, social response, and player interaction.</figcaption>
+<figcaption>Growth and regression loop showing how plant stages respond to dinosaur interaction and nutrient flow.</figcaption>
+</figure>
+<figure class="example-figure">
+<a class="example-media-link" href="assets/media/dinohab/anecdote-mycelium-diagram.png" rel="noopener noreferrer" target="_blank">
+<img alt="Mycelium range and compost flow diagram" class="example-thumb" loading="lazy" src="assets/media/dinohab/anecdote-mycelium-diagram.png"/>
+</a>
+<figcaption>Mycelium range and compost transfer made the fungi layer concrete instead of abstract.</figcaption>
 </figure>
 </div>
 </article>
@@ -155,29 +171,21 @@
 </div>
 </article>
 <article style="padding:1rem 1.125rem;border:1px solid rgba(127,127,127,0.22);border-radius:18px;">
-<h3>Turned harmony, fungi, and waste into one visible ecosystem loop</h3>
-<div class="example-media-single" style="margin:0.875rem 0 1rem;">
-<figure class="example-figure">
-<a class="example-media-link" href="assets/media/dinohab/anecdote-harmony-loop.gif" rel="noopener noreferrer" target="_blank">
-<img alt="DinoHab harmony loop gameplay gif" class="example-thumb" loading="lazy" src="assets/media/dinohab/anecdote-harmony-loop.gif"/>
-</a>
-</figure>
-</div>
-<p>A lot of ecology games end up abstracting the interesting part away. Waste becomes a cleanup chore, harmony becomes a mystery number, and the player is left guessing which action actually matters. I wanted DinoHab to make that loop legible. Fungi and waste were where I spent a lot of that effort, because they let me close the circle between what dinosaurs consume, what they produce, and how the habitat recovers.</p>
-<p>By making mycelium ranges, compost transfer, and harmony feedback visible, I could give the player a clear read on why the ecosystem was healthy or unstable. The nice part was that this solved both a design problem and a UX problem at once: it made dung strategically useful instead of just gross, and it gave the player a fast way to understand whether they needed more flora, more fungi, or a different layout.</p>
-
+<h3>Built creature and buddy behaviours that taught the game naturally</h3>
+<p>One of the risks in a habitat game like this is leaning too hard on UI and losing the fantasy of caring for living creatures. I wanted the dinosaurs to feel readable, but I did not want them to feel like vending machines with moods attached. That pushed me toward explicit state logic for hunger, water, rest, social, satisfaction, trust, growth, and player interaction, so the creatures could react consistently without feeling scripted in a flat way.</p>
+<p>The buddy was especially useful because it let me solve onboarding more organically. Instead of relying on constant prompts, I used follow behaviour, playful hops, objective-leading, and special MR rules so the companion could pull the player toward the next useful action and stay emotionally present across transitions. I liked this because it made guidance feel like part of the relationship rather than a layer floating on top of the game.</p>
 <div class="example-media-grid">
 <figure class="example-figure">
-<a class="example-media-link" href="assets/media/dinohab/anecdote-compost-loop.png" rel="noopener noreferrer" target="_blank">
-<img alt="Compost loop diagram linking plants, fungi, dinos, nutrients, and waste" class="example-thumb" loading="lazy" src="assets/media/dinohab/anecdote-compost-loop.png"/>
+<a class="example-media-link" href="assets/media/dinohab/anecdote-creature-adult.png" rel="noopener noreferrer" target="_blank">
+<img alt="In-game dinosaur behaviour screenshot" class="example-thumb" loading="lazy" src="assets/media/dinohab/anecdote-creature-adult.png"/>
 </a>
-<figcaption>A simple loop showing how plants, fungi, dinos, waste, and nutrients fed back into each other.</figcaption>
+<figcaption>Readable creature posture and proximity cues helped player care actions feel grounded.</figcaption>
 </figure>
 <figure class="example-figure">
-<a class="example-media-link" href="assets/media/dinohab/anecdote-mycelium-diagram.png" rel="noopener noreferrer" target="_blank">
-<img alt="Mycelium range and compost flow diagram" class="example-thumb" loading="lazy" src="assets/media/dinohab/anecdote-mycelium-diagram.png"/>
+<a class="example-media-link" href="assets/media/dinohab/anecdote-buddy-state-tree-crop.png" rel="noopener noreferrer" target="_blank">
+<img alt="Buddy behaviour tree design diagram" class="example-thumb" loading="lazy" src="assets/media/dinohab/anecdote-buddy-state-tree-crop.png"/>
 </a>
-<figcaption>Mycelium range and compost transfer made the fungi layer concrete instead of abstract.</figcaption>
+<figcaption>Buddy behaviour tree for need checks, trust, social response, and player interaction.</figcaption>
 </figure>
 </div>
 </article>
@@ -196,15 +204,7 @@
 </article>
 </div>
 <div class="evidence-grid">
-<article class="evidence-card">
-<a class="evidence-preview" href="assets/docs/dinohab/Dino-Hab-Plants-and-Fungi.pdf" rel="noopener noreferrer" target="_blank"><img alt="Preview for Plants &amp; Fungi System Overview" loading="lazy" src="assets/evidence-previews/dinohab/Dino-Hab-Plants-and-Fungi-preview.png"/></a>
-<div class="evidence-copy">
-<p class="evidence-type">PDF</p>
-<h3>Plants &amp; Fungi System Overview</h3>
-<p>System overview for plant, fungi, waste, and resource flow.</p>
-<p class="entry-card-actions"><a class="button button-small" href="assets/docs/dinohab/Dino-Hab-Plants-and-Fungi.pdf" rel="noopener noreferrer" target="_blank">Open File</a></p>
-</div>
-</article>
+
 <article class="evidence-card">
 <a class="evidence-preview" href="assets/docs/dinohab/DH-Plants.pdf" rel="noopener noreferrer" target="_blank"><img alt="Preview for Plants Feature Document" loading="lazy" src="assets/evidence-previews/dinohab/DH-Plants-preview.png"/></a>
 <div class="evidence-copy">
@@ -214,15 +214,7 @@
 <p class="entry-card-actions"><a class="button button-small" href="assets/docs/dinohab/DH-Plants.pdf" rel="noopener noreferrer" target="_blank">Open File</a></p>
 </div>
 </article>
-<article class="evidence-card">
-<a class="evidence-preview" href="assets/docs/dinohab/DH-Fungi.pdf" rel="noopener noreferrer" target="_blank"><img alt="Preview for Fungi Feature Document" loading="lazy" src="assets/evidence-previews/dinohab/DH-Fungi-preview.png"/></a>
-<div class="evidence-copy">
-<p class="evidence-type">PDF</p>
-<h3>Fungi Feature Document</h3>
-<p>Compost conversion, network range, and fungi behaviour.</p>
-<p class="entry-card-actions"><a class="button button-small" href="assets/docs/dinohab/DH-Fungi.pdf" rel="noopener noreferrer" target="_blank">Open File</a></p>
-</div>
-</article>
+
 <article class="evidence-card">
 <a class="evidence-preview" href="assets/docs/dinohab/DH-Plant-Lushness.pdf" rel="noopener noreferrer" target="_blank"><img alt="Preview for Plant Lushness Tuning" loading="lazy" src="assets/evidence-previews/dinohab/DH-Plant-Lushness-preview.png"/></a>
 <div class="evidence-copy">
@@ -230,15 +222,6 @@
 <h3>Plant Lushness Tuning</h3>
 <p>Visual response tuning for habitat growth and recovery.</p>
 <p class="entry-card-actions"><a class="button button-small" href="assets/docs/dinohab/DH-Plant-Lushness.pdf" rel="noopener noreferrer" target="_blank">Open File</a></p>
-</div>
-</article>
-<article class="evidence-card">
-<a class="evidence-preview" href="assets/docs/dinohab/Dino-Hab-Buddy-Behavior-Tree.pdf" rel="noopener noreferrer" target="_blank"><img alt="Preview for Buddy Behavior Tree" loading="lazy" src="assets/evidence-previews/dinohab/Dino-Hab-Buddy-Behavior-Tree-preview.png"/></a>
-<div class="evidence-copy">
-<p class="evidence-type">PDF</p>
-<h3>Buddy Behavior Tree</h3>
-<p>Companion follow, guidance, and player-response logic.</p>
-<p class="entry-card-actions"><a class="button button-small" href="assets/docs/dinohab/Dino-Hab-Buddy-Behavior-Tree.pdf" rel="noopener noreferrer" target="_blank">Open File</a></p>
 </div>
 </article>
 
@@ -251,15 +234,27 @@
 <p class="entry-card-actions"><a class="button button-small" href="assets/docs/dinohab/DinoHab_Team_Design_Document_Binder.pdf" rel="noopener noreferrer" target="_blank">Open File</a></p>
 </div>
 </article>
+
 <article class="evidence-card">
-<a class="evidence-preview" href="assets/docs/dinohab/DH-Disruptors.pdf" rel="noopener noreferrer" target="_blank"><img alt="Preview for Disruptors" loading="lazy" src="assets/evidence-previews/dinohab/DH-Disruptors-preview.png"/></a>
+<a class="evidence-preview" href="assets/docs/dinohab/Dino-Hab-Plants-and-Fungi.pdf" rel="noopener noreferrer" target="_blank"><img alt="Preview for Plants &amp; Fungi System Overview" loading="lazy" src="assets/evidence-previews/dinohab/Dino-Hab-Plants-and-Fungi-preview.png"/></a>
 <div class="evidence-copy">
 <p class="evidence-type">PDF</p>
-<h3>Disruptors</h3>
-<p>Weather and raid events used to test habitat resilience.</p>
-<p class="entry-card-actions"><a class="button button-small" href="assets/docs/dinohab/DH-Disruptors.pdf" rel="noopener noreferrer" target="_blank">Open File</a></p>
+<h3>Plants &amp; Fungi System Overview</h3>
+<p>System overview for plant, fungi, waste, and resource flow.</p>
+<p class="entry-card-actions"><a class="button button-small" href="assets/docs/dinohab/Dino-Hab-Plants-and-Fungi.pdf" rel="noopener noreferrer" target="_blank">Open File</a></p>
 </div>
 </article>
+
+<article class="evidence-card">
+<a class="evidence-preview" href="assets/docs/dinohab/Dino-Hab-Buddy-Behavior-Tree.pdf" rel="noopener noreferrer" target="_blank"><img alt="Preview for Buddy Behavior Tree" loading="lazy" src="assets/evidence-previews/dinohab/Dino-Hab-Buddy-Behavior-Tree-preview.png"/></a>
+<div class="evidence-copy">
+<p class="evidence-type">PDF</p>
+<h3>Buddy Behavior Tree</h3>
+<p>Companion follow, guidance, and player-response logic.</p>
+<p class="entry-card-actions"><a class="button button-small" href="assets/docs/dinohab/Dino-Hab-Buddy-Behavior-Tree.pdf" rel="noopener noreferrer" target="_blank">Open File</a></p>
+</div>
+</article>
+
 <article class="evidence-card">
 <a class="evidence-preview" href="assets/docs/dinohab/Dinohab-Pre-Alpha-Wireframe.pdf" rel="noopener noreferrer" target="_blank"><img alt="Preview for Pre-Alpha Wireframe" loading="lazy" src="assets/evidence-previews/dinohab/Dinohab-Pre-Alpha-Wireframe-preview.png"/></a>
 <div class="evidence-copy">
@@ -269,7 +264,9 @@
 <p class="entry-card-actions"><a class="button button-small" href="assets/docs/dinohab/Dinohab-Pre-Alpha-Wireframe.pdf" rel="noopener noreferrer" target="_blank">Open File</a></p>
 </div>
 </article>
-</div></section><section class="section keyart-section"><div class="hero-image">
+
+</div>
+</section><section class="section keyart-section"><div class="hero-image">
 <img alt="DinoHab key art" src="assets/media/dinohab/keyart.jpg"/>
 </div></section><section class="section">
 <h2>Gallery</h2>
