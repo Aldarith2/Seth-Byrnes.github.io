@@ -8,6 +8,28 @@
 <title>The Deep: Beyond the Reef — Seth Byrnes</title>
 <meta content="Portfolio project page for The Deep: Beyond the Reef." name="description"/>
 <link href="assets/styles.css" rel="stylesheet"/>
+
+<style>
+.example-media-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0.75rem;margin-top:0.875rem;align-items:start;justify-items:center;}
+.example-media-grid.single{grid-template-columns:1fr;justify-items:center;}
+.example-media-grid.single figure{max-width:340px;width:100%;}
+.example-thumb-link{display:block;width:100%;max-width:340px;margin:0 auto;text-decoration:none;cursor:zoom-in;}
+.example-thumb{display:block;width:100%;max-width:340px;aspect-ratio:4 / 3;object-fit:cover;border-radius:12px;margin:0 auto;}
+.example-media-grid.wide-single figure,.example-media-grid.wide-single .example-thumb-link{max-width:640px;}
+.example-media-grid.wide-single .example-thumb{max-width:640px;}
+.lightbox-overlay{position:fixed;inset:0;background:rgba(10,10,14,0.88);display:none;align-items:center;justify-content:center;padding:2rem;z-index:9999;cursor:zoom-out;}
+.lightbox-overlay.is-open{display:flex;}
+.lightbox-content{position:relative;max-width:min(96vw,1400px);max-height:92vh;display:flex;align-items:center;justify-content:center;}
+.lightbox-image{display:block;max-width:100%;max-height:92vh;width:auto;height:auto;border-radius:14px;box-shadow:0 20px 60px rgba(0,0,0,0.45);background:#111;}
+.lightbox-close{position:absolute;top:-0.75rem;right:-0.75rem;width:2.5rem;height:2.5rem;border:none;border-radius:999px;background:rgba(255,255,255,0.92);color:#111;font-size:1.5rem;line-height:1;cursor:pointer;box-shadow:0 10px 30px rgba(0,0,0,0.25);}
+.lightbox-close:hover{background:#fff;}
+@media (max-width: 700px){
+  .example-thumb-link,.example-thumb,.example-media-grid.single figure{max-width:100%;}
+  .lightbox-overlay{padding:1rem;}
+  .lightbox-close{top:0.5rem;right:0.5rem;}
+}
+</style>
+
 </head>
 <body>
 <div class="layout">
@@ -17,20 +39,17 @@
 <p class="site-role">Game Designer</p>
 <p class="site-location">Milwaukee, Wisconsin</p>
 <a aria-label="LinkedIn" class="sidebar-linkedin-button" href="https://www.linkedin.com/in/seth-byrnes-85003268/" rel="noopener noreferrer" target="_blank"><img alt="LinkedIn" src="assets/ui/linkedin-button-bgDark.png"/></a>
-<nav class="sidebar-nav">
-<a href="index.html">Home</a><a href="cv.html">CV / Resume</a><a class="active" href="the-deep.html">The Deep: Beyond the Reef</a><a href="dinohab.html">DinoHab</a><a href="monster-simulator-3000.html">Monster Simulator 3000</a><a href="civitas.html">Civitas / Civatlas</a><a href="battle-cry-of-freedom.html">Battle Cry of Freedom</a><a href="b17-flying-fortress.html">B-17: Flying Fortress The Bloody 100th</a><a href="dune-sea.html">Dune Sea</a><a href="roll-together.html">Roll Together / CritterBall / CritterBox</a><a href="half-rats-parasomnia.html">Half-Rats: Parasomnia</a><a href="mount-and-blade-community-maps.html">Mount &amp; Blade Community Maps</a><a href="red-meat-games.html">First Impact / Onslaught</a>
-</nav>
+<nav class="sidebar-nav"><a href="index.html">Home</a><a href="cv.html">CV / Resume</a><p class="nav-group-title">Featured Work</p><a class="active" href="the-deep.html">The Deep: Beyond the Reef</a><a href="dinohab.html">DinoHab</a><a href="monster-simulator-3000.html">Monster Simulator 3000</a><p class="nav-group-title">Additional Work</p><a href="civitas.html">Civatlas</a><a href="battle-cry-of-freedom.html">Battle Cry of Freedom</a><a href="b17-flying-fortress.html">B-17: Flying Fortress The Bloody 100th</a><a href="dune-sea.html">Dune Sea</a><a href="roll-together.html">Roll Together</a><a href="half-rats-parasomnia.html">Half-Rats: Parasomnia</a><a href="mount-and-blade-community-maps.html">Mount &amp; Blade Community Maps</a><a href="red-meat-games.html">First Impact / Onslaught</a></nav>
 <button aria-label="Toggle light and dark mode" aria-pressed="false" class="theme-toggle" type="button"><img alt="Dark mode" class="theme-toggle-image" src="assets/ui/theme-toggle-dark.png"/></button><div class="sidebar-meta"></div>
 </div>
 </aside>
 <main class="content">
 <div class="page">
 <header class="project-hero no-banner">
-
 <div class="hero-copy">
 <p class="eyebrow">Dark Slope</p>
 <h1>The Deep: Beyond the Reef</h1>
-<p class="lead">Game Designer · April 2023 – October 2025</p>
+<p class="lead">Game Designer · April 2023 – October 2025</p><div class="project-skill-row"><ul class="skill-chips compact"><li>Systems Design</li><li>VR Interaction</li><li>Core Loop Design</li><li>Onboarding</li><li>UI / UX</li><li>Documentation</li><li>Level Design</li><li>Playtesting</li></ul></div>
 </div>
 </header><section class="section">
 <h2>Trailer</h2>
@@ -57,13 +76,107 @@
 </dl>
 </section>
 <section class="section">
-<h2>Position Summary</h2>
-<p>VR underwater adventure built around exploration, environmental cleanup, discovery, and transformation. I designed the project in pre-production across core loop definition, player tools, onboarding, progression, hazard design, UI concepts, and implementation-ready documentation. Once the project was live, I kept revising the designs on the fly while testing, configuring, and handling level design in parallel.</p></section>
+<h2>Ownership and Outcome</h2>
+<p><em>The Deep: Beyond the Reef</em> was a VR underwater adventure built around exploration, environmental cleanup, discovery, and environmental transformation. In pre-production, I helped define the project’s core loop, player tools, onboarding, progression structure, hazard design, and UI direction, then carried that work forward through implementation review, testing, configuration, and level design support as the game evolved. The result was a publicly released Meta store title with a clearer interaction language, structured progression, and a documented content path that supported the shipped experience.</p></section>
 <section class="section">
 <h2>Responsibilities</h2>
-<ul class="list-tight"><li>Defined and iterated the core gameplay loop around exploration, cleaning, challenge unlocking, upgrades, and forward progression.</li><li>Designed player tools, HUD concepts, onboarding flow, challenge-area structure, traversal rules, scanning behaviour, and environmental cleanup interactions in pre-production.</li><li>Authored feature documentation for suit systems, Sonic Laser behaviour, shared energy economy, artifact upgrades, and player feedback loops, then revised those systems live as the project evolved.</li><li>Supported production planning, in-engine tuning, level design, implementation review, and revision based on internal testing and QA.</li></ul></section>
-
-<section class="section"><h2>Design Work Samples</h2><p>These examples show both the pre-production direction and the live-production revision work behind The Deep. I designed the project in pre-production, then modified systems, levels, and documentation on the fly while testing, configuring, and handling level design at the same time.</p><div class="sample-list"><article class="sample-card"><h3>Pre-Production Documentation</h3><p>Early design direction defining the project before implementation tightened around production realities.</p><p class="note"><a href="assets/docs/the-deep/Pre-Production-Documentation.pdf" rel="noopener noreferrer" target="_blank">Open file</a></p></article><article class="sample-card"><h3>Mid-Production Level Brief</h3><p>Live production sample showing how level and feature intentions were updated while the project was active.</p><p class="note"><a href="assets/docs/the-deep/Mid-Production-Level-Brief.pdf" rel="noopener noreferrer" target="_blank">Open file</a></p></article><article class="sample-card"><h3>Production Documentation Template</h3><p>Structure used to communicate implementation needs clearly across disciplines.</p><p class="note"><a href="assets/docs/the-deep/Production-Documentation-Template.pdf" rel="noopener noreferrer" target="_blank">Open file</a></p></article><article class="sample-card"><h3>MVP Wireframe</h3><p>Wireframe sample tying interaction planning and player-facing structure back to the core loop.</p><p class="note"><a href="assets/docs/the-deep/The-Deep-MVP-Wireframe.pdf" rel="noopener noreferrer" target="_blank">Open file</a></p></article></div></section><section class="section keyart-section"><div class="hero-image">
+<ul class="list-tight"><li>Defined and iterated the core gameplay loop around exploration, cleaning, challenge unlocking, upgrades, and forward progression.</li><li>Produced 180 pages of de-duplicated design material across 28 direct work-product documents covering progression, player tools, hazards, rewards, UI, and testing.</li><li>Designed and documented 6 connected gameplay spaces, including a 6-zone Reef hub, Yellow Cave, Red Cave, the Trench, Blue Cave, and the Monumental finale.</li><li>Built a 32-beat Reef onboarding path and designed player tools, HUD concepts, challenge-area structure, traversal rules, scanning behaviour, and environmental cleanup interactions in pre-production.</li><li>Authored 18 supporting feature briefs and implementation-facing documentation, including 80+ named gameplay variables and tuning parameters for locomotion, laser interaction, artifacts, contamination, puzzles, enemy behaviours, rewards, and feedback systems.</li><li>Structured Quest 3 user testing and translated findings into actionable changes for wayfinding, controls, feedback, puzzle clarity, and hazard readability.</li><li>Supported production planning, in-engine tuning, level design, implementation review, and live revision through internal testing and QA.</li></ul></section>
+<section class="section"><h2>Examples</h2><p>These examples focus on four connected design problems: giving the player one tactile language for interaction, turning freeform swimming into readable danger, building puzzles around the same core verbs, and structuring progression so discovery always led somewhere meaningful.</p>
+<div style="display:grid;gap:1rem;margin:1.25rem 0 1.5rem;">
+<article style="padding:1rem 1.125rem;border:1px solid rgba(127,127,127,0.22);border-radius:18px;">
+<h3>Creating a tactile language for cleaning, contamination, and progression</h3>
+<p>One of the first problems I had to solve on <em>The Deep</em> was that the player’s main tool could not feel detached from the rest of the game. If the Sonic Laser was only a cleaner, while upgrades, collectibles, gates, and puzzles all behaved like separate systems, the experience would fragment very quickly. I worked to make the laser the common verb across the game. It cleaned contamination, grabbed objects, collected pickups, triggered certain puzzle states, and its upgrade level determined which contamination colors and routes the player could meaningfully interact with.</p>
+<p>That let me tie cleaning directly into progression. Contamination was not just scenery to remove; it hid artifacts, blocked routes, controlled access to later areas, and fed rewards such as energy crystals. Because laser level and contamination color were linked, every upgrade immediately changed what the player could do in the world. That gave the game a consistent tactile language: when players saw contamination, a collectible, or a blocked path, they were still reading the same underlying system rather than learning an unrelated one from scratch.</p>
+<div class="example-media-grid single"><figure style="margin:0;">
+<a class="example-thumb-link" href="assets/media/the-deep/DeepLaser1.gif" data-full="assets/media/the-deep/DeepLaser1.gif"><img alt="The Deep Sonic Laser cleaning contamination" loading="lazy" src="assets/media/the-deep/DeepLaser1.gif" class="example-thumb"/></a>
+<figcaption style="margin-top:0.45rem;font-size:0.95em;opacity:0.8;">The laser was designed to be the player’s main verb, not a one-off cleaning tool.</figcaption>
+</figure></div>
+<p>That let me tie cleaning directly into progression. Contamination was not just scenery to remove; it hid artifacts, blocked routes, controlled access to later areas, and fed rewards such as energy crystals. Because laser level and contamination color were linked, every upgrade immediately changed what the player could do in the world. That gave the game a consistent tactile language: when players saw contamination, a collectible, or a blocked path, they were still reading the same underlying system rather than learning an unrelated one from scratch.</p>
+<div class="example-media-grid single"><figure style="margin:0;">
+<a class="example-thumb-link" href="assets/media/the-deep/DeepLaser2.gif" data-full="assets/media/the-deep/DeepLaser2.gif"><img alt="The Deep Sonic Laser interaction and progression example" loading="lazy" src="assets/media/the-deep/DeepLaser2.gif" class="example-thumb"/></a>
+<figcaption style="margin-top:0.45rem;font-size:0.95em;opacity:0.8;">Cleaning, grabbing, rewards, and gating all had to read as one connected loop.</figcaption>
+</figure></div>
+</article>
+<article style="padding:1rem 1.125rem;border:1px solid rgba(127,127,127,0.22);border-radius:18px;">
+<h3>Creating movement problems and linking them to creature behaviour</h3>
+<p>Because the player could swim in any direction, I could not rely on flat, floor-based threat design. Hazards had to work in three dimensions and had to be understandable at speed in VR. I treated enemies and obstacles as movement problems first. Sharks were best in open water where their tracking and dives felt deliberate. Jellyfish and electric eels worked as mobile area denial that forced the player to read spacing and timing. Urchins became far more useful when paired with moving threats, because that created moments where the player had to decide whether to bait, dodge, clean, or reposition.</p>
+<p>I also wanted those encounters to feel interactive rather than purely punitive. The laser could slow hostile creatures in some cases, passive wildlife could be stunned, and contaminated wildlife could shift into a safer state once cleaned. That mattered because it gave the player agency over pressure. Instead of hazards only stopping progress, they became part of the same loop as cleaning and traversal: the player learned the space, managed threat, cleaned strategically, and opened a safer route forward.</p>
+<div class="example-media-grid single"><figure style="margin:0;">
+<a class="example-thumb-link" href="assets/media/the-deep/DeepCreatureDodge.gif" data-full="assets/media/the-deep/DeepCreatureDodge.gif"><img alt="The Deep creature dodge example" loading="lazy" src="assets/media/the-deep/DeepCreatureDodge.gif" class="example-thumb"/></a>
+<figcaption style="margin-top:0.45rem;font-size:0.95em;opacity:0.8;">Threats were arranged to create readable 3D dodge problems, not random punishment.</figcaption>
+</figure></div>
+<p>I also wanted those encounters to feel interactive rather than purely punitive. The laser could slow hostile creatures in some cases, passive wildlife could be stunned, and contaminated wildlife could shift into a safer state once cleaned. That mattered because it gave the player agency over pressure. Instead of hazards only stopping progress, they became part of the same loop as cleaning and traversal: the player learned the space, managed threat, cleaned strategically, and opened a safer route forward.</p>
+<div class="example-media-grid single"><figure style="margin:0;">
+<a class="example-thumb-link" href="assets/media/the-deep/DeepCreatureClean.gif" data-full="assets/media/the-deep/DeepCreatureClean.gif"><img alt="The Deep creature cleaning example" loading="lazy" src="assets/media/the-deep/DeepCreatureClean.gif" class="example-thumb"/></a>
+<figcaption style="margin-top:0.45rem;font-size:0.95em;opacity:0.8;">Cleaning could also change the state of wildlife and lower the pressure in a space.</figcaption>
+</figure></div>
+</article>
+<article style="padding:1rem 1.125rem;border:1px solid rgba(127,127,127,0.22);border-radius:18px;">
+<h3>Puzzles that tied the core systems together</h3>
+<p>The puzzle work on <em>The Deep</em> had to do more than simply block doors. It needed to reinforce the same toolset the player was already learning through exploration and cleaning. I used reconstruct puzzles, beam puzzles, hidden pieces, keyed doors, and color-coded interactions so that solving a puzzle still meant using the laser, moving carefully through space, reading environmental clues, and understanding what the last upgrade had actually unlocked.</p>
+<p>I was especially conscious of readability. These puzzles needed to feel approachable for younger players without becoming insultingly simple. That meant strong visual hierarchy, clear scan feedback, obvious snap points, satisfying audiovisual confirmation when a piece was placed correctly, and layouts that suggested the answer before the game ever had to explain it. The goal was for players to feel that they had figured something out for themselves, even when the system was quietly doing a lot of work to keep the solution legible.</p>
+<div class="example-media-grid single"><figure style="margin:0;">
+<a class="example-thumb-link" href="assets/media/the-deep/DeepPuzzle1.gif" data-full="assets/media/the-deep/DeepPuzzle1.gif"><img alt="The Deep puzzle interaction example one" loading="lazy" src="assets/media/the-deep/DeepPuzzle1.gif" class="example-thumb"/></a>
+<figcaption style="margin-top:0.45rem;font-size:0.95em;opacity:0.8;">Puzzle interactions reused the same laser and movement language as the rest of the game.</figcaption>
+</figure></div>
+<p>I was especially conscious of readability. These puzzles needed to feel approachable for younger players without becoming insultingly simple. That meant strong visual hierarchy, clear scan feedback, obvious snap points, satisfying audiovisual confirmation when a piece was placed correctly, and layouts that suggested the answer before the game ever had to explain it. The goal was for players to feel that they had figured something out for themselves, even when the system was quietly doing a lot of work to keep the solution legible.</p>
+<div class="example-media-grid single"><figure style="margin:0;">
+<a class="example-thumb-link" href="assets/media/the-deep/DeepPuzzle2.gif" data-full="assets/media/the-deep/DeepPuzzle2.gif"><img alt="The Deep puzzle interaction example two" loading="lazy" src="assets/media/the-deep/DeepPuzzle2.gif" class="example-thumb"/></a>
+<figcaption style="margin-top:0.45rem;font-size:0.95em;opacity:0.8;">Readable feedback helped players connect pieces, placement, and solution states quickly.</figcaption>
+</figure></div>
+<div class="example-media-grid single"><figure style="margin:0;">
+<a class="example-thumb-link" href="assets/media/the-deep/DeepPuzzle3.gif" data-full="assets/media/the-deep/DeepPuzzle3.gif"><img alt="The Deep puzzle interaction example three" loading="lazy" src="assets/media/the-deep/DeepPuzzle3.gif" class="example-thumb"/></a>
+<figcaption style="margin-top:0.45rem;font-size:0.95em;opacity:0.8;">The best puzzles rewarded observation and spatial reasoning rather than brute-force trial and error.</figcaption>
+</figure></div>
+</article>
+<article style="padding:1rem 1.125rem;border:1px solid rgba(127,127,127,0.22);border-radius:18px;">
+<h3>Structuring discovery across hubs, upgrades, and narrative progression</h3>
+<p>Once the tools, hazards, and puzzles were working, the last challenge was sequencing them so the game kept pulling the player forward. I designed the main wireframe for the experience and laid out the progression across the major hubs so discovery felt steady rather than accidental. The Reef served as the onboarding hub, teaching the core verbs while leaving enough openness for curiosity. Later spaces such as the Trench and Monumental Zone then reused those verbs at a larger scale, with new contamination types, deeper puzzle chains, and stronger gating based on prior upgrades.</p>
+<p>What mattered to me here was that progression should feel like the world was opening up for a reason. Artifacts, color-locked contamination, gated doors, creature encounters, and puzzle rooms all had to point at the next worthwhile objective without making the player feel dragged through a tunnel. When that structure was working, players could experience a sense of discovery while still understanding why they were there, what they had just earned, and what had become possible because of it.</p>
+<div class="example-media-grid single"><figure style="margin:0;">
+<a class="example-thumb-link" href="assets/media/the-deep/DeepDoorOpen.gif" data-full="assets/media/the-deep/DeepDoorOpen.gif"><img alt="The Deep door opening and progression example" loading="lazy" src="assets/media/the-deep/DeepDoorOpen.gif" class="example-thumb"/></a>
+<figcaption style="margin-top:0.45rem;font-size:0.95em;opacity:0.8;">Hubs, upgrades, and gates were plotted so discovery always converted into forward movement.</figcaption>
+</figure></div>
+</article>
+</div>
+<div class="evidence-grid">
+<article class="evidence-card">
+<a class="evidence-preview" href="assets/docs/the-deep/Pre-Production-Documentation.pdf" rel="noopener noreferrer" target="_blank"><img alt="Preview for Pre-Production Documentation" loading="lazy" src="assets/evidence-previews/the-deep/Pre-Production-Documentation-preview.png"/></a>
+<div class="evidence-copy">
+<p class="evidence-type">PDF</p>
+<h3>Pre-Production Documentation</h3>
+<p>Core loop and systems direction.</p>
+<p class="entry-card-actions"><a class="button button-small" href="assets/docs/the-deep/Pre-Production-Documentation.pdf" rel="noopener noreferrer" target="_blank">Open File</a></p>
+</div>
+</article>
+<article class="evidence-card">
+<a class="evidence-preview" href="assets/docs/the-deep/Mid-Production-Level-Brief.pdf" rel="noopener noreferrer" target="_blank"><img alt="Preview for Mid-Production Level Brief" loading="lazy" src="assets/evidence-previews/the-deep/Mid-Production-Level-Brief-preview.png"/></a>
+<div class="evidence-copy">
+<p class="evidence-type">PDF</p>
+<h3>Mid-Production Level Brief</h3>
+<p>Hazards, pacing, and level iteration.</p>
+<p class="entry-card-actions"><a class="button button-small" href="assets/docs/the-deep/Mid-Production-Level-Brief.pdf" rel="noopener noreferrer" target="_blank">Open File</a></p>
+</div>
+</article>
+<article class="evidence-card">
+<a class="evidence-preview" href="assets/docs/the-deep/The-Deep-Team-Design-Document.pdf" rel="noopener noreferrer" target="_blank"><img alt="Preview for The Deep Team Design Document" loading="lazy" src="assets/evidence-previews/the-deep/The-Deep-Team-Design-Document-preview.png"/></a>
+<div class="evidence-copy">
+<p class="evidence-type">PDF</p>
+<h3>The Deep Team Design Document</h3>
+<p>Consolidated full design document example.</p>
+<p class="entry-card-actions"><a class="button button-small" href="assets/docs/the-deep/The-Deep-Team-Design-Document.pdf" rel="noopener noreferrer" target="_blank">Open File</a></p>
+</div>
+</article>
+<article class="evidence-card">
+<a class="evidence-preview" href="assets/docs/the-deep/The-Deep-MVP-Wireframe.pdf" rel="noopener noreferrer" target="_blank"><img alt="Preview for MVP Wireframe" loading="lazy" src="assets/evidence-previews/the-deep/The-Deep-MVP-Wireframe-preview.png"/></a>
+<div class="evidence-copy">
+<p class="evidence-type">PDF</p>
+<h3>MVP Wireframe</h3>
+<p>Flow, hubs, and progression map.</p>
+<p class="entry-card-actions"><a class="button button-small" href="assets/docs/the-deep/The-Deep-MVP-Wireframe.pdf" rel="noopener noreferrer" target="_blank">Open File</a></p>
+</div>
+</article>
+</div></section><section class="section keyart-section"><div class="hero-image">
 <img alt="The Deep: Beyond the Reef key art" src="assets/media/the-deep/keyart.jpg"/>
 </div></section><section class="section">
 <h2>Gallery</h2>
@@ -74,5 +187,59 @@
 </div>
 </main>
 </div>
-<script defer="True" src="assets/site.js"></script></body>
+<script defer="True" src="assets/site.js"></script>
+<div class="lightbox-overlay" id="example-lightbox" aria-hidden="true" role="dialog" aria-label="Expanded example image">
+  <div class="lightbox-content">
+    <button class="lightbox-close" type="button" aria-label="Close expanded image">×</button>
+    <img class="lightbox-image" alt="" src=""/>
+  </div>
+</div>
+
+
+<script>
+(function(){
+  const lightbox = document.getElementById('example-lightbox');
+  if (!lightbox) return;
+  const lightboxImg = lightbox.querySelector('.lightbox-image');
+  const closeBtn = lightbox.querySelector('.lightbox-close');
+  let lastTrigger = null;
+
+  function openLightbox(trigger){
+    const full = trigger.getAttribute('data-full') || trigger.getAttribute('href');
+    const img = trigger.querySelector('img');
+    if (!full || !img) return;
+    lastTrigger = trigger;
+    lightboxImg.src = full;
+    lightboxImg.alt = img.alt || '';
+    lightbox.classList.add('is-open');
+    lightbox.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLightbox(){
+    lightbox.classList.remove('is-open');
+    lightbox.setAttribute('aria-hidden', 'true');
+    lightboxImg.src = '';
+    document.body.style.overflow = '';
+    if (lastTrigger) lastTrigger.focus();
+  }
+
+  document.querySelectorAll('.example-thumb-link').forEach(link => {
+    link.addEventListener('click', function(e){
+      e.preventDefault();
+      openLightbox(link);
+    });
+  });
+
+  closeBtn.addEventListener('click', closeLightbox);
+  lightbox.addEventListener('click', function(e){
+    if (e.target === lightbox) closeLightbox();
+  });
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape' && lightbox.classList.contains('is-open')) closeLightbox();
+  });
+})();
+</script>
+
+</body>
 </html>

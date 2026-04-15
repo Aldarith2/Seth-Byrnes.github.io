@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 
+<!DOCTYPE html>
+
 <html lang="en">
 <head>
 <meta charset="utf-8"/>
@@ -8,6 +10,28 @@
 <title>B-17: Flying Fortress The Bloody 100th — Seth Byrnes</title>
 <meta content="Portfolio project page for B-17: Flying Fortress The Bloody 100th." name="description"/>
 <link href="assets/styles.css" rel="stylesheet"/>
+
+<style>
+.example-media-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0.75rem;margin-top:0.875rem;align-items:start;justify-items:center;}
+.example-media-grid.single{grid-template-columns:1fr;justify-items:center;}
+.example-media-grid.single figure{max-width:340px;width:100%;}
+.example-thumb-link{display:block;width:100%;max-width:340px;margin:0 auto;text-decoration:none;cursor:zoom-in;}
+.example-thumb{display:block;width:100%;max-width:340px;aspect-ratio:4 / 3;object-fit:cover;border-radius:12px;margin:0 auto;}
+.example-media-grid.wide-single figure,.example-media-grid.wide-single .example-thumb-link{max-width:640px;}
+.example-media-grid.wide-single .example-thumb{max-width:640px;}
+.lightbox-overlay{position:fixed;inset:0;background:rgba(10,10,14,0.88);display:none;align-items:center;justify-content:center;padding:2rem;z-index:9999;cursor:zoom-out;}
+.lightbox-overlay.is-open{display:flex;}
+.lightbox-content{position:relative;max-width:min(96vw,1400px);max-height:92vh;display:flex;align-items:center;justify-content:center;}
+.lightbox-image{display:block;max-width:100%;max-height:92vh;width:auto;height:auto;border-radius:14px;box-shadow:0 20px 60px rgba(0,0,0,0.45);background:#111;}
+.lightbox-close{position:absolute;top:-0.75rem;right:-0.75rem;width:2.5rem;height:2.5rem;border:none;border-radius:999px;background:rgba(255,255,255,0.92);color:#111;font-size:1.5rem;line-height:1;cursor:pointer;box-shadow:0 10px 30px rgba(0,0,0,0.25);}
+.lightbox-close:hover{background:#fff;}
+@media (max-width: 700px){
+  .example-thumb-link,.example-thumb,.example-media-grid.single figure{max-width:100%;}
+  .lightbox-overlay{padding:1rem;}
+  .lightbox-close{top:0.5rem;right:0.5rem;}
+}
+</style>
+
 </head>
 <body>
 <div class="layout">
@@ -17,20 +41,17 @@
 <p class="site-role">Game Designer</p>
 <p class="site-location">Milwaukee, Wisconsin</p>
 <a aria-label="LinkedIn" class="sidebar-linkedin-button" href="https://www.linkedin.com/in/seth-byrnes-85003268/" rel="noopener noreferrer" target="_blank"><img alt="LinkedIn" src="assets/ui/linkedin-button-bgDark.png"/></a>
-<nav class="sidebar-nav">
-<a href="index.html">Home</a><a href="cv.html">CV / Resume</a><a href="the-deep.html">The Deep: Beyond the Reef</a><a href="dinohab.html">DinoHab</a><a href="monster-simulator-3000.html">Monster Simulator 3000</a><a href="civitas.html">Civitas / Civatlas</a><a href="battle-cry-of-freedom.html">Battle Cry of Freedom</a><a class="active" href="b17-flying-fortress.html">B-17: Flying Fortress The Bloody 100th</a><a href="dune-sea.html">Dune Sea</a><a href="roll-together.html">Roll Together / CritterBall / CritterBox</a><a href="half-rats-parasomnia.html">Half-Rats: Parasomnia</a><a href="mount-and-blade-community-maps.html">Mount &amp; Blade Community Maps</a><a href="red-meat-games.html">First Impact / Onslaught</a>
-</nav>
+<nav class="sidebar-nav"><a href="index.html">Home</a><a href="cv.html">CV / Resume</a><p class="nav-group-title">Featured Work</p><a href="the-deep.html">The Deep: Beyond the Reef</a><a href="dinohab.html">DinoHab</a><a href="monster-simulator-3000.html">Monster Simulator 3000</a><p class="nav-group-title">Additional Work</p><a href="civitas.html">Civatlas</a><a href="battle-cry-of-freedom.html">Battle Cry of Freedom</a><a class="active" href="b17-flying-fortress.html">B-17: Flying Fortress The Bloody 100th</a><a href="dune-sea.html">Dune Sea</a><a href="roll-together.html">Roll Together</a><a href="half-rats-parasomnia.html">Half-Rats: Parasomnia</a><a href="mount-and-blade-community-maps.html">Mount &amp; Blade Community Maps</a><a href="red-meat-games.html">First Impact / Onslaught</a></nav>
 <button aria-label="Toggle light and dark mode" aria-pressed="false" class="theme-toggle" type="button"><img alt="Dark mode" class="theme-toggle-image" src="assets/ui/theme-toggle-dark.png"/></button><div class="sidebar-meta"></div>
 </div>
 </aside>
 <main class="content">
 <div class="page">
 <header class="project-hero no-banner">
-
 <div class="hero-copy">
 <p class="eyebrow">MicroProse Canada / Outerra</p>
 <h1>B-17: Flying Fortress The Bloody 100th</h1>
-<p class="lead">Game Designer / Coordinator / Mission Design / Narrative Support · October 2020 – December 2022</p>
+<p class="lead">Game Designer / Coordinator / Mission Design / Narrative Support · October 2020 – December 2022</p><div class="project-skill-row"><ul class="skill-chips compact"><li>Historical Research</li><li>Mission Design</li><li>Narrative Support</li><li>Documentation</li><li>Level Design</li><li>Art Reference</li><li>Cross-Discipline Support</li></ul></div>
 </div>
 </header><section class="section b17-top-keyart-section">
 <div class="hero-image b17-top-keyart">
@@ -59,13 +80,144 @@
 </dl>
 </section>
 <section class="section">
-<h2>Position Summary</h2>
-<p>WWII bomber simulation built around historical research, mission framing, aircraft operations, and crew-space readability. My role bridged design, historical reference, narrative support, visual guidance, and cross-discipline coordination, with a strong emphasis on turning museum and archival material into implementation-ready game content for both gameplay and art production.</p></section>
+<h2>Ownership and Outcome</h2>
+<p><em>B-17: Flying Fortress The Bloody 100th</em> was a WWII bomber simulation built around historical authenticity, mission context, crew-space readability, and grounded environmental reconstruction. My role sat between design, research, narrative support, and production coordination, with a strong focus on turning archival, museum, and primary-source material into buildable content for gameplay and art. In practice, that meant helping reconstruct Thorpe Abbotts as a usable production space rather than a loose historical impression, supporting mission and environment direction with structured reference, and giving the wider team clearer material to graybox, stage, and iterate from. The result was a stronger historical foundation for airbase layout, interiors, props, signage, and supporting mission-facing detail across the project.</p></section>
 <section class="section">
 <h2>Responsibilities</h2>
-<ul class="list-tight"><li>Collaborated with the Warplane Heritage Museum and primary-source material to ground design in historical reference.</li><li>Designed and documented mechanics, mission structures, and level concepts based on bomber operations, crew procedures, and period context.</li><li>Built reference mockups, including a full airbase layout, to help art teams work to correct scale, placement, and period detail.</li><li>Compiled obscure manuals, diagrams, photographs, and layout references to support artists, modellers, and environment work with period-accurate material.</li></ul></section>
+<ul class="list-tight"><li>Built and organized a structured historical reference pipeline of 380+ production-useful items covering Thorpe Abbotts, USAAF operations, crew life, and broader bomber-support context.</li><li>Collaborated with museum contacts and primary-source archival material to convert research into usable design, environment, and mission-support reference.</li><li>Designed and documented mechanics, mission structures, and level concepts grounded in bomber operations, crew procedures, and period context.</li><li>Produced full airbase layout mockups and reference materials, including 30 targeted airfield-layout and structure references to support scale, placement, landmark relationships, and graybox decision-making.</li><li>Assembled 19 planning, document, and UI references, plus 18 aircraft, crew, and combat-context references, to support mission framing, environmental storytelling, and interface-adjacent authenticity.</li><li>Curated 15 uniform and personal-equipment references and 11 art-direction, color, and signage references to reduce ambiguity for props, materials, and other period-facing visual decisions.</li></ul></section>
+<section class="section"><h2>Examples</h2><p>This work started as research, but the useful part was turning that research into buildable space. I used archival photos, site plans, manuals, museum reference, and location material to help reconstruct Thorpe Abbotts, block key interiors, and give environment work a stronger historical foundation from graybox through final art.</p><div style="display:grid;gap:1rem;margin:1.25rem 0 1.5rem;">
+<article style="padding:1rem 1.125rem;border:1px solid rgba(127,127,127,0.22);border-radius:18px;">
+<h3>Reconnaissance</h3>
+<p>The first task was finding the real Thorpe Abbotts in a way production could use. I worked with museum contacts and archival sources to locate genuine period aerial photographs of the airfield, then dug through period documents to work out the likely placement and purpose of buildings, roads, and support structures. The problem was not just authenticity. It was giving the team a real map of the place rather than a loose impression of it.</p>
+<p>Once those references were cross-checked, they could be handed to artists as something actionable. That was the turning point. The airfield stopped being a vague historical subject and became a layout that could actually be plotted in engine and built from with confidence.</p>
+<div class="example-media-grid">
+<figure style="margin:0;"><a class="example-thumb-link" href="assets/media/b17-flying-fortress/recon-thorpe-abbotts.jpg" data-full="assets/media/b17-flying-fortress/recon-thorpe-abbotts.jpg"><img alt="High-resolution aerial reference of Thorpe Abbotts" loading="lazy" src="assets/media/b17-flying-fortress/recon-thorpe-abbotts.jpg" class="example-thumb"/></a></figure>
+<figure style="margin:0;"><a class="example-thumb-link" href="assets/media/b17-flying-fortress/recon-thorpe-aerial.png" data-full="assets/media/b17-flying-fortress/recon-thorpe-aerial.png"><img alt="Additional period aerial view of Thorpe Abbotts" loading="lazy" src="assets/media/b17-flying-fortress/recon-thorpe-aerial.png" class="example-thumb"/></a></figure>
+<figure style="margin:0;"><a class="example-thumb-link" href="assets/media/b17-flying-fortress/recon-thorpe-overlay.png" data-full="assets/media/b17-flying-fortress/recon-thorpe-overlay.png"><img alt="Thorpe Abbotts overlay planning in engine" loading="lazy" src="assets/media/b17-flying-fortress/recon-thorpe-overlay.png" class="example-thumb"/></a></figure>
+<figure style="margin:0;"><a class="example-thumb-link" href="assets/media/b17-flying-fortress/recon-airbase-built.png" data-full="assets/media/b17-flying-fortress/recon-airbase-built.png"><img alt="Thorpe Abbotts built out in engine from archival reference" loading="lazy" src="assets/media/b17-flying-fortress/recon-airbase-built.png" class="example-thumb"/></a></figure>
+</div>
+</article>
+<article style="padding:1rem 1.125rem;border:1px solid rgba(127,127,127,0.22);border-radius:18px;">
+<h3>Grayboxing the base</h3>
+<p>Once the footprint was in place, period references started providing usable metrics for blockouts. We were able to reconstruct classrooms, briefing spaces, offices, and communal rooms, which meant we now had both interiors and exteriors to work with. At that stage, though, they were still hollow shells. The design problem became how to move from correct proportions to believable lived spaces.</p>
+<p>This was where grayboxing proved its value. A room either read immediately or it did not. If the reference supported a clear blockout, then it was doing real production work. That process gave us spaces that could be tested, reviewed, and iterated on before final art, instead of relying on guesswork later.</p>
+<div class="example-media-grid">
+<figure style="margin:0;"><a class="example-thumb-link" href="assets/media/b17-flying-fortress/graybox-classroom-photos.png" data-full="assets/media/b17-flying-fortress/graybox-classroom-photos.png"><img alt="Classroom and briefing room photo reference" loading="lazy" src="assets/media/b17-flying-fortress/graybox-classroom-photos.png" class="example-thumb"/></a></figure>
+<figure style="margin:0;"><a class="example-thumb-link" href="assets/media/b17-flying-fortress/graybox-classroom.png" data-full="assets/media/b17-flying-fortress/graybox-classroom.png"><img alt="Classroom graybox built from historical reference" loading="lazy" src="assets/media/b17-flying-fortress/graybox-classroom.png" class="example-thumb"/></a></figure>
+<figure style="margin:0;"><a class="example-thumb-link" href="assets/media/b17-flying-fortress/graybox-officers-lounge-ref.png" data-full="assets/media/b17-flying-fortress/graybox-officers-lounge-ref.png"><img alt="Officers lounge historical reference" loading="lazy" src="assets/media/b17-flying-fortress/graybox-officers-lounge-ref.png" class="example-thumb"/></a></figure>
+<figure style="margin:0;"><a class="example-thumb-link" href="assets/media/b17-flying-fortress/graybox-communal-room.png" data-full="assets/media/b17-flying-fortress/graybox-communal-room.png"><img alt="Communal room graybox based on period reference" loading="lazy" src="assets/media/b17-flying-fortress/graybox-communal-room.png" class="example-thumb"/></a></figure>
+<figure style="margin:0;"><a class="example-thumb-link" href="assets/media/b17-flying-fortress/graybox-office.png" data-full="assets/media/b17-flying-fortress/graybox-office.png"><img alt="Office interior graybox based on archival material" loading="lazy" src="assets/media/b17-flying-fortress/graybox-office.png" class="example-thumb"/></a></figure>
+</div>
+</article>
+<article style="padding:1rem 1.125rem;border:1px solid rgba(127,127,127,0.22);border-radius:18px;">
+<h3>Esoteric Material Culture</h3>
+<p>After that I went looking for the deep-cut details that made the base feel inhabited in 1944 rather than merely accurate from a distance. Personal accounts and photographs turned up the sort of references that are easy to miss but invaluable once found: improvised washroom details like reused coffee canisters, cigarette tins outside buildings, giant bomber scheduling chalkboards full of assignment information, and the plain Air Ministry furniture that gave offices and briefing rooms their period character.</p>
+<p>I liked this stage because the findings were useful in more than one way. They helped environment art with the minutiae of daily life on the base, but they also informed mission design and interface thinking. The scheduling board, in particular, was not just dressing. It was a window into how bomber operations were organized and communicated.</p>
+<div class="example-media-grid">
+<figure style="margin:0;"><a class="example-thumb-link" href="assets/media/b17-flying-fortress/culture-bathroom.jpg" data-full="assets/media/b17-flying-fortress/culture-bathroom.jpg"><img alt="Washroom material culture reference from the base" loading="lazy" src="assets/media/b17-flying-fortress/culture-bathroom.jpg" class="example-thumb"/></a></figure>
+<figure style="margin:0;"><a class="example-thumb-link" href="assets/media/b17-flying-fortress/culture-control-location.png" data-full="assets/media/b17-flying-fortress/culture-control-location.png"><img alt="Support-structure and tower utility reference" loading="lazy" src="assets/media/b17-flying-fortress/culture-control-location.png" class="example-thumb"/></a></figure>
+<figure style="margin:0;"><a class="example-thumb-link" href="assets/media/b17-flying-fortress/culture-schedule.png" data-full="assets/media/b17-flying-fortress/culture-schedule.png"><img alt="Bomber scheduling chalkboard reference" loading="lazy" src="assets/media/b17-flying-fortress/culture-schedule.png" class="example-thumb"/></a></figure>
+<figure style="margin:0;"><a class="example-thumb-link" href="assets/media/b17-flying-fortress/culture-table-material.png" data-full="assets/media/b17-flying-fortress/culture-table-material.png"><img alt="Air Ministry table and furniture material reference" loading="lazy" src="assets/media/b17-flying-fortress/culture-table-material.png" class="example-thumb"/></a></figure>
+</div>
+</article>
+<article style="padding:1rem 1.125rem;border:1px solid rgba(127,127,127,0.22);border-radius:18px;">
+<h3>Expanding the visual story on the base</h3>
+<p>Once the footprint, interiors, and material culture were established, the next step was broadening the visual story of the airfield itself. We wanted more than correct rooms. We wanted the player to feel transported into Thorpe Abbotts and its surrounding landscape. That meant pushing roughouts of interiors and exteriors further and using geographic surveys to reconstruct the countryside, roads, and wider spatial context of the time.</p>
+<p>That wider context mattered because it tied the intimate spaces of the base to the operational life around them. The result was not just an accurate cluster of buildings, but a place with a horizon, a runway, a countryside, and a sense of routine that framed the missions themselves.</p>
+<div class="example-media-grid">
+<figure style="margin:0;"><a class="example-thumb-link" href="assets/media/b17-flying-fortress/story-airbase-interior-1.png" data-full="assets/media/b17-flying-fortress/story-airbase-interior-1.png"><img alt="Interior pass of the Thorpe Abbotts base" loading="lazy" src="assets/media/b17-flying-fortress/story-airbase-interior-1.png" class="example-thumb"/></a></figure>
+<figure style="margin:0;"><a class="example-thumb-link" href="assets/media/b17-flying-fortress/story-airbase-interior-2.png" data-full="assets/media/b17-flying-fortress/story-airbase-interior-2.png"><img alt="Second interior pass of the Thorpe Abbotts base" loading="lazy" src="assets/media/b17-flying-fortress/story-airbase-interior-2.png" class="example-thumb"/></a></figure>
+<figure style="margin:0;"><a class="example-thumb-link" href="assets/media/b17-flying-fortress/story-airfield-life.png" data-full="assets/media/b17-flying-fortress/story-airfield-life.png"><img alt="Airfield life and atmosphere in engine" loading="lazy" src="assets/media/b17-flying-fortress/story-airfield-life.png" class="example-thumb"/></a></figure>
+<figure style="margin:0;"><a class="example-thumb-link" href="assets/media/b17-flying-fortress/story-airfield-takeoff.png" data-full="assets/media/b17-flying-fortress/story-airfield-takeoff.png"><img alt="Takeoff and runway perspective from the base" loading="lazy" src="assets/media/b17-flying-fortress/story-airfield-takeoff.png" class="example-thumb"/></a></figure>
+<figure style="margin:0;"><a class="example-thumb-link" href="assets/media/b17-flying-fortress/story-airstrip-above.png" data-full="assets/media/b17-flying-fortress/story-airstrip-above.png"><img alt="Aerial reconstruction of the countryside and airstrip" loading="lazy" src="assets/media/b17-flying-fortress/story-airstrip-above.png" class="example-thumb"/></a></figure>
+</div>
+</article>
+<article style="padding:1rem 1.125rem;border:1px solid rgba(127,127,127,0.22);border-radius:18px;">
+<h3>Research made into reality</h3>
+<p>One of the clearest examples of the whole process paying off was a mobile air traffic control hut that kept appearing in the background of reference photos. For a time we could see it often enough to know it mattered, but not clearly enough to understand it. Finding enough usable images to create a turnaround for the artists was a real research task in itself. Once we pinned down its role in communicating with aircraft as they taxied and landed, the model could finally move ahead with confidence.</p>
+<p>I remember that moment vividly because it felt like research becoming tangible. There was a real buzz in the office when the model was finalized. It was a small structure, but it represented the best part of the project: obscure reference turning into a finished, placed object that made the world more believable.</p>
+<div class="example-media-grid">
+<figure style="margin:0;"><a class="example-thumb-link" href="assets/media/b17-flying-fortress/reality-hut-photo-1.png" data-full="assets/media/b17-flying-fortress/reality-hut-photo-1.png"><img alt="Historical photo of the mobile air traffic control hut" loading="lazy" src="assets/media/b17-flying-fortress/reality-hut-photo-1.png" class="example-thumb"/></a></figure>
+<figure style="margin:0;"><a class="example-thumb-link" href="assets/media/b17-flying-fortress/reality-hut-photo-2.png" data-full="assets/media/b17-flying-fortress/reality-hut-photo-2.png"><img alt="Additional historical reference of the mobile air traffic control hut" loading="lazy" src="assets/media/b17-flying-fortress/reality-hut-photo-2.png" class="example-thumb"/></a></figure>
+<figure style="margin:0;"><a class="example-thumb-link" href="assets/media/b17-flying-fortress/reality-hut-graybox.png" data-full="assets/media/b17-flying-fortress/reality-hut-graybox.png"><img alt="3D model blockout of the mobile air traffic control hut" loading="lazy" src="assets/media/b17-flying-fortress/reality-hut-graybox.png" class="example-thumb"/></a></figure>
+<figure style="margin:0;"><a class="example-thumb-link" href="assets/media/b17-flying-fortress/reality-hut-final.png" data-full="assets/media/b17-flying-fortress/reality-hut-final.png"><img alt="Finished model of the mobile air traffic control hut" loading="lazy" src="assets/media/b17-flying-fortress/reality-hut-final.png" class="example-thumb"/></a></figure>
+</div>
+</article>
+</div><div class="evidence-grid"><article class="evidence-card">
+<a class="evidence-preview" href="assets/docs/b17-flying-fortress/thorpe_abbotts_runway_control_caravan_RefBrief.pdf" rel="noopener noreferrer" target="_blank"><img alt="Preview for Thorpe Abbotts Runway Control Caravan Brief" loading="lazy" src="assets/evidence-previews/b17-flying-fortress/Runway-Control-Caravan-Brief-preview.png"/></a>
+<div class="evidence-copy">
+<p class="evidence-type">PDF</p>
+<h3>Runway Control Caravan Brief</h3>
+<p>Combined artist and environment brief covering the Thorpe Abbotts runway control caravan, its placement, and its build constraints.</p>
+<p class="entry-card-actions"><a class="button button-small" href="assets/docs/b17-flying-fortress/thorpe_abbotts_runway_control_caravan_RefBrief.pdf" rel="noopener noreferrer" target="_blank">Open File</a></p>
+</div>
+</article>
+<article class="evidence-card"><a class="evidence-preview" href="https://youtu.be/1mcUti8h9EA" rel="noopener noreferrer" target="_blank"><img alt="Preview for B-17 reconstruction video" loading="lazy" src="assets/evidence-previews/b17-flying-fortress/B17-Reconstruction-Video-preview.png"/></a><div class="evidence-copy"><p class="evidence-type">VIDEO</p><h3>B-17 Reconstruction Overview</h3><p>Research from manuals, schematics, diagrams, and archival material led to a complete and accurate reconstruction of a B-17.</p><p class="entry-card-actions"><a class="button button-small" href="https://youtu.be/1mcUti8h9EA" rel="noopener noreferrer" target="_blank">Watch Video</a></p></div></article>
+<article class="evidence-card">
+<a class="evidence-preview" href="assets/docs/b17-flying-fortress/Clothing-and-Material-Culture-on-Base.pdf" rel="noopener noreferrer" target="_blank"><img alt="Preview for Clothing and Material Culture on Base" loading="lazy" src="assets/evidence-previews/b17-flying-fortress/Clothing-and-Material-Culture-on-Base-preview.png"/></a>
+<div class="evidence-copy">
+<p class="evidence-type">PDF</p>
+<h3>Clothing and Material Culture on Base</h3>
+<p>Base-life reference for clothing, support spaces, and everyday material detail.</p>
+<p class="entry-card-actions"><a class="button button-small" href="assets/docs/b17-flying-fortress/Clothing-and-Material-Culture-on-Base.pdf" rel="noopener noreferrer" target="_blank">Open File</a></p>
+</div>
+</article>
+<article class="evidence-card">
+<a class="evidence-preview" href="assets/docs/b17-flying-fortress/B-17-Pilot-Checklist.pdf" rel="noopener noreferrer" target="_blank"><img alt="Preview for B-17 Pilot Checklist" loading="lazy" src="assets/evidence-previews/b17-flying-fortress/B-17-Pilot-Checklist-preview.png"/></a>
+<div class="evidence-copy">
+<p class="evidence-type">PDF</p>
+<h3>B-17 Pilot Checklist</h3>
+<p>Operational reference for cockpit procedure and aircraft authenticity.</p>
+<p class="entry-card-actions"><a class="button button-small" href="assets/docs/b17-flying-fortress/B-17-Pilot-Checklist.pdf" rel="noopener noreferrer" target="_blank">Open File</a></p>
+</div>
+</article>
+<article class="evidence-card">
+<a class="evidence-preview" href="assets/docs/b17-flying-fortress/B-17-Pilots-Manual.pdf" rel="noopener noreferrer" target="_blank"><img alt="Preview for B-17 Pilots Manual" loading="lazy" src="assets/evidence-previews/b17-flying-fortress/B-17-Pilots-Manual-preview.png"/></a>
+<div class="evidence-copy">
+<p class="evidence-type">PDF</p>
+<h3>B-17 Pilots Manual</h3>
+<p>Technical source used to support aircraft interpretation for design and art.</p>
+<p class="entry-card-actions"><a class="button button-small" href="assets/docs/b17-flying-fortress/B-17-Pilots-Manual.pdf" rel="noopener noreferrer" target="_blank">Open File</a></p>
+</div>
+</article>
+<article class="evidence-card">
+<a class="evidence-preview" href="assets/docs/b17-flying-fortress/Combat-Crew-Manual.pdf" rel="noopener noreferrer" target="_blank"><img alt="Preview for Combat Crew Manual" loading="lazy" src="assets/evidence-previews/b17-flying-fortress/Combat-Crew-Manual-preview.png"/></a>
+<div class="evidence-copy">
+<p class="evidence-type">PDF</p>
+<h3>Combat Crew Manual</h3>
+<p>Crew-role and operations reference for mission framing and supporting detail.</p>
+<p class="entry-card-actions"><a class="button button-small" href="assets/docs/b17-flying-fortress/Combat-Crew-Manual.pdf" rel="noopener noreferrer" target="_blank">Open File</a></p>
+</div>
+</article>
+<article class="evidence-card">
+<a class="evidence-preview" href="assets/docs/b17-flying-fortress/Radio-Operator-Information-File.pdf" rel="noopener noreferrer" target="_blank"><img alt="Preview for Radio Operator Information File" loading="lazy" src="assets/evidence-previews/b17-flying-fortress/Radio-Operator-Information-File-preview.png"/></a>
+<div class="evidence-copy">
+<p class="evidence-type">PDF</p>
+<h3>Radio Operator Information File</h3>
+<p>Specialist crew-space reference for role-specific authenticity.</p>
+<p class="entry-card-actions"><a class="button button-small" href="assets/docs/b17-flying-fortress/Radio-Operator-Information-File.pdf" rel="noopener noreferrer" target="_blank">Open File</a></p>
+</div>
+</article>
+<article class="evidence-card">
+<a class="evidence-preview" href="assets/docs/b17-flying-fortress/Pilots-Information-File.pdf" rel="noopener noreferrer" target="_blank"><img alt="Preview for Pilots Information File" loading="lazy" src="assets/evidence-previews/b17-flying-fortress/Pilots-Information-File-preview.png"/></a>
+<div class="evidence-copy">
+<p class="evidence-type">PDF</p>
+<h3>Pilots Information File</h3>
+<p>Supplementary period documentation used across the wider research set.</p>
+<p class="entry-card-actions"><a class="button button-small" href="assets/docs/b17-flying-fortress/Pilots-Information-File.pdf" rel="noopener noreferrer" target="_blank">Open File</a></p>
+</div>
+</article>
+<article class="evidence-card">
+<a class="evidence-preview" href="assets/docs/b17-flying-fortress/Tower-Site-Sketch.jpg" rel="noopener noreferrer" target="_blank"><img alt="Preview for Tower Site Sketch" loading="lazy" src="assets/evidence-previews/b17-flying-fortress/Tower-Site-Sketch-preview.png"/></a>
+<div class="evidence-copy">
+<p class="evidence-type">JPG</p>
+<h3>Tower Site Sketch</h3>
+<p>Airbase layout reference for structure placement and spatial logic.</p>
+<p class="entry-card-actions"><a class="button button-small" href="assets/docs/b17-flying-fortress/Tower-Site-Sketch.jpg" rel="noopener noreferrer" target="_blank">Open File</a></p>
+</div>
+</article>
 
-<section class="section"><h2>Design Work Samples</h2><p>This research pack reflects hours of searching for obscure reference material and compiling it into something useful for production. The goal was to give artists and modellers period-accurate references, support aircraft and crew-space detail, and provide layout material for airbase spaces and structures.</p><div class="sample-list"><article class="sample-card"><h3>Clothing and Material Culture on Base</h3><p>A short reference brief focused on clothing issue, kitchen-duty footwear, and everyday support-space material culture on base. It was assembled to give artists and modellers grounded reference for personnel presentation, support interiors, and the practical texture of airbase life beyond aircraft-only material.</p><p class="note"><a href="assets/docs/b17-flying-fortress/Clothing-and-Material-Culture-on-Base.pdf" rel="noopener noreferrer" target="_blank">Open file</a></p></article><article class="sample-card"><h3>B-17 Pilot Checklist</h3><p>Reference material gathered to support cockpit, crew-procedure, and operational authenticity.</p><p class="note"><a href="assets/docs/b17-flying-fortress/B-17-Pilot-Checklist.pdf" rel="noopener noreferrer" target="_blank">Open file</a></p></article><article class="sample-card"><h3>B-17 Pilots Manual</h3><p>Technical reference compiled to support historically grounded interpretation for design and art.</p><p class="note"><a href="assets/docs/b17-flying-fortress/B-17-Pilots-Manual.pdf" rel="noopener noreferrer" target="_blank">Open file</a></p></article><article class="sample-card"><h3>Combat Crew Manual</h3><p>Crew operations reference used to inform mission framing, crew roles, and supporting detail.</p><p class="note"><a href="assets/docs/b17-flying-fortress/Combat-Crew-Manual.pdf" rel="noopener noreferrer" target="_blank">Open file</a></p></article><article class="sample-card"><h3>Radio Operator Information File</h3><p>Specialist role reference gathered to help ground crew-space detail and supporting art decisions.</p><p class="note"><a href="assets/docs/b17-flying-fortress/Radio-Operator-Information-File.pdf" rel="noopener noreferrer" target="_blank">Open file</a></p></article><article class="sample-card"><h3>Pilots Information File</h3><p>Supplementary period documentation assembled as part of the wider research effort.</p><p class="note"><a href="assets/docs/b17-flying-fortress/Pilots-Information-File.pdf" rel="noopener noreferrer" target="_blank">Open file</a></p></article><article class="sample-card"><h3>Tower Site Sketch</h3><p>Layout reference used to help artists and environment work with base placement and structure relationships.</p><p class="note"><a href="assets/docs/b17-flying-fortress/Tower-Site-Sketch.jpg" rel="noopener noreferrer" target="_blank">Open file</a></p></article><article class="sample-card"><h3>Runway Hut Reference</h3><p>Example of the visual reference gathered to support accurate airbase dressing and support structures.</p><p class="note"><a href="assets/docs/b17-flying-fortress/Runway-Hut-Reference.png" rel="noopener noreferrer" target="_blank">Open file</a></p></article></div></section><section class="section">
+</div></section><section class="section">
 <h2>Gallery</h2>
 <div class="gallery">
 <figure class="gallery-item"><img alt="B-17: Flying Fortress The Bloody 100th screenshot 1" loading="lazy" src="assets/media/b17-flying-fortress/gallery-01.jpg"/></figure><figure class="gallery-item"><img alt="B-17: Flying Fortress The Bloody 100th screenshot 2" loading="lazy" src="assets/media/b17-flying-fortress/gallery-02.jpg"/></figure><figure class="gallery-item"><img alt="B-17: Flying Fortress The Bloody 100th screenshot 3" loading="lazy" src="assets/media/b17-flying-fortress/gallery-03.jpg"/></figure><figure class="gallery-item"><img alt="B-17: Flying Fortress The Bloody 100th screenshot 4" loading="lazy" src="assets/media/b17-flying-fortress/gallery-04.jpg"/></figure><figure class="gallery-item"><img alt="B-17: Flying Fortress The Bloody 100th screenshot 5" loading="lazy" src="assets/media/b17-flying-fortress/gallery-05.jpg"/></figure><figure class="gallery-item"><img alt="B-17: Flying Fortress The Bloody 100th screenshot 6" loading="lazy" src="assets/media/b17-flying-fortress/gallery-06.jpg"/></figure>
@@ -74,5 +226,59 @@
 </div>
 </main>
 </div>
-<script defer="True" src="assets/site.js"></script></body>
+<script defer="True" src="assets/site.js"></script>
+<div class="lightbox-overlay" id="example-lightbox" aria-hidden="true" role="dialog" aria-label="Expanded example image">
+  <div class="lightbox-content">
+    <button class="lightbox-close" type="button" aria-label="Close expanded image">×</button>
+    <img class="lightbox-image" alt="" src=""/>
+  </div>
+</div>
+
+
+<script>
+(function(){
+  const lightbox = document.getElementById('example-lightbox');
+  if (!lightbox) return;
+  const lightboxImg = lightbox.querySelector('.lightbox-image');
+  const closeBtn = lightbox.querySelector('.lightbox-close');
+  let lastTrigger = null;
+
+  function openLightbox(trigger){
+    const full = trigger.getAttribute('data-full') || trigger.getAttribute('href');
+    const img = trigger.querySelector('img');
+    if (!full || !img) return;
+    lastTrigger = trigger;
+    lightboxImg.src = full;
+    lightboxImg.alt = img.alt || '';
+    lightbox.classList.add('is-open');
+    lightbox.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLightbox(){
+    lightbox.classList.remove('is-open');
+    lightbox.setAttribute('aria-hidden', 'true');
+    lightboxImg.src = '';
+    document.body.style.overflow = '';
+    if (lastTrigger) lastTrigger.focus();
+  }
+
+  document.querySelectorAll('.example-thumb-link').forEach(link => {
+    link.addEventListener('click', function(e){
+      e.preventDefault();
+      openLightbox(link);
+    });
+  });
+
+  closeBtn.addEventListener('click', closeLightbox);
+  lightbox.addEventListener('click', function(e){
+    if (e.target === lightbox) closeLightbox();
+  });
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape' && lightbox.classList.contains('is-open')) closeLightbox();
+  });
+})();
+</script>
+
+</body>
 </html>

@@ -14,7 +14,9 @@
   function pickTheme() {
     try {
       if (pickBroken()) return 'dark';
-      return localStorage.getItem(STORAGE_KEY) || 'dark';
+      var stored = localStorage.getItem(STORAGE_KEY);
+      if (stored === 'light' || stored === 'dark') return stored;
+      return 'dark';
     } catch (e) {
       return 'dark';
     }
@@ -112,10 +114,6 @@
   }
 
   function setupSafetyResets() {
-    if (isIndexPage()) {
-      resetBrokenState();
-    }
-
     document.querySelectorAll('.sidebar-linkedin-button, .hero-linkedin-button').forEach(function (link) {
       bindLinkedinFxNavigation(link);
     });
@@ -130,6 +128,7 @@
     document.body.appendChild(fxLayer);
     return fxLayer;
   }
+
 
   function emitDust(link) {
     if (!link) return;
@@ -154,6 +153,35 @@
         };
       }(particle), 820);
     }
+  }
+
+  function emitPixelBurst(target, palette, amount, className) {
+    if (!target) return;
+    var layer = ensureFxLayer();
+    var rect = target.getBoundingClientRect();
+    var count = amount || 10;
+    for (var i = 0; i < count; i += 1) {
+      var particle = document.createElement('span');
+      particle.className = className || 'wickle-dust-particle';
+      particle.style.left = (rect.left + rect.width * (0.18 + Math.random() * 0.64)).toFixed(2) + 'px';
+      particle.style.top = (rect.top + rect.height * (0.2 + Math.random() * 0.54)).toFixed(2) + 'px';
+      particle.style.setProperty('--wpx-x', ((Math.random() * 54) - 27).toFixed(2) + 'px');
+      particle.style.setProperty('--wpx-y', (-14 - Math.random() * 24).toFixed(2) + 'px');
+      particle.style.setProperty('--wpx-y2', (22 + Math.random() * 48).toFixed(2) + 'px');
+      particle.style.setProperty('--wpx-rot', ((Math.random() * 200) - 100).toFixed(2) + 'deg');
+      particle.style.setProperty('--wpx-scale', (0.9 + Math.random() * 0.9).toFixed(2));
+      if (palette && palette.length) particle.style.background = palette[Math.floor(Math.random() * palette.length)];
+      layer.appendChild(particle);
+      window.setTimeout(function (node) {
+        return function () {
+          if (node && node.parentNode) node.parentNode.removeChild(node);
+        };
+      }(particle), 1300);
+    }
+  }
+
+  function emitDustParticles(target) {
+    emitPixelBurst(target, ['rgba(204,192,168,.78)', 'rgba(176,166,142,.66)', 'rgba(154,144,122,.52)'], 12, 'wickle-dust-particle');
   }
 
   function emitNameDust(target) {
@@ -281,10 +309,28 @@
     });
   }
 
+  function updateGameReviewPageButtons(theme) {
+    var path = ((window.location.pathname || '').split('/').pop() || 'index.html').toLowerCase();
+    if (['design-game-reviews.html', 'design-notes.html', 'design-essay-simplicity.html'].indexOf(path) === -1) return;
+
+    document.querySelectorAll('.design-notes-links .button').forEach(function (button) {
+      if (theme === 'dark') {
+        button.style.background = '#3f7a1f';
+        button.style.borderColor = '#3f7a1f';
+        button.style.color = '#000';
+      } else {
+        button.style.removeProperty('background');
+        button.style.removeProperty('border-color');
+        button.style.removeProperty('color');
+      }
+    });
+  }
+
   function applyTheme(theme) {
     root.setAttribute('data-theme', theme);
     root.style.setProperty('--bg-pattern', buildBackground());
     updateThemeAssets(theme);
+    updateGameReviewPageButtons(theme);
     document.querySelectorAll('.theme-toggle').forEach(function (btn) {
       btn.setAttribute('aria-pressed', theme === 'light' ? 'true' : 'false');
       btn.setAttribute('title', theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
@@ -493,6 +539,9 @@
         if (pickBroken()) {
           ev.preventDefault();
           ev.stopPropagation();
+          if (!stack.classList.contains('fuse-panel-open')) {
+            openFusePanel();
+          }
           pulseSparks();
           return;
         }
@@ -507,6 +556,17 @@
         }
         clickTimes = clickTimes.filter(function (time) { return now - time < stack._burnWindowMs; });
         clickTimes.push(now);
+        if (window.__wickleLightMisclickBoost && window.__wickleLightMisclickBoost.active && window.__wickleLightMisclickBoost.until > now) {
+          clickTimes.push(now - 1);
+          clickTimes.push(now - 2);
+          if (Math.random() < 0.11) {
+            clickTimes.push(now - 3);
+            clickTimes.push(now - 4);
+            clickTimes.push(now - 5);
+            clickTimes.push(now - 6);
+          }
+          window.__wickleLightMisclickBoost.active = false;
+        }
         if (clickTimes.length >= stack._burnThreshold) {
           ev.preventDefault();
           ev.stopPropagation();
@@ -549,6 +609,19 @@
     });
   }
 
+  function paintBottomDividerBlack(divider) {
+    if (!divider) return;
+    divider.style.setProperty('--wickle-bottom-divider-color', '#000');
+    divider.querySelectorAll('.divider-bar, .divider-endcap').forEach(function (part) {
+      part.style.background = '#000';
+      part.style.borderColor = '#000';
+      part.style.color = '#000';
+      part.style.boxShadow = 'none';
+      part.style.filter = 'grayscale(1) brightness(0)';
+      part.style.opacity = '1';
+    });
+  }
+
   function setupDividerDecor() {
     document.querySelectorAll('.section h2').forEach(function (heading) {
       var section = heading.closest('.section');
@@ -558,6 +631,29 @@
       divider.innerHTML = '<span class="divider-endcap divider-endcap-left" aria-hidden="true"></span><span class="divider-bar" aria-hidden="true"></span><span class="divider-endcap divider-endcap-right" aria-hidden="true"></span>';
       section.insertBefore(divider, heading);
     });
+
+    var host = document.querySelector('main') ||
+      document.querySelector('.page-content') ||
+      document.querySelector('.page-shell') ||
+      document.querySelector('.content') ||
+      document.body;
+
+    if (!host) return;
+
+    var finalDivider = document.getElementById('final-page-divider');
+    if (!finalDivider) {
+      finalDivider = document.createElement('div');
+      finalDivider.className = 'section-divider final-page-divider';
+      finalDivider.id = 'final-page-divider';
+      finalDivider.dataset.wickleBottom = 'true';
+      finalDivider.setAttribute('aria-hidden', 'true');
+      finalDivider.innerHTML = '<span class="divider-endcap divider-endcap-left" aria-hidden="true"></span><span class="divider-bar" aria-hidden="true"></span><span class="divider-endcap divider-endcap-right" aria-hidden="true"></span>';
+      finalDivider.style.marginTop = '32px';
+      finalDivider.style.marginBottom = '0';
+      host.appendChild(finalDivider);
+    }
+
+    paintBottomDividerBlack(finalDivider);
   }
 
   function setupLightbox() {
@@ -707,23 +803,60 @@
     var avatar = document.querySelector('.profile-photo');
     if (!avatar || avatar.dataset.sbSecretBound === 'true') return;
     avatar.dataset.sbSecretBound = 'true';
+    var clickCount = 0;
+    var clickTimer = 0;
+    var isCompleting = false;
+    var secretPalette = ['rgba(192,170,116,.92)'];
+
+    function getSecretMessage(step) {
+      if (step <= 1) return 'Congratulations, You found a secret interaction! 1/3';
+      if (step === 2) return '2/3...';
+      return '3/3!';
+    }
+
     avatar.addEventListener('click', function () {
+      if (isCompleting) return;
+
       var host = avatar.closest('.intro-grid') || avatar.parentNode || document.body;
+      clickCount = Math.min(3, clickCount + 1);
+
+      window.clearTimeout(clickTimer);
+      clickTimer = window.setTimeout(function () {
+        clickCount = 0;
+        clickTimer = 0;
+      }, 1800);
+
+      emitPixelBurst(avatar, secretPalette, 6 + (clickCount * 6), 'wickle-dust-particle');
+
       var existing = host.querySelector('.avatar-secret-message');
       if (existing) existing.remove();
       var message = document.createElement('div');
       message.className = 'avatar-secret-message';
-      message.textContent = "You've found a secret message! Congratulations!";
+      message.textContent = getSecretMessage(clickCount);
+      message.dataset.step = String(clickCount);
+      message.style.setProperty('--sb-secret-scale', (1 + (Math.max(0, clickCount - 1) * 0.035)).toFixed(3));
       host.appendChild(message);
       window.requestAnimationFrame(function () {
         message.classList.add('is-visible');
       });
+
+      var visibleFor = clickCount >= 3 ? 2200 : 1700;
       window.setTimeout(function () {
         message.classList.remove('is-visible');
-      }, 1700);
+      }, visibleFor);
       window.setTimeout(function () {
         if (message && message.parentNode) message.parentNode.removeChild(message);
-      }, 2200);
+      }, visibleFor + 500);
+
+      if (clickCount >= 3) {
+        isCompleting = true;
+        clickCount = 0;
+        window.clearTimeout(clickTimer);
+        clickTimer = 0;
+        window.setTimeout(function () {
+          window.location.href = 'design-notes.html';
+        }, 1000);
+      }
     });
   }
 
@@ -738,6 +871,7 @@
         node.classList.remove('sb-press');
         void node.offsetWidth;
         node.classList.add('sb-press');
+        if (Math.random() < 0.1) emitDustParticles(node);
         window.setTimeout(function () {
           node.classList.remove('sb-press');
         }, 180);
@@ -780,12 +914,2785 @@
   }
 
 
+
+  
+
+
+  function setupWickleDividerOverlap() {
+    var styleId = 'sb-wickle-divider-overlap-style';
+    if (document.getElementById(styleId)) return;
+    var style = document.createElement('style');
+    style.id = styleId;
+    style.textContent = '' +
+      '.section-divider:not(.final-page-divider) .wickle-peek{' +
+        'translate:0 3px !important;' +
+      '}' +
+      '.final-page-divider .wickle-peek{' +
+        'translate:0 5px !important;' +
+      '}';
+    document.head.appendChild(style);
+  }
+
+  function setupSidebarTightFit() {
+    var styleId = 'sb-sidebar-tightfit-style';
+    if (!document.getElementById(styleId)) {
+      var style = document.createElement('style');
+      style.id = styleId;
+      style.textContent = '' +
+        ':root[data-sb-sidebar-fit="tight"] .sidebar{' +
+          'padding-top:12px;' +
+          'padding-bottom:12px;' +
+        '}' +
+        ':root[data-sb-sidebar-fit="tight"] .sidebar .sidebar-nav{' +
+          'margin-top:6px;' +
+          'margin-bottom:6px;' +
+        '}' +
+        ':root[data-sb-sidebar-fit="tight"] .sidebar .sidebar-nav ul,' +
+        ':root[data-sb-sidebar-fit="tight"] .sidebar .sidebar-nav ol{' +
+          'margin-top:0;' +
+          'margin-bottom:0;' +
+          'row-gap:6px;' +
+          'column-gap:6px;' +
+        '}' +
+        ':root[data-sb-sidebar-fit="tight"] .sidebar .sidebar-nav li{' +
+          'margin-top:0;' +
+          'margin-bottom:0;' +
+        '}' +
+        ':root[data-sb-sidebar-fit="tight"] .sidebar .site-name{' +
+          'margin-bottom:2px;' +
+        '}' +
+        ':root[data-sb-sidebar-fit="tight"] .sidebar .site-role,' +
+        ':root[data-sb-sidebar-fit="tight"] .sidebar .site-location,' +
+        ':root[data-sb-sidebar-fit="tight"] .sidebar .sidebar-meta,' +
+        ':root[data-sb-sidebar-fit="tight"] .sidebar .sidebar-meta p{' +
+          'margin-top:0;' +
+          'margin-bottom:4px;' +
+        '}' +
+        ':root[data-sb-sidebar-fit="tight"] .sidebar .sidebar-linkedin-button,' +
+        ':root[data-sb-sidebar-fit="tight"] .sidebar .theme-toggle-stack{' +
+          'margin-top:6px;' +
+        '}' +
+        ':root[data-sb-sidebar-fit="tight"] .sidebar > * + *{' +
+          'margin-top:6px;' +
+        '}' +
+        ':root[data-sb-sidebar-fit="tight"] .sidebar .sidebar-nav a{' +
+          'padding-top:6px;' +
+          'padding-bottom:6px;' +
+        '}' +
+        ':root[data-sb-sidebar-fit="tighter"] .sidebar{' +
+          'padding-top:8px;' +
+          'padding-bottom:8px;' +
+        '}' +
+        ':root[data-sb-sidebar-fit="tighter"] .sidebar .sidebar-nav{' +
+          'margin-top:4px;' +
+          'margin-bottom:4px;' +
+        '}' +
+        ':root[data-sb-sidebar-fit="tighter"] .sidebar .sidebar-nav ul,' +
+        ':root[data-sb-sidebar-fit="tighter"] .sidebar .sidebar-nav ol{' +
+          'margin-top:0;' +
+          'margin-bottom:0;' +
+          'row-gap:4px;' +
+          'column-gap:4px;' +
+        '}' +
+        ':root[data-sb-sidebar-fit="tighter"] .sidebar .sidebar-nav li{' +
+          'margin-top:0;' +
+          'margin-bottom:0;' +
+        '}' +
+        ':root[data-sb-sidebar-fit="tighter"] .sidebar .site-name{' +
+          'margin-bottom:1px;' +
+        '}' +
+        ':root[data-sb-sidebar-fit="tighter"] .sidebar .site-role,' +
+        ':root[data-sb-sidebar-fit="tighter"] .sidebar .site-location,' +
+        ':root[data-sb-sidebar-fit="tighter"] .sidebar .sidebar-meta,' +
+        ':root[data-sb-sidebar-fit="tighter"] .sidebar .sidebar-meta p{' +
+          'margin-top:0;' +
+          'margin-bottom:2px;' +
+        '}' +
+        ':root[data-sb-sidebar-fit="tighter"] .sidebar .sidebar-linkedin-button,' +
+        ':root[data-sb-sidebar-fit="tighter"] .sidebar .theme-toggle-stack{' +
+          'margin-top:4px;' +
+        '}' +
+        ':root[data-sb-sidebar-fit="tighter"] .sidebar > * + *{' +
+          'margin-top:4px;' +
+        '}' +
+        ':root[data-sb-sidebar-fit="tighter"] .sidebar .sidebar-nav a{' +
+          'padding-top:5px;' +
+          'padding-bottom:5px;' +
+        '}' +
+        ':root[data-sb-sidebar-fit="tightest"] .sidebar{' +
+          'padding-top:4px;' +
+          'padding-bottom:4px;' +
+        '}' +
+        ':root[data-sb-sidebar-fit="tightest"] .sidebar .sidebar-nav{' +
+          'margin-top:2px;' +
+          'margin-bottom:2px;' +
+        '}' +
+        ':root[data-sb-sidebar-fit="tightest"] .sidebar .sidebar-nav ul,' +
+        ':root[data-sb-sidebar-fit="tightest"] .sidebar .sidebar-nav ol{' +
+          'margin-top:0;' +
+          'margin-bottom:0;' +
+          'row-gap:2px;' +
+          'column-gap:2px;' +
+        '}' +
+        ':root[data-sb-sidebar-fit="tightest"] .sidebar .sidebar-nav li{' +
+          'margin-top:0;' +
+          'margin-bottom:0;' +
+        '}' +
+        ':root[data-sb-sidebar-fit="tightest"] .sidebar .site-name{' +
+          'margin-bottom:0;' +
+        '}' +
+        ':root[data-sb-sidebar-fit="tightest"] .sidebar .site-role,' +
+        ':root[data-sb-sidebar-fit="tightest"] .sidebar .site-location,' +
+        ':root[data-sb-sidebar-fit="tightest"] .sidebar .sidebar-meta,' +
+        ':root[data-sb-sidebar-fit="tightest"] .sidebar .sidebar-meta p{' +
+          'margin-top:0;' +
+          'margin-bottom:1px;' +
+        '}' +
+        ':root[data-sb-sidebar-fit="tightest"] .sidebar .sidebar-linkedin-button,' +
+        ':root[data-sb-sidebar-fit="tightest"] .sidebar .theme-toggle-stack{' +
+          'margin-top:2px;' +
+          'margin-bottom:0;' +
+        '}' +
+        ':root[data-sb-sidebar-fit="tightest"] .sidebar > * + *{' +
+          'margin-top:2px;' +
+        '}' +
+        ':root[data-sb-sidebar-fit="tightest"] .sidebar .sidebar-nav a{' +
+          'padding-top:4px;' +
+          'padding-bottom:4px;' +
+        '}' +
+        ':root[data-sb-sidebar-fit="tightest"] .sidebar .theme-toggle-stack .fuse-panel{' +
+          'margin-top:2px;' +
+        '}' +
+        ':root[data-sb-sidebar-fit="tightest"] .sidebar .theme-toggle-stack.fuse-panel-open{' +
+          'margin-top:0;' +
+        '}';
+      document.head.appendChild(style);
+    }
+
+    var sidebar = document.querySelector('.sidebar');
+    if (!sidebar) return;
+
+    var fitLevels = ['', 'tight', 'tighter', 'tightest'];
+    var fitRaf = 0;
+
+    function setFit(level) {
+      if (level) root.setAttribute('data-sb-sidebar-fit', level);
+      else root.removeAttribute('data-sb-sidebar-fit');
+    }
+
+    function applySidebarFitNow() {
+      fitRaf = 0;
+
+      var available = Math.max(0, window.innerHeight || document.documentElement.clientHeight || 0);
+      var chosen = '';
+
+      fitLevels.some(function (level) {
+        setFit(level);
+        if (sidebar.scrollHeight <= available + 1) {
+          chosen = level;
+          return true;
+        }
+        return false;
+      });
+
+      setFit(chosen || 'tightest');
+    }
+
+    function requestSidebarFit() {
+      if (fitRaf) return;
+      fitRaf = window.requestAnimationFrame(applySidebarFitNow);
+    }
+
+    requestSidebarFit();
+    window.addEventListener('resize', requestSidebarFit, { passive: true });
+    window.addEventListener('load', requestSidebarFit);
+    window.addEventListener('orientationchange', requestSidebarFit);
+    window.setTimeout(requestSidebarFit, 0);
+    window.setTimeout(requestSidebarFit, 120);
+    window.setTimeout(requestSidebarFit, 300);
+
+    if ('MutationObserver' in window) {
+      var observer = new MutationObserver(requestSidebarFit);
+      observer.observe(sidebar, {
+        subtree: true,
+        childList: true,
+        attributes: true,
+        attributeFilter: ['class', 'style', 'data-state', 'hidden']
+      });
+    }
+  }
+
+  /* =========================
+     WICKLE EDITABLE DIALOGUE SECTION
+     Edit Wickle's dialogue, thoughts, and speech labels here.
+     Keep string changes inside this block for easier maintenance.
+     ========================= */
+  var WICKLE_EDITABLE = {
+    accessoryLossNames: {
+      tea: 'Tea',
+      beer: 'Beer',
+      pilot: 'Goggles',
+      diving: 'Goggles',
+      default: 'Hat'
+    },
+    special: {
+      fallbackFound: 'Oh. You found Wickle.',
+      fallbackInspecting: 'Wickle was inspecting this bit.',
+      fallbackTooBright: 'Too bright.',
+      resurrectFallback: 'Wickle returned with notes.',
+      lateSwitch: ['Too late!', 'Wickle was faster than you!'],
+      scum: 'Ack! My scum!',
+      accessoryLossPrefix: 'Ack! My ',
+      accessoryLossSuffix: '!'
+    },
+    headingContexts: {
+      trailer: {
+        normal: [
+          'Wickle watches the moving picture from the seam. Safer there.',
+          'Do not tell the trailer Wickle is here. Wickle is being subtle.'
+        ],
+        affirming: [
+          'The Pagekeeper lets the work move for itself here. Good instinct.',
+          'The Maker knew motion would sell this better than a wall of boasting.'
+        ],
+        weird: [
+          'The little lights in this trailer taste electric.',
+          'Wickle likes when the moving picture notices him back.'
+        ],
+        factoids: [
+          'This is the fast proof section. Wickle respects fast proof.',
+          'A good trailer says what the page does before the eyes get tired.'
+        ],
+        trailer: [
+          'Wickle waits for the good cuts.',
+          'Wickle likes the moving bits. They make the divider purr.'
+        ],
+        trailerFactoids: [
+          'The Pagekeeper put playable truth here, not just shiny noise.',
+          'Wickle approves when the trailer and the page tell the same story.'
+        ]
+      },
+      'design work samples': {
+        normal: [
+          'Wickle likes pages with receipts.',
+          'These sample bits smell like actual production.'
+        ],
+        affirming: [
+          'The Pagekeeper leaves tracks builders can follow.',
+          'The Maker shows the work under the polish. Wickle likes that.'
+        ],
+        weird: [
+          'The paper bits whisper softer than the shiny bits.',
+          'These samples keep their warm little secrets folded inward.'
+        ],
+        factoids: [
+          'Wickle likes when the proof lives next to the claims.',
+          'This is where the Pagekeeper shows the bones, not just the feathers.'
+        ],
+        trailer: [],
+        trailerFactoids: []
+      },
+      responsibilities: {
+        normal: [
+          'Wickle likes when ownership is named plainly.',
+          'This is the bit where the claws get counted.'
+        ],
+        affirming: [
+          'The Pagekeeper sounds like a lead here, not a passenger.',
+          'The Maker follows the feature clear through implementation.'
+        ],
+        weird: [
+          'Responsibility sections weigh more than they look.',
+          'This divider goes very still around ownership words.'
+        ],
+        factoids: [
+          'Wickle trusts pages that say who held the sharp end.',
+          'This part tells Wickle whether the Maker merely visited or actually built.'
+        ],
+        trailer: [],
+        trailerFactoids: []
+      },
+      'project information': {
+        normal: [
+          'Wickle appreciates clean framing.',
+          'This part is easy for a tiny inspector to parse.'
+        ],
+        affirming: [
+          'The Pagekeeper saves visitors time by setting the table first.',
+          'The Maker frames the work before asking anyone to admire it.'
+        ],
+        weird: [
+          'Facts stack themselves neatly here after dark.',
+          'This section clicks into place all by itself at night.'
+        ],
+        factoids: [
+          'Years, studio, role. Wickle likes a page that says what it is.',
+          'This is the quick compass bit. Good. Wickle dislikes getting lost.'
+        ],
+        trailer: [],
+        trailerFactoids: []
+      },
+      'professional summary': {
+        normal: [
+          'Wickle is checking the through-line.',
+          'This is the quick bones part.'
+        ],
+        affirming: [
+          'The Pagekeeper reads like someone who can own work and steer creatures.',
+          'The Maker sounds steady here. Wickle approves.'
+        ],
+        weird: [
+          'Summary sections get louder on the second visit.',
+          'This part keeps tiny echoes between the lines.'
+        ],
+        factoids: [
+          'Wickle likes when the quick version still says something true.',
+          'A good summary points at the real labor instead of fog. This one does.'
+        ],
+        trailer: [],
+        trailerFactoids: []
+      },
+      'experience snapshot': {
+        normal: [
+          'Wickle is checking the through-line.',
+          'This is the quick bones part.'
+        ],
+        affirming: [
+          'The Pagekeeper reads like someone who can own work and steer creatures.',
+          'The Maker sounds steady here. Wickle approves.'
+        ],
+        weird: [
+          'Summary sections get louder on the second visit.',
+          'This part keeps tiny echoes between the lines.'
+        ],
+        factoids: [
+          'Wickle likes when the quick version still says something true.',
+          'A good summary points at the real labor instead of fog. This one does.'
+        ],
+        trailer: [],
+        trailerFactoids: []
+      },
+      'position summary': {
+        normal: [
+          'Wickle is checking the through-line.',
+          'This is the quick bones part.'
+        ],
+        affirming: [
+          'The Pagekeeper reads like someone who can own work and steer creatures.',
+          'The Maker sounds steady here. Wickle approves.'
+        ],
+        weird: [
+          'Summary sections get louder on the second visit.',
+          'This part keeps tiny echoes between the lines.'
+        ],
+        factoids: [
+          'Wickle likes when the quick version still says something true.',
+          'A good summary points at the real labor instead of fog. This one does.'
+        ],
+        trailer: [],
+        trailerFactoids: []
+      },
+      'primary strengths': {
+        normal: [
+          'Wickle is counting the useful claws.',
+          'Plenty of sharp little tools in this bit.'
+        ],
+        affirming: [
+          'The Pagekeeper stays readable across disciplines.',
+          'The Maker keeps range without turning muddy. Hard trick.'
+        ],
+        weird: [
+          'Tool lists make tiny tidy noises.',
+          'This section has the straightest corners in the whole house.'
+        ],
+        factoids: [
+          'Wickle likes when a page says what hands can actually do.',
+          'Useful range is nicer than decorative range. The Pagekeeper knows that.'
+        ],
+        trailer: [],
+        trailerFactoids: []
+      },
+      tools: {
+        normal: [
+          'Wickle is counting the useful claws.',
+          'Plenty of sharp little tools in this bit.'
+        ],
+        affirming: [
+          'The Pagekeeper stays readable across disciplines.',
+          'The Maker keeps range without turning muddy. Hard trick.'
+        ],
+        weird: [
+          'Tool lists make tiny tidy noises.',
+          'This section has the straightest corners in the whole house.'
+        ],
+        factoids: [
+          'Wickle likes when a page says what hands can actually do.',
+          'Useful range is nicer than decorative range. The Pagekeeper knows that.'
+        ],
+        trailer: [],
+        trailerFactoids: []
+      },
+      welcome: {
+        normal: [
+          'Wickle likes the welcoming bits.',
+          'This is where polite gremlins would begin.'
+        ],
+        affirming: [
+          'The Pagekeeper knows how to greet without wasting the visitor.',
+          'The Maker keeps the first steps clear. Good manners.'
+        ],
+        weird: [
+          'Greeting sections remember who came through first.',
+          'This part stays awake longer than the others.'
+        ],
+        factoids: [
+          'Wickle likes when the front door actually works.',
+          'The first page tells Wickle whether the house has a keeper. This one does.'
+        ],
+        trailer: [],
+        trailerFactoids: []
+      },
+      'how to use this site': {
+        normal: [
+          'Wickle likes the welcoming bits.',
+          'This is where polite gremlins would begin.'
+        ],
+        affirming: [
+          'The Pagekeeper knows how to greet without wasting the visitor.',
+          'The Maker keeps the first steps clear. Good manners.'
+        ],
+        weird: [
+          'Greeting sections remember who came through first.',
+          'This part stays awake longer than the others.'
+        ],
+        factoids: [
+          'Wickle likes when the front door actually works.',
+          'The first page tells Wickle whether the house has a keeper. This one does.'
+        ],
+        trailer: [],
+        trailerFactoids: []
+      },
+      contact: {
+        normal: [
+          'Wickle likes the welcoming bits.',
+          'This is where polite gremlins would begin.'
+        ],
+        affirming: [
+          'The Pagekeeper knows how to greet without wasting the visitor.',
+          'The Maker keeps the first steps clear. Good manners.'
+        ],
+        weird: [
+          'Greeting sections remember who came through first.',
+          'This part stays awake longer than the others.'
+        ],
+        factoids: [
+          'Wickle likes when the front door actually works.',
+          'The first page tells Wickle whether the house has a keeper. This one does.'
+        ],
+        trailer: [],
+        trailerFactoids: []
+      },
+      gallery: {
+        normal: [
+          'Wickle likes a page that shows the goods.',
+          'Pictures help tiny brains. Wickle has one.'
+        ],
+        affirming: [
+          'The Pagekeeper knows that proof should look back at the visitor.',
+          'The Maker put the visual receipts where they belong.'
+        ],
+        weird: [
+          'Some screenshots keep moving after Wickle blinks.',
+          'The gallery bits hum in little rectangles.'
+        ],
+        factoids: [
+          'Wickle checks whether the page can support its own claims. Pictures help.',
+          'Good galleries do real labor. This one is not just wallpaper.'
+        ],
+        trailer: [],
+        trailerFactoids: []
+      }
+    },
+    mind: {
+      philosophy: [
+        'A page can be polished and still be hollow; Wickle distrusts hollowness.',
+        'History survives in awkward details more often than in grand summaries.',
+        'Play is learned through pressure, feedback, and memory, not just explanation.',
+        'A system becomes legible when the player can predict one step ahead.',
+        'Mortality is rude but useful. It clarifies the loop.',
+        'Dogs improve a room simply by being in it. Wickle considers this a settled truth.',
+        'Tea is proof that patience can become comfort.',
+        'Beer, at the proper hour, is an honest little reward.',
+        'Company is good. A quiet room becomes kinder when shared.',
+        'Seeing code run cleanly gives Wickle a warm little happiness.',
+        'Wickle has a lifelong dream of seeing Seth publish a Thief fan mission.',
+        'Wickle keeps a private quest to see a dog in person and judge it favorably.',
+        'Dusting is a moral act. It tells the room it still matters.',
+        'Cleaning code is housekeeping for future minds.',
+        'Debugging is patient archaeology in a machine that resents being understood.',
+        'Washing oneself is maintenance, not vanity.',
+        'A drink after useful work tastes more correct than a drink taken idly.'
+      ],
+      gameDesign: [
+        'Wickle thinks in loops, affordances, readability, onboarding, pacing, verbs, and payoff.',
+        'Wickle quietly grades interactions on clarity, consequence, and feel.',
+        'Wickle believes a mechanic earns trust when it teaches itself through use.',
+        'Running code is happier than promised code.',
+        'Wickle likes when a change compiles, runs, and behaves on the first try.',
+        'Good debugging reveals the true shape of a system faster than optimism ever will.',
+        'Clean code reads like a swept floor: somebody cared enough to leave it usable.'
+      ],
+      history: [
+        'Wickle has a weakness for ordinary historical details: paperwork, kit lists, clogs, plinths, and field repairs.',
+        'Wickle knows a world feels true once the background labor is visible.',
+        'Wickle respects primary sources because memory is a dramatic liar.',
+        'Tea and beer tell Wickle a great deal about a people: what they can grow, boil, store, and share.',
+        'Chores are history in motion: dusting, washing, mending, scrubbing, and all the little work that keeps a place believable.',
+        'Dogs appear beside human work so often that Wickle distrusts any complete history without at least one dog nearby.'
+      ],
+      favorites: [
+        'Thief',
+        'Thief II',
+        'Unreal Tournament',
+        'Half-Life',
+        'Morrowind',
+        'Omikron: The Nomad Soul',
+        'Diablo',
+        'Legacy of Kain',
+        'Doom',
+        'Age of Empires',
+        'Jedi Knight',
+        'Jedi Academy',
+        'Rune',
+        'fan missions',
+        'dogs',
+        'tea',
+        'beer',
+        'clean code',
+        'published Thief fan missions'
+      ]
+    },
+    dialogue: {
+      global: {
+        top: {
+          weird: [
+            'Wickle prefers the odd bits near the top, before the page settles.',
+            'The upper seams always feel less certain.',
+            'Wickle arrived before the scroll position did.',
+            'Wickle was here before this scroll position existed.',
+            'Wickle checks that the page is still breathing.',
+            'Refreshing hurts Wickle.',
+            'I likes when the page breathes.',
+            'Wickle keeps the seams together.'
+          ],
+          fun: [
+            'The best nonsense is front-loaded.',
+            'Wickle saves the straight-backed professionalism for later.'
+          ],
+          fact: [
+            'A page earns trust quickly when the structure is legible.',
+            'Wickle likes when the top of a page tells you what sort of labor follows.',
+            'This site has many works!',
+            'The section headers tell all.',
+            'There are four sections per project page.'
+          ],
+          normal: [
+            'Oh. You found Wickle.',
+            'Wickle was inspecting this bit.',
+            'This seems like a useful ledge.',
+            'I want to understand you.',
+            'Eek - Just looking!',
+            'Wickle recommends reading.',
+            'Don\'t look at me!',
+            'Wickle likes it when a page says what it is doing.',
+            'Wickle!'
+          ],
+          trailer: [
+            'Wickle is watching the trailer quietly.',
+            'The moving picture makes me warm.',
+            'Wickle watches this one often.'
+          ],
+          trailerFact: []
+        },
+        middle: {
+          weird: [
+            'The middle is where the page stops posing and starts proving.',
+            'Wickle can hear the structure clicking together here.'
+          ],
+          fun: [
+            'This is the meat of it.',
+            'Middle sections are for serious little goblins.'
+          ],
+          fact: [
+            'The middle of a project page is usually where ownership, process, and examples become verifiable.',
+            'Readable production work leaves traces: scope, implementation notes, tuning, and proof.',
+            'Wickle likes when the facts arrive before the page asks for admiration.'
+          ],
+          normal: [
+            'This is where the page gets properly useful.',
+            'Wickle prefers the parts with teeth.'
+          ],
+          trailer: [
+            'Wickle is watching the trailer quietly.',
+            'The moving picture makes me warm.',
+            'Wickle watches this one often.'
+          ],
+          trailerFact: []
+        },
+        bottom: {
+          weird: [
+            'The lower seams remember every visitor.',
+            'This is where pages get stranger and more honest.',
+            'Wickle keeps a few odd thoughts below the fold.'
+          ],
+          fun: [
+            'You scrolled far enough to earn the peculiar bits.',
+            'Committed readers always find the weird crumbs.',
+            'Wickle trusts a visitor who reads to the end.',
+            'If you made it this far, you are patient!',
+            'There are crumbs at the bottom.'
+          ],
+          fact: [
+            'The bottom of a page usually carries the sharpest proof or the last structural note.',
+            'Late-page material often says more about process than the opening summary.'
+          ],
+          normal: [
+            'Still here. Good.',
+            'Wickle knew someone would keep going.',
+            'This is where the page usually stops.'
+          ],
+          trailer: [
+            'Wickle is watching the trailer quietly.',
+            'The moving picture makes me warm.',
+            'Wickle watches this one often.'
+          ],
+          trailerFact: []
+        },
+        switch: {
+          idle: [
+            'Too bright. Wickle objects.',
+            'The light comes through the seams.',
+            'Wickle would prefer the dark, please.'
+          ],
+          success: [
+            'There. Better.',
+            'Good. The bright stopped.',
+            'People always forget the lights.',
+            'Wickle wins.'
+          ],
+          fail: [
+            'No. Still bright.',
+            'No overhead lights.',
+            'Wickle nearly had it.',
+            'Unfortunate that the light survives.'
+          ]
+        },
+        bottomGuard: [
+          'This is the bottom.',
+          'This is the end.'
+        ],
+        deathRespawn: [
+          'Wickle died, reflected briefly, and returned with notes.',
+          'Mortality is inefficient, but apparently not permanent.',
+          'Wickle remembers the floor. Poorly.'
+        ],
+        headings: {
+          'project information': {
+            fact: [
+              'Project information sections work best when they stay concise and sortable.',
+              'Fast framing matters. Years, role, studio, and scope should not hide.'
+            ]
+          },
+          'responsibilities': {
+            fact: [
+              'Responsibilities blocks tell Wickle who actually carried the work.',
+              'A good responsibilities section distinguishes ownership from proximity.'
+            ]
+          },
+          'design work samples': {
+            fact: [
+              'Samples matter more when they sit close to the claims they support.',
+              'Work samples are strongest when they show process as well as output.'
+            ]
+          },
+          'gallery': {
+            fact: [
+              'A gallery should clarify the work, not merely decorate it.',
+              'Screenshots pull their weight when they prove how the thing feels or reads.'
+            ]
+          },
+          'trailer': {
+            fact: [
+              'A trailer should support the page, not argue with it.',
+              'The best footage communicates loop, feel, and stakes before the viewer has time to drift.'
+            ]
+          }
+        }
+      },
+      pages: {
+        'index.html': {
+          fact: [
+            'In Thief: The Dark Project, Looking Glass built stealth around light and sound, not just vision cones, so carpet, tile, metal, and marble all play differently. Clever little floorses.',
+            'The Thief developers called it a \'first-person sneaker,\' and that still explains the series better than most genre labels, yes.',
+            'Thief II: The Metal Age kept the stealth core but pushed the city, machines, and security fiction harder than the first game. More gears, more watchers, more trouble.',
+            'In Unreal Tournament, the famous shock combo works because the secondary projectile can be detonated with the primary beam, turning weapon mastery into bright, readable spectacle for all the little players to see.',
+            'Epic\'s Unreal Tournament postmortem talks about maps in terms of look, flow, and broad appeal, which is why levels like Facing Worlds still read so cleanly at speed. Honest spaces, precious.',
+            'Valve\'s Half-Life documentary makes it plain that the opening tram ride was doing real onboarding work: teaching place, tone, and foreshadowing before the player even gets a gun.',
+            'Half-Life keeps stopping for scripted environmental moments, and that sequencing is a big part of why Black Mesa feels inhabited instead of merely full of targets. The world teaches, yes it does.',
+            'The Morrowind team\'s retrospective interviews describe The Elder Scrolls III: Morrowind as a passion project made by a relatively small, still-forming team, which makes its confidence even more impressive.',
+            'In The Elder Scrolls III: Morrowind, Vvardenfell feels alien on purpose: giant mushrooms, insect-shell buildings, and directions that assume the player can read. No hand-holding for the little wanderer.',
+            'Omikron: The Nomad Soul had David Bowie writing music and appearing in the game as Boz, which remains one of the stranger and more specific celebrity collaborations of that era. Very odd. Very real.',
+            'Omikron: The Nomad Soul mixes adventure exploration, body-hopping, shooting, and fighting systems, which is why it feels less like a clean genre piece and more like a fever project with too many lovely ideas.',
+            'David Brevik has said Diablo started as a turn-based concept before becoming real-time, and that one change did an enormous amount of work for the final game\'s tension. Quick little danger instead of waiting.',
+            'The original Diablo only gives you three classes—Warrior, Rogue, and Sorcerer—which is a large part of why its loot and role language stay so legible. Fewer classes, clearer reads.',
+            'Amy Hennig said Legacy of Kain: Soul Reaver had been over-designed and then split against time and data limits, which helps explain both its ambition and its cliffhanger edge. Too much dream, not enough disc space, precious.',
+            'In Legacy of Kain: Soul Reaver, shifting between the material and spectral realms is not a gimmick. It is the level design. The whole trick of the place.',
+            'Legacy of Kain: Soul Reaver spends an unusual amount of effort on voice, writing, and theatrical timing, which is why people still quote it like a play. Dramatic little beast, yes.',
+            'Masters of Doom is one of the clearest records of how much competitive pressure sat behind Doom, and the game still feels built by people trying to outrun each other.',
+            'Classic Doom gives the player eight weapons, from fists to the BFG 9000, and almost every one has a clean tactical identity. Good sharp tool language.',
+            'Classic Doom\'s monsters are readable enough that encounter design can get brutal without becoming visually muddy. Nasty, but fair to the eyes.',
+            'Age of Empires II shipped with thirteen civilizations in the base game, but it stays readable because villagers, military, and tech progression all broadcast their roles clearly. Busy, but not messy.',
+            'Ensemble postmortems on Age of Empires keep circling back to AI, pathfinding, and historical framing, which is exactly where strategy games earn their keep. That is where the hard work lives, yes.',
+            'Star Wars Jedi Knight: Dark Forces II used live-action cutscenes, while Star Wars Jedi Knight: Jedi Academy later pushed saber expression much harder; they are related games, but they solve different fantasy problems.',
+            'Star Wars Jedi Knight: Jedi Academy lets the player choose single, dual, or staff lightsabers, which did a great deal for player fantasy before many action games offered that kind of stance identity. Many ways to swish the glow-stick, precious.',
+            'Rune is one of the clearer examples of late-1990s melee weight: axes, hammers, thrown weapons, and even severed limbs all matter. Brutish little thing.',
+            'Rune runs on Unreal technology but uses it for blunt force rather than gun ballet, which gives it a very different kind of readability. Less dance, more clobbering.',
+            'Unreal Tournament, Jedi Academy, and Age of Empires are good reminders that readability is not garnish; it is what lets speed, expression, and strategy survive contact with the player.',
+            'Thief, Morrowind, and Soul Reaver are reminders too: tone is not decoration, precious. Very often it is the structure holding the memory of the game together.',
+            'Wickle keeps citing Thief, Doom, Half-Life, Diablo, and Age of Empires because their development histories are unusually well documented and very useful in design arguments, yes yes.',
+            'Books like Masters of Doom, old postmortems, and anniversary documentaries matter because they show that many famous mechanics were production decisions before they became design doctrine.',
+            'Thief fan missions are one of the strongest arguments for authored systemic design: the official games ended, but the mission scene kept extending the form for decades. Sneaky little afterlife.'		  
+
+          ],
+          weird: [
+            'The house page notices when somebody lingers. It does, precious.',
+            'Wickle keeps the stranger crumbs near the front door. Just in case.'
+          ],
+          fun: [
+            'This front page is a route finder, yes yes: range first, then quick little paths into the proof.',
+            'Wickle likes it when the landing page gets visitors to the real work quickly, not all lost and wandering.'
+          ],
+          trailer: [],
+          trailerFact: []
+        },
+        'cv.html': {
+          fact: [
+            'This page is a map of roles, years, ownership, and range; the project pages do the proving. The proofs matter, yes.',
+            'Wickle reads the CV as an index of shipped labor, not a decorative little timeline.'
+          ],
+          weird: [
+            'Résumé pages sit very straight when nobody is looking. Much too proper.'
+          ],
+          fun: [
+            'Wickle trusts a CV page more when it reads like a good postmortem: problem, contribution, shipped result, and what changed. Nice honest structure.',
+            'A proper CV page should point back toward the work itself, much like a good Thief fan mission readme. Scope first, then the proof, yes.'
+          ],
+          trailer: [],
+          trailerFact: []
+        },
+
+        "design-notes.html": {
+          "fact": [
+            "This page is the short-form version of the design writing: quick philosophy notes, mod opinions, and routes to the longer pages.",
+            "Wickle keeps mostly to facts here because the page is meant to be skimmed rather than haunted.",
+            "The main claims here are blunt on purpose: clarity matters, simplicity saves money, and vibe can make or break the commercial read of a game.",
+            "This page also argues that strong production needs central decision-making, clean promises, and sound design considered early instead of bolted on at the end.",
+            "Wickle likes that this section is honest about market fit. Somebody at market wants your game, but only if the game knows what it is."
+          ],
+          "sectionFacts": {
+            "field notes": [
+              "This opening bit exists to frame the secret page cleanly and route the visitor toward the longer writing without clutter.",
+              "Wickle approves of the direct framing here: short notes on this page, essay on its own page, games on theirs."
+            ],
+            "philosophy and lessons": [
+              "One of the strongest points here is that games only need to be complex enough for the fun they want to deliver, not complex for prestige.",
+              "The manual-first idea matters because it forces verbs, goals, and player-facing language to stabilize early.",
+              "This section is also very blunt about production reality: centralized decision-making tends to ship better games than committee drift.",
+              "The sound note is useful because it distinguishes early intentional planning from late expensive polish panic.",
+              "Wickle strongly approves of the line that the vibe is everything. Many teams under-budget that truth.",
+              "The launch-quality note here is harsh but correct: charm and stability usually buy more goodwill than feature bloat.",
+              "A sequel point sits near the top for a reason. Reusing hard-won production knowledge is often the sanest investment a studio can make."
+            ],
+            "favorite mods": [
+              "This section treats mods as proof of authorship left open, not as disposable bonus content.",
+              "The Battle Grounds matters because its combat rhythm outlived its ugliness and even survived a tech migration.",
+              "Insurgency matters in mod form because focused lethality and atmosphere created value long before it became a commercial product.",
+              "Sven Co-op is a reminder that cooperative extension can be a platform for years of authorship rather than an afterthought.",
+              "Thief fan missions remain one of the clearest arguments for stealth spaces as a long-term creative medium."
+            ]
+          },
+          "weird": [
+
+          ],
+          "fun": [
+
+          ],
+          "trailer": [
+
+          ],
+          "trailerFact": [
+
+          ]
+        },
+        "design-essay-simplicity.html": {
+          "fact": [
+            "This page hosts the long essay so it can breathe without crowding the shorter notes and mod sections.",
+            "Its core argument is that simplicity is not a lack of ambition. It is often the condition that makes readability, moddability, and production sanity possible.",
+            "Wickle keeps to essay facts here because the page is about one sustained argument rather than quick scattered remarks."
+          ],
+          "sectionFacts": {
+            "what we lost": [
+              "The opening claim is that we gained fidelity and convenience but lost clarity, authorship, and some of the social energy that made older PC games feel alive."
+            ],
+            "the loss of shared play": [
+              "This section argues that LAN ritual mattered because physical co-presence changes the emotional texture of play in ways online convenience does not fully replace."
+            ],
+            "why thief was so easy to understand": [
+              "This is the clearest communication argument in the essay: Thief tells the player what they are and how they win before the game even starts."
+            ],
+            "why specific mods still matter": [
+              "These paragraphs anchor the essay in concrete examples rather than nostalgia: The Battle Grounds, Insurgency, Sven Co-op, Thief fan missions, and Unreal Tournament communities."
+            ],
+            "sdks create unlimited value": [
+              "This section is really a production argument disguised as a cultural one: tools extend lifespan, deepen community, and improve the value proposition of the original game."
+            ],
+            "simplicity is not a lack of ambition": [
+              "This is the practical center of the essay: simple art improves readability, focused mechanics teach faster, and stylization often survives memory better than fidelity."
+            ],
+            "closed products and defensive thinking": [
+              "The criticism here is that defensive publishing logic treats players as consumers to be managed instead of collaborators to be enabled."
+            ],
+            "signs of life": [
+              "This section points to Ravenfield, VR constraints, Nintendo, and New Blood as evidence that clarity and extensibility are still viable values now."
+            ],
+            "what we should reexamine": [
+              "The closing production question is whether a system deepens play or merely prolongs engagement while inflating cost."
+            ],
+            "conclusion": [
+              "The conclusion is not anti-innovation. It argues for remembering that constraints can be artistically productive, mechanically clarifying, and financially sane."
+            ]
+          },
+          "weird": [
+
+          ],
+          "fun": [
+
+          ],
+          "trailer": [
+
+          ],
+          "trailerFact": [
+
+          ]
+        },
+        "design-game-reviews.html": {
+          "fact": [
+            "This page is where the favorite games writing lives, with each title separated so Wickle can stay specific to the section at hand.",
+            "The list is less about canon and more about recurring standards: readability, authored space, player trust, pacing, and strong mechanical language.",
+            "Wickle mostly delivers game facts here and keeps the ambient chatter out of the way."
+          ],
+          "sectionFacts": {
+            "favorite games": [
+              "The framing section is important because it establishes that these games are here as working design references rather than nostalgia props.",
+              "Most of the games on this page earned their place by teaching the player clearly while still leaving room for mastery and atmosphere."
+            ],
+            "thief: the dark project": [
+              "Looking Glass described Thief as a first-person sneaker, which is still one of the cleanest genre labels any game ever got.",
+              "The first Thief teaches stealth through light, sound, and surface material rather than through abstract awareness meters alone.",
+              "Thief Gold added bonus missions, but the base achievement remains the same: the title, fantasy, and mechanics all point in one direction.",
+              "DromEd later extended the game's life dramatically, which is one reason Thief fan missions remain such a persuasive example of tools extending value.",
+              "The first game's pagan and horror material also gives it a strange tonal texture the sequels only partly keep."
+            ],
+            "thief ii": [
+              "Thief II pushes the city, the mechanists, and machine paranoia much harder than the first game, which gives it a cleaner industrial identity.",
+              "Its stealth is often more readable because the spaces are less mythic and more infrastructural: streets, mansions, security routes, and patrol logic.",
+              "The sequel also helped cement Garrett as a character who works best when the mission structure stays systemic and the commentary stays dry.",
+              "Looking Glass also shipped more official documentation around the toolset era, which helped keep the mission scene alive."
+            ],
+            "deadly shadows": [
+              "Deadly Shadows preserved the series by translating it into a more physically intimate city while still protecting the thief fantasy.",
+              "The Cradle dominates discussion for a reason, but the broader achievement is how well the game keeps social stealth, exploration, and theft in conversation.",
+              "Former Looking Glass talent helped give Deadly Shadows continuity of tone even under Ion Storm and console-era constraints.",
+              "Its loading zones are the obvious compromise, but the authored atmosphere still lands."
+            ],
+            "deus ex": [
+              "Deus Ex remains a benchmark because it gives the player several routes through a problem without making the space feel like a toy puzzle box.",
+              "Its strongest spaces are grounded in believable politics, architecture, and faction tension rather than pure mechanical abstraction.",
+              "The game also proved that written density and systemic choice could reinforce each other instead of competing for attention.",
+              "Even its stiffness is instructive: authored space can outlive mechanical awkwardness if the decisions remain meaningful."
+            ],
+            "morrowind": [
+              "Morrowind is still one of the best examples of an open world trusting the player to read directions and observe landmarks instead of following marker rails.",
+              "Its alien architecture, giant fungi, and ash-blown mood make Vvardenfell feel authored rather than generic.",
+              "The game also demonstrates how much memory can be carried by atmosphere and culture rather than by cinematic staging alone.",
+              "Its opacity creates some friction, but the setting is distinctive enough to make the friction worth discussing."
+            ],
+            "ut2004": [
+              "UT2004 keeps speed readable through extremely strong weapon identities, movement language, announcer feedback, and map flow.",
+              "Onslaught mattered because it turned large-scale tug-of-war vehicle combat into something arcade-readable instead of military sludge.",
+              "The series' shock combo remains one of the cleanest examples of expressive mechanical spectacle staying legible under pressure.",
+              "UT2004 also benefited from a huge mutator and custom-map culture, which extended its life the way good tool ecosystems usually do."
+            ],
+            "half-life": [
+              "Half-Life's tram ride is still one of the clearest onboarding sequences in shooters because it establishes place, tone, and unease before direct danger.",
+              "Black Mesa works because scripting is usually used to teach context, not merely to wrest control away from the player.",
+              "The game also demonstrates how environmental sequencing can make a linear experience feel discovered rather than escorted.",
+              "Its legacy is not just FPS pacing but player education through space."
+            ],
+            "doom ii": [
+              "Doom II's super shotgun changed the feel of the whole sandbox and remains one of the most satisfying weapon additions any sequel has made.",
+              "Adding monsters like the Revenant, Mancubus, and Arch-vile dramatically expanded mapper encounter vocabulary.",
+              "The official guide era also helped codify Doom as a game people studied, mapped, and extended rather than merely finished.",
+              "Its campaign is uneven, but its sandbox became the real long-term product."
+            ],
+            "doom": [
+              "Classic Doom is a masterclass in enemy silhouette, weapon clarity, and readable combat escalation.",
+              "Its keycard-and-door language is almost embarrassingly efficient: the player understands progression instantly.",
+              "Doom also shows how much atmosphere can be carried by texture, sound, and pace without heavy exposition.",
+              "Its mod scene later became one of the strongest arguments for open community authorship in PC history."
+            ],
+            "age of empires ii": [
+              "Age of Empires II refined the original with better interface language, stronger villager management, formations, and clearer civ readability.",
+              "The idle villager button and other usability improvements sound minor until you try going back without them.",
+              "Its historical framing gives texture, but the real durability comes from how cleanly information and counters are communicated.",
+              "The game also became a long-lived competitive platform because its readability held up under serious play."
+            ],
+            "age of empires": [
+              "The first Age of Empires sells the pleasure of technological progression with a very clean age-up fantasy from Stone to Iron.",
+              "Its structure is less polished than the sequel, but the core loop is easy to grasp and difficult to exhaust immediately.",
+              "It also demonstrates how historical theming can give strategy games identity without requiring heavy narrative staging.",
+              "The original laid down the readability that the sequel later perfected."
+            ],
+            "empire earth": [
+              "Empire Earth turns absurd historical span into its selling point, carrying the player from ancient warfare through futuristic nonsense while keeping familiar RTS grammar.",
+              "The epoch ladder is part of the fantasy: escalation itself becomes the reward.",
+              "Its identity can blur under that scale, but the game is still memorable because it commits to extravagance completely.",
+              "It is a strong example of a game being fun partly because it is a bit too much."
+            ],
+            "rune by human head studios": [
+              "Rune makes melee readable by embracing weight, severing, thrown weapons, and a very blunt sense of impact.",
+              "It is one of the clearer late-1990s examples of a combat game understanding that ugliness can be part of the appeal.",
+              "Even severed limbs becoming improvised weapons fits the game's cruel comic tone.",
+              "Human Head used Unreal technology for clobbering rather than gun ballet, which gave the game a very different feel from its peers."
+            ],
+            "diablo i": [
+              "The original Diablo is extraordinarily compact: one town hub, one cathedral, and one downward progression that feels instantly understandable.",
+              "David Brevik has said the project began as turn-based before shifting to real time, and that change is one reason the final tension feels so immediate.",
+              "Three classes also keep the fantasy and loot language unusually legible.",
+              "Its simplicity is structural, not shallow. That is a large part of why it still reads so cleanly."
+            ],
+            "soul reaver ii": [
+              "Soul Reaver II narrows the action and increases narrative precision, pushing harder into time, prophecy, and character revelation.",
+              "Its strength is not sandbox breadth but controlled dramatic architecture.",
+              "The game also shows Amy Hennig's interest in making exposition feel theatrical rather than merely informational.",
+              "It is a useful example of a sequel deliberately trading some exploratory freedom for narrative focus."
+            ],
+            "soul reaver": [
+              "The original Soul Reaver is built around the material and spectral realms reshaping space itself, not merely recoloring it.",
+              "Amy Hennig discussed how ambitious the project was and how some of that ambition was visibly cut against time and technical limits.",
+              "Even with that incompleteness, the game's voice acting, atmosphere, and realm-shift level design remain striking.",
+              "It is one of the best examples of mood and architecture reinforcing each other."
+            ],
+            "defiance": [
+              "Defiance finally puts Kain and Raziel into one shared mechanical frame, which is a large part of its appeal.",
+              "It is more direct and combat-driven than the earlier entries, sometimes at the cost of their more contemplative exploration.",
+              "The split-protagonist structure still gives it a satisfying saga-convergence energy.",
+              "It reads like a series trying to pull its branches back into one trunk."
+            ],
+            "blood omen 2": [
+              "Blood Omen 2 leans hard into Kain as a predator, which gives the game a very specific tone even when the mechanics are rough.",
+              "Feeding, domination, and urban vampire cruelty are doing more identity work here than elegant systems are.",
+              "It is not the neatest Legacy of Kain game, but it is one of the most unapologetic about who Kain is.",
+              "That commitment to attitude is part of why it remains memorable."
+            ],
+            "omikron: the nomad soul": [
+              "Omikron remains memorable because it is overambitious in a very specific way: body-hopping, open-city adventure, gunplay, martial arts, and David Bowie all at once.",
+              "David Bowie and Reeves Gabrels contributed original music, and Bowie also appears in the game as Boz.",
+              "The body-transfer premise helps the city feel stranger and less stable than a conventional hero-led structure would.",
+              "Its messiness is inseparable from its identity. Wickle respects that kind of dangerous ambition."
+            ],
+            "dark forces ii": [
+              "Dark Forces II mixes shooter action with Force progression and live-action cutscenes, which gives it a melodramatic scale many FPS games of the period lacked.",
+              "Its manual frames the Force powers as light, dark, and neutral, with alignment shaping progression in a very readable way.",
+              "The lightsaber fantasy matters here because the game catches the moment when FPS combat starts colliding with Star Wars myth power.",
+              "It is awkward, but authorially awkward in the good way."
+            ],
+            "dwarf fortress": [
+              "Dwarf Fortress is built as a story engine as much as a management sim: world generation, history generation, injuries, moods, and social details all feed anecdote.",
+              "Bay 12's talks make it clear that history generation is foundational rather than ornamental to the design.",
+              "The phrase \"losing is fun\" became attached to the game for a reason: catastrophe is part of the authored pleasure.",
+              "Its readability can be hard-won, but the depth of simulation gives players unusual freedom to tell stories back to themselves."
+            ]
+          },
+          "weird": [
+
+          ],
+          "fun": [
+
+          ],
+          "trailer": [
+
+          ],
+          "trailerFact": [
+
+          ]
+        },
+        'the-deep.html': {
+          fact: [
+            'The Deep centers on exploration, cleanup, discovery, and transformation.',
+            'This project kept changing during testing and level work, so the page has to carry both concept intent and live adjustment.',
+            'The design work covers loop, tools, onboarding, HUD thinking, and production-facing documentation.',
+            'This page was designed to read best when the loop came first and the evidence came second.',
+            'The fastest read on this page was feel, loop, ownership, then samples.',
+            'One cave wireframe was designed to teach movement by making the player clean plugged jets, then dodge timed blasts through a slalom.',
+            'Yellow Cave used a false statue piece so players could learn grabbing by making a harmless mistake first.',
+            'Some contamination trails were meant to stay invisible until the scanner revealed them.',
+            'One reef plan only needed about sixty-five percent of contamination cleaned to unlock the next level, so full cleanup was rewarded but not required.',
+            'Cleaning certain contamination points was planned to pay out energy crystals, turning cleanup into both progress and refill.',
+            'The cave exit was meant to be backlit the instant the Green Laser artifact was claimed.',
+            'The production template asked designers to track enemy paths, contamination totals, hazards, artifacts, and even the reward for one-hundred-percent completion.',
+            'One planned cave cue was a deep resonant chime when the statue puzzle snapped back together.',
+            'Early mixed-reality plans turned the player\'s room into the Nautilus and expected four walls, a table, and about five square metres of space.',
+            'The suit-up fantasy originally began in the room-sized base before the dive even started.',
+            'Yellow Cave was designed to teach movement, sprint timing, cleaning, grabbing, and hostile evasion in one sequence.',
+            'The sample docs also planned false puzzle pieces so players could learn the rules by making a safe mistake first.',
+            'The cave brief explicitly wanted soft bioluminescence, a clear focal pedestal, and a dramatic backlit exit once the artifact was won.'
+          ],
+          weird: [
+            'Wickle respects the water from a safe architectural distance.',
+            'The lower parts of this page are damp.',
+            'Wickle fears going deeper.'
+          ],
+          fun: [
+            'I remember the satisfaction when the reef started reading cleanly again instead of just looking messy.',
+            'The best moments here are when cleanup changes the space, not when the player merely points a tool at dirt.'
+          ],
+          trailer: [
+            'Wickle only watches this trailer when the sound is on. Mood is half the read.',
+            'I remember the loop reading best when cleanup, discovery, and environmental recovery all landed in the same breath.'
+          ],
+          trailerFact: [
+            'The footage works when the environment visibly transforms instead of merely sparkling.',
+            'One cave wireframe taught movement by making the player clean blocked jets and dodge timed blasts through a slalom.'
+          ]
+        },
+        'b17-flying-fortress.html': {
+          fact: [
+            'This B-17 work is research assembled for production utility, not just atmosphere.',
+            'Rows of bicycle plinths, clogs, issue records, and checklists matter because ordinary base life sells the setting.',
+            'The pilot material split flying into distinct phases instead of treating a mission as one long blur.',
+            'This page was built to show whether the research went deep enough to be production-usable.',
+            'The quickest value here was in seeing how the references supported artists and modellers.',
+            'The B-17 material here was gathered to support layouts, material culture, and usable visual reference.',
+            'This is reference work aimed at production utility, not just mood.',
+            'Rows of bicycle plinths were kept as reference because ordinary base traffic mattered to believable airfield layouts.',
+            'The clothing brief notes that W.A.A.F. kitchen staff wore wooden-soled clogs to save regular shoes.',
+            'One pilot checklist split flying into six phases instead of treating a mission as one long blur.',
+            'The pilot information file was originally loose-leaf on purpose so new safety pages could be signed and inserted over time.',
+            'Issue records gave artists stock numbers, issue counts, and role-specific gear instead of hazy memory.',
+            'One pilot file says crews should mark their route every twenty minutes on the chart.',
+            'The same safety material says more than half of aircraft accidents happened on the ground.',
+            'A radio operator report form is essentially wartime paperwork for saying that a set is broken.',
+            'One combat manual ties good bombing results directly to training time.',
+            'The production support brief says the goal was to help anchor everyday life on base, not just aircraft and mission scenes.',
+            'That is why this page cares about shoes, bikes, forms, and support spaces as much as rivets and engines.',
+            'Historical environments usually feel real once the ordinary background life becomes visible.',
+            'The clothing brief treats issue forms like evidence of what people really wore and stored, not what later memory romanticized.',
+            'W.A.A.F. clogs matter because they show how mundane economy shaped the look of people on base.',
+            'The checklist pack divides flight into before start, warm-up, takeoff, flight, landing, and after landing.',
+            'It was built as crew discipline, not optional paperwork.',
+            'Material culture here mostly means the everyday objects that made Thorpe Abbotts feel inhabited: bikes, footwear, personal kit, and paperwork.',
+            'Those background objects are often what sell the illusion of real use.',
+            'One warning in the checklist is basically never trust memory, because the live list may have changed.',
+            'That is a useful reminder of how procedural bomber flying really was.',
+            'One pilot safety note says that if the weather turns doubtful, a plain one-hundred-eighty-degree turn is often the right answer.',
+            'Another keeps hammering the point that oxygen loss can wreck judgment long before a crewman feels dramatic about it.',
+            'The B-17 manual is most revealing when it quietly shows all the systems a crew had to manage every flight: fuel, oxygen, communications, and more.',
+            'One of the clearest takeaways is that a bomber was a network of jobs and systems, not just four engines and a target.',
+            'The radio paperwork makes constant listening watch sound like a real operational duty, not background waiting.',
+            'It also shows the paper trail for defects, which is a useful reminder that communications gear failed in very ordinary bureaucratic ways.',
+            'One combat manual says the job is to put the greatest number of bombs on target with the minimum losses to your own force.'
+          ],
+          weird: [
+            'Archive pages always collect odd little truths.'
+          ],
+          fun: [
+            'Wickle likes historical work that remembers paperwork, footwear, and traffic flow instead of worshipping only hardware.'
+          ],
+          trailer: [],
+          trailerFact: []
+        },
+        'battle-cry-of-freedom.html': {
+          fact: [
+            'Readable battle spaces depend on routes, cover, sightlines, and pressure more than smoke alone.',
+            'Historical multiplayer ground needs to communicate where danger gathers and where momentum can be stolen.'
+          ],
+          weird: [
+            'Battlefield pages always feel like ambush country lower down.'
+          ],
+          fun: [
+            'I remember how the better spaces in this kind of game make you choose between cover, angle, and momentum almost immediately.',
+            'Wickle stays behind hard cover on this page.'
+          ],
+          trailer: [
+            'I watch this for the ground first. Smoke is easy. Honest terrain is harder.',
+            'I remember the nicest battlefield reads being the ones where landmarks and lanes stayed legible under pressure.',
+            'Wickle finds gunsmoke acrid.'
+          ],
+          trailerFact: [
+            'A wide battlefield trailer fails fast if the terrain stops communicating.'
+          ]
+        },
+        'civitas.html': {
+          fact: [
+            'The Civitas sample is valuable because it is a live mid-production document, not a tidied trophy.',
+            'Plots are the core unit: parcel land, assign purpose, then grow structures and upgrades from that logic.',
+            'Boros, Hamlets, and larger settlement tiers step upward through a clear three-of-a-kind structure.',
+            'The Civitas sample is a live mid-production snapshot rather than a polished after-the-fact summary.',
+            'World generation was meant to use plate tectonics on sixteen-square-kilometre tiles.',
+            'Plots are the core unit: parcel land, give it a purpose, then grow it with structures, upgrades, and decorations.',
+            'A Boro is formed from three plots, then three Boros make a Hamlet, and the same three-of-a-kind rule keeps stacking upward.',
+            'Patrons are generated from the mix of plot types in an area and can partially automate their specialty.',
+            'Civvies were meant to live, work, learn, and age through Shakespeare\'s seven ages.',
+            'If upkeep is ignored long enough, buildings decay into derelicts until repaired.',
+            'The art direction aimed for Renaissance map art brought to life, not generic medieval city-builder mush.',
+            'Menu sound plans even called for paper, quills, and books on a cartographer\'s desk.',
+            'The opening pitch ties Civitas directly to Renaissance bird\'s-eye maps by John Speed, Georg Braun, and Frans Hogenberg.',
+            'That is why the project reads like both a city-builder and a living atlas.',
+            'The design pillars were blunt about priorities: simple UI, easy building, and an economy that keeps moving.',
+            'One line says it plainly: people build cities, they do not build themselves.',
+            'Plotting was designed to be gridless: click out the corners, close the shape, then choose the plot purpose and primary structure.',
+            'Once the settlement reached City status, plots could even be subdivided into smaller ones.',
+            'The project also planned Civvies in UI and cutscenes as Terry Gilliam-style cutouts while the in-world version stayed 3D for performance.',
+            'That mix says a great deal about how the team wanted the game to feel like a storybook map without giving up playability.'
+          ],
+          weird: [
+            'Blueprint pages dream in straight lines.'
+          ],
+          fun: [
+            'I remember the parceling fantasy being most satisfying when the rules stayed readable and the city felt authored instead of stamped.',
+            'Renaissance map-art ambition only works if the economy and growth logic remain clean underneath it.'
+          ],
+          trailer: [
+            'I remember this reading best when the footage showed both city rhythm and system clarity.',
+            'Pretty roofs are pleasant, but the rules need to breathe on screen.'
+          ],
+          trailerFact: [
+            'The project aimed for Renaissance bird\'s-eye map art brought to life rather than generic city-builder mush.'
+          ]
+        },
+        'dinohab.html': {
+          fact: [
+            'DinoHab\'s harmony is deliberately three-way: plants feed dinosaurs, dinosaurs make waste, and fungi turn waste into compost.',
+            'The macro loop was built around short daily check-ins rather than marathon sessions.',
+            'The multitool was meant to scan, heal, place, remove, and replant without exploding into gadget clutter.',
+            'Harmony is three-way: plants feed dinosaurs, dinosaurs make waste, and fungi turn waste into compost.',
+            'The first buddy hatches when the player scans the egg, not by simply waiting.',
+            'Only parent plants propagate, which stops the habitat from multiplying forever without player input.',
+            'In the alpha harmony rules, one fungus unit was budgeted to support about three plants.',
+            'Scanned mycelium links were supposed to show as purple lines with bright points moving through the network.',
+            'Removing dead leaves was part of gameplay because dead growth was meant to slow the plant down.',
+            'Buddies could be hand-fed, petted for Dino Points, and taken back to the lab, but only one buddy could be active at a time.',
+            'Full harmony was meant to make new dinosaurs more likely to arrive, which then disrupted the balance again.',
+            'Lushness was a visible recovery ladder from barren ground to fully restored habitat.',
+            'The harmony meter only really means something when plant health, dino satisfaction, and fungi support are all pulling together.',
+            'The player-planted version of a plant is the important one in the logic, because it acts as the parent that can seed more life nearby.',
+            'The fungi spec treats mushrooms like living compost silos that eat waste, store compost, and feed it back to plants.',
+            'The plant spec treats one number, nutrients, as food, health, and growth progression all at once.',
+            'A valid dinosaur rest patch could be something as simple as three nearby plants whose cover values add up high enough.',
+            'Some plants were allowed to go dormant and come back instead of simply dying forever.'
+          ],
+          weird: [
+            'The habitat pages make Wickle want to overwater something.'
+          ],
+          fun: [
+            'I remember the loop clicking once fungi, waste, and plants started feeding one another visibly.',
+            'Visible ecological feedback does most of the teaching here.'
+          ],
+          trailer: [
+            'I watch this for readable cause and effect before the cute parts try to steal the scene.',
+            'I remember lushness working best when the recovery ladder was obvious at a glance.'
+          ],
+          trailerFact: [
+            'At full recovery the design called for cleaner air, more insects, healthier cover, and clearer signs that the habitat had turned around.',
+            'This project was designed so visible ecological feedback would do as much teaching as the UI.'
+          ]
+        },
+        'monster-simulator-3000.html': {
+          fact: [
+            'Monster Simulator 3000 depends on readable chaos: boss tells, throwable objects, objectives, rage gain, and perk effects all have to stay legible.',
+            'The boss blimp, helicopter, and tank briefs are built around readable tells instead of cheap surprise damage.',
+            'Throw assist was intentionally stronger up close so VR throws landed where players meant them to.',
+            'Monster Simulator 3000 work here includes enemy-design features and close balance attention.',
+            'Power plants were multi-step objectives: open the stack, carry cores, and force an overheat.',
+            'Throw assist was intentionally stronger up close so heavy VR throws landed where players meant them to.',
+            'Rage came from wrecking things, killing enemies, and even taking damage.',
+            'Perks are temporary run upgrades and disappear on death.',
+            'The boss blimp flies a figure-eight and drops bombs with blinking fuses that the player can grab or crush.',
+            'The boss helicopter tries to stay between the player and the nearest spawner, and clever players can bait it into hitting its own side.',
+            'The boss tank teaches shield timing: wind-up, reticle lock, shield drop, then the volley.',
+            'Knocking out all the buddy tanks was meant to leave the boss exposed.',
+            'Boom perks create chain explosions, while Stone perks can destroy enemy projectiles as well as enemies.',
+            'The level process was expected to stay playable through whitebox, production, and balance passes.',
+            'Spawn pressure was designed to get meaner near objectives and ease off when the player was hurt or farther away.',
+            'A lot of the systems work here was about making that chaos readable instead of random.',
+            'The configuration docs exposed exactly how adjustable the combat was, right down to rage gain, shockwave costs, projectile behavior, and enemy fire rates.',
+            'That means this page is not only concept work; it is also tuning-knob work.',
+            'The boss tank, helicopter, and blimp briefs were all built around player-readable tells, not cheap surprise damage.',
+            'The throw feature page even added coyote timing and aim help so grabbing and hurling would feel intentional in VR.',
+            'The strongest images on this page should show scale, target clarity, and the difference between throwables, threats, and objectives.',
+            'Monster chaos only really works once the city still reads as a place and not just a debris cloud.'
+          ],
+          weird: [
+            'Wickle is definitely not the monster.'
+          ],
+          fun: [
+            'I remember baiting the helicopter into its own side and feeling very clever about it.',
+            'Big destruction only feels good when the player can still tell why a plan worked.'
+          ],
+          trailer: [
+            'I watch this for silhouette and intention. Big things go muddy fast.',
+            'I remember the best reads being the ones where the city, the targets, and the threats all stayed distinct.'
+          ],
+          trailerFact: [
+            'Spawn pressure was designed to increase near objectives and ease off when the player was hurt or farther away.',
+            'The best footage here should make boss tells, throwable objects, and objective logic readable at the same time.',
+            'A kaiju game can be messy, but the player still needs to understand why a plan worked.'
+          ]
+        },
+        'dune-sea.html': {
+          fact: [
+            'This work is strongest where pacing, player-facing read, and encounter pressure stay clear.'
+          ],
+          weird: [
+            'Dry pages always whisper louder.'
+          ],
+          fun: [
+            'Wide horizons are only useful when the player still knows what matters.'
+          ],
+          trailer: [
+            'I remember this reading cleanly when the interface stayed calm and the space kept its pressure lines.'
+          ],
+          trailerFact: []
+        },
+        'half-rats-parasomnia.html': {
+          fact: [
+            'Mood only holds when the interaction read stays disciplined.',
+            'Good QA notes capture not only what broke, but what the break did to the player.'
+          ],
+          weird: [
+            'This page still feels like it is listening back.'
+          ],
+          fun: [
+            'I remember the best horror reads being the ones that stayed legible while unsettling me.'
+          ],
+          trailer: [
+            'I only watch this with sound. Silence cheats the mood.',
+            'I remember the strongest passages being the ones where silhouette, space, and pacing kept the dread coherent.'
+          ],
+          trailerFact: []
+        },
+        'mount-and-blade-community-maps.html': {
+          fact: [
+            'This page is route craft first: lanes, sightlines, pressure points, and readable movement.',
+            'Long-form community map work is mostly sustained tuning rather than one heroic gesture.'
+          ],
+          weird: [
+            'Route pages carry tiny winds in them.'
+          ],
+          fun: [
+            'I remember good multiplayer spaces revealing their intent in the first ten seconds of movement.'
+          ],
+          trailer: [
+            'I watch this for path honesty. If the terrain lies, the fight lies.'
+          ],
+          trailerFact: []
+        },
+        'red-meat-games.html': {
+          fact: [
+            'Early studio work is often where breadth shows up most plainly: level work, production support, QA, and design all sharing the same day.',
+            'Arena and progression work read best when pressure steps upward cleanly.'
+          ],
+          weird: [
+            'Early-work pages always feel like crowded toolboxes.'
+          ],
+          fun: [
+            'Practical hands matter more than grand speeches at this stage.'
+          ],
+          trailer: [
+            'I remember arena rhythm being the real story here once the sparks settled.'
+          ],
+          trailerFact: []
+        },
+        'roll-together.html': {
+          fact: [
+            'Playful systems still need rigid clarity under the surface.',
+            'Co-op obstacle work succeeds when timing and communication read without friction.'
+          ],
+          weird: [
+            'Circular pages never fully stop moving.'
+          ],
+          fun: [
+            'Whimsy benefits from clean edges more than almost anything.'
+          ],
+          trailer: [
+            'I remember the playful bits working best once the obstacle language stayed consistent at speed.'
+          ],
+          trailerFact: []
+        },
+        '404.html': {
+          fact: [
+            'Even a fallback page is doing route work.'
+          ],
+          weird: [
+            'Lost pages drift a little at night.'
+          ],
+          fun: [
+            'A good dead end still points home.'
+          ],
+          trailer: [],
+          trailerFact: []
+        }
+      }
+    }
+  };
+
+
+  function getWicklePageKey() {
+    var path = ((window.location.pathname || '').split('/').pop() || 'index.html').toLowerCase();
+    return path || 'index.html';
+  }
+
+  function getWickleHeadingContext(heading) {
+    var text = (heading || '').trim().toLowerCase();
+    var empty = { normal: [], affirming: [], weird: [], factoids: [], trailer: [], trailerFactoids: [] };
+    if (!text) return empty;
+
+    var keys = Object.keys(WICKLE_EDITABLE.headingContexts || {});
+    for (var i = 0; i < keys.length; i += 1) {
+      if (text.indexOf(keys[i]) !== -1) return WICKLE_EDITABLE.headingContexts[keys[i]];
+    }
+
+    return empty;
+  }
+
+  function getWicklePageConfig() {
+    return {
+      key: getWicklePageKey()
+    };
+  }
+
+
+  function setupDividerWickle() {
+    var dividers = Array.from(document.querySelectorAll('.section-divider'));
+    var finalDivider = document.getElementById('final-page-divider');
+    if (finalDivider && dividers.indexOf(finalDivider) === -1) dividers.push(finalDivider);
+    if (!dividers.length) return;
+
+    var spritePath = 'assets/ui/Wickle.png';
+    var deathSpritePath = 'assets/ui/Wicklediesprite.png';
+    var clickSounds = ['assets/ui/wickle-click-1.wav', 'assets/ui/wickle-click-2.wav'];
+    var rareClickSound = 'assets/ui/RareWickleSquishClick.wav';
+    var dieSound = 'assets/ui/WickleDie.wav';
+    var lightFailSounds = ['assets/ui/WickleLightSwitchFail1.wav', 'assets/ui/WickleLightSwitchFail2.wav'];
+    var lightSuccessSounds = ['assets/ui/WickleLightSwitchSuccess1.wav', 'assets/ui/WickleLightSwitchSuccess2.wav'];
+    var accessoryClickSounds = ['assets/ui/WickleClicked3.wav', 'assets/ui/WickleClicked4.wav'];
+    var switchButton = document.querySelector('.theme-toggle');
+    var switchStack = document.querySelector('.theme-toggle-stack') || (switchButton ? switchButton.closest('.theme-toggle-stack') : null);
+    var deadStorageKey = 'wickle_dead_until_index_reload';
+    var resurrectStorageKey = 'wickle_resurrect_once';
+    var currentPageKey = getWicklePageKey();
+    var WICKLE_SPECIAL_LINES = WICKLE_EDITABLE.special;
+    var WICKLE_ACCESSORIES = {
+      tea: {
+        key: 'tea',
+        src: 'assets/ui/wickle/wickle_overlay_tea_mug.png',
+        palette: ['rgba(228,210,171,.96)', 'rgba(186,145,92,.9)', 'rgba(144,42,34,.88)']
+      },
+      beer: {
+        key: 'beer',
+        src: 'assets/ui/wickle/wickle_overlay_beer_stein.png',
+        palette: ['rgba(234,210,151,.96)', 'rgba(181,119,27,.92)', 'rgba(120,74,18,.88)']
+      },
+      lightBulb: {
+        key: 'lightBulb',
+        src: 'assets/ui/wickle/wickle_overlay_light_bulb_hat.png',
+        palette: ['rgba(255,228,112,.96)', 'rgba(226,177,56,.92)', 'rgba(122,86,24,.86)']
+      },
+      pilot: {
+        key: 'pilot',
+        src: 'assets/ui/wickle/wickle_overlay_steampunk_pilot_goggles.png',
+        palette: ['rgba(214,173,82,.96)', 'rgba(52,149,120,.92)', 'rgba(94,66,27,.88)']
+      },
+      diving: {
+        key: 'diving',
+        src: 'assets/ui/wickle/wickle_overlay_diving_goggles_snorkel.png',
+        palette: ['rgba(90,193,224,.96)', 'rgba(196,55,35,.88)', 'rgba(44,78,119,.88)']
+      },
+      wizardBlue: {
+        key: 'wizardBlue',
+        src: 'assets/ui/wickle/wickle_overlay_wizard_blue.png',
+        palette: ['rgba(67,82,166,.96)', 'rgba(223,168,58,.9)', 'rgba(38,48,103,.9)']
+      },
+      wizardRed: {
+        key: 'wizardRed',
+        src: 'assets/ui/wickle/wickle_overlay_wizard_red.png',
+        palette: ['rgba(160,78,37,.96)', 'rgba(214,154,56,.9)', 'rgba(96,45,20,.88)']
+      }
+    };
+
+    if (currentPageKey === 'index.html' && sessionStorage.getItem(deadStorageKey) === '1') {
+      sessionStorage.removeItem(deadStorageKey);
+      sessionStorage.setItem(resurrectStorageKey, '1');
+    }
+    var WICKLE_MIND = WICKLE_EDITABLE.mind;
+    var WICKLE_DIALOGUE = WICKLE_EDITABLE.dialogue;
+
+    var state = {
+      host: null,
+      hostType: '',
+      visitTimer: 0,
+      hideTimer: 0,
+      bubbleTimer: 0,
+      speechSequenceTimer: 0,
+      shiverTimer: 0,
+      switchTimer: 0,
+      ponderTimer: 0,
+      idleAnimTimer: 0,
+      lastInteraction: Date.now(),
+      hasShownOnce: false,
+      recentLines: [],
+      lastHost: null,
+      clickStamps: [],
+      currentLine: '',
+      instanceClickLineShown: false,
+      dead: sessionStorage.getItem(deadStorageKey) === '1',
+      showAt: 0,
+      trailerVideos: [],
+      lightAmbushArmed: false,
+      switchCooldownUntil: 0,
+      bottomNoticeCooldownUntil: 0,
+      bottomNoticeAttempts: [],
+      bottomNoticeLastAttemptAt: 0,
+      resurrectLinePending: sessionStorage.getItem(resurrectStorageKey) === '1',
+      privateThought: '',
+      accessoryKey: '',
+      accessoryPalette: null,
+      accessoryDropped: false,
+      currentSpeechIsSplit: false,
+      lightAmbushCompletedByWickle: false
+    };
+
+    if (state.dead) return;
+
+    var sprite = document.createElement('button');
+    sprite.type = 'button';
+    sprite.className = 'wickle-peek';
+    sprite.setAttribute('aria-label', 'Wickle is peeking from the divider');
+    sprite.setAttribute('title', 'Wickle');
+    sprite.innerHTML = '<span class="wickle-inner"><img class="wickle-base" src="' + spritePath + '" alt="" aria-hidden="true"><img class="wickle-accessory" alt="" aria-hidden="true" hidden></span>';
+    sprite.hidden = true;
+    sprite.style.background = 'transparent';
+    sprite.style.border = '0';
+    sprite.style.padding = '0';
+    sprite.style.margin = '0';
+    sprite.style.outline = 'none';
+    sprite.style.boxShadow = 'none';
+    sprite.style.borderRadius = '0';
+    sprite.style.appearance = 'none';
+    sprite.style.WebkitAppearance = 'none';
+    sprite.style.color = 'inherit';
+    sprite.style.font = 'inherit';
+
+    var inner = sprite.querySelector('.wickle-inner');
+    var accessory = sprite.querySelector('.wickle-accessory');
+    accessory.style.left = '0';
+    accessory.style.top = '0';
+    accessory.style.width = '100%';
+    accessory.style.height = 'auto';
+    accessory.style.transformOrigin = 'center center';
+
+    var bubble = document.createElement('div');
+    bubble.className = 'wickle-bubble';
+    bubble.setAttribute('role', 'status');
+    bubble.setAttribute('aria-live', 'polite');
+    document.body.appendChild(bubble);
+
+    var bubbleSecondary = document.createElement('div');
+    bubbleSecondary.className = 'wickle-bubble wickle-bubble-secondary';
+    bubbleSecondary.setAttribute('role', 'status');
+    bubbleSecondary.setAttribute('aria-live', 'polite');
+    document.body.appendChild(bubbleSecondary);
+
+    function randomRange(min, max) {
+      return Math.round(min + Math.random() * (max - min));
+    }
+
+    function clamp(value, min, max) {
+      return Math.min(max, Math.max(min, value));
+    }
+
+    function getScrollRatio() {
+      var doc = document.documentElement;
+      var top = window.scrollY || doc.scrollTop || 0;
+      var max = Math.max(1, (doc.scrollHeight || 1) - (window.innerHeight || doc.clientHeight || 1));
+      return top / max;
+    }
+
+    function getPageRegion() {
+      var ratio = getScrollRatio();
+      if (ratio < 0.24) return 'top';
+      if (ratio > 0.72) return 'bottom';
+      return 'middle';
+    }
+
+    function isBottomDivider(host) {
+      return !!(host && host.dataset && host.dataset.wickleBottom === 'true');
+    }
+
+    function getSectionForHost(host) {
+      return host ? host.closest('.section') : null;
+    }
+
+    function getHeadingForHost(host) {
+      var section = getSectionForHost(host);
+      var heading = section ? section.querySelector('h1, h2, h3') : null;
+      return heading ? heading.textContent.trim() : '';
+    }
+
+    function getHostHeadingLower(host) {
+      return getHeadingForHost(host).toLowerCase();
+    }
+
+    function hostIsVisible(host) {
+      if (!host || !host.getBoundingClientRect) return false;
+      var rect = host.getBoundingClientRect();
+      var vh = window.innerHeight || document.documentElement.clientHeight || 0;
+      var vw = window.innerWidth || document.documentElement.clientWidth || 0;
+      if (!rect.width && !rect.height) return false;
+      return rect.bottom > 24 && rect.top < vh - 24 && rect.right > 24 && rect.left < vw - 24;
+    }
+
+    function nearBottom() {
+      var doc = document.documentElement;
+      var scrollBottom = (window.scrollY || doc.scrollTop || 0) + (window.innerHeight || doc.clientHeight || 0);
+      return scrollBottom >= (doc.scrollHeight || 0) - 6;
+    }
+
+    function recordInteraction() {
+      state.lastInteraction = Date.now();
+    }
+
+    function clearTimer(key) {
+      if (state[key]) {
+        window.clearTimeout(state[key]);
+        state[key] = 0;
+      }
+    }
+
+    function cleanupTimers() {
+      ['visitTimer', 'hideTimer', 'bubbleTimer', 'speechSequenceTimer', 'shiverTimer', 'switchTimer', 'ponderTimer', 'idleAnimTimer'].forEach(clearTimer);
+    }
+
+    function clearHideTimers() {
+      ['hideTimer', 'bubbleTimer', 'speechSequenceTimer'].forEach(clearTimer);
+    }
+
+    function detach() {
+      if (sprite.parentNode) sprite.parentNode.removeChild(sprite);
+      state.host = null;
+      state.hostType = '';
+    }
+
+    function resetPresentation() {
+      sprite.className = 'wickle-peek';
+      sprite.style.removeProperty('translate');
+      bubble.className = 'wickle-bubble';
+      bubble.classList.remove('is-visible', 'is-below');
+      bubble.style.removeProperty('--wickle-bubble-x');
+      bubble.style.removeProperty('--wickle-bubble-y');
+      bubble.style.removeProperty('--wickle-tail-x');
+      bubbleSecondary.className = 'wickle-bubble wickle-bubble-secondary';
+      bubbleSecondary.classList.remove('is-visible', 'is-below');
+      bubbleSecondary.style.removeProperty('--wickle-bubble-x');
+      bubbleSecondary.style.removeProperty('--wickle-bubble-y');
+      bubbleSecondary.style.removeProperty('--wickle-tail-x');
+      sprite.classList.remove('is-visible', 'is-speaking');
+      accessory.hidden = true;
+      accessory.removeAttribute('src');
+      accessory.style.removeProperty('transform');
+      state.accessoryKey = '';
+      state.accessoryPalette = null;
+      state.accessoryDropped = false;
+      state.currentSpeechIsSplit = false;
+      state.lightAmbushCompletedByWickle = false;
+    }
+
+    function normalizeLine(line) {
+      return (line || WICKLE_SPECIAL_LINES.fallbackFound).replace(/\s+/g, ' ').trim();
+    }
+
+    function pushRecentLine(line) {
+      if (!line) return;
+      state.recentLines.push(line);
+      if (state.recentLines.length > 18) state.recentLines.shift();
+    }
+
+    function chooseFreshLine(lines) {
+      var cleaned = (lines || []).map(normalizeLine).filter(Boolean);
+      if (!cleaned.length) return WICKLE_SPECIAL_LINES.fallbackFound;
+      var unique = cleaned.filter(function (line, index) { return cleaned.indexOf(line) === index; });
+      var fresh = unique.filter(function (line) { return state.recentLines.indexOf(line) === -1; });
+      var pool = fresh.length ? fresh : unique;
+      var chosen = pool[Math.floor(Math.random() * pool.length)];
+      pushRecentLine(chosen);
+      return chosen;
+    }
+
+    function playSound(source, options) {
+      try {
+        var src = Array.isArray(source) ? source[Math.floor(Math.random() * source.length)] : source;
+        if (!src) return;
+        var audio = new Audio(src);
+        audio.preload = 'auto';
+        audio.volume = options && options.volume != null ? options.volume : 0.78;
+        audio.playbackRate = options && options.rate != null ? options.rate : (0.95 + Math.random() * 0.12);
+        audio.preservesPitch = false;
+        audio.mozPreservesPitch = false;
+        audio.webkitPreservesPitch = false;
+        audio.play().catch(function () {});
+      } catch (e) {}
+    }
+
+    function emitPixelBurst(target, palette, amount, className) {
+      if (!target) return;
+      var layer = ensureFxLayer();
+      var rect = target.getBoundingClientRect();
+      var count = amount || 10;
+      for (var i = 0; i < count; i += 1) {
+        var particle = document.createElement('span');
+        particle.className = className || 'wickle-dust-particle';
+        particle.style.left = (rect.left + rect.width * (0.18 + Math.random() * 0.64)).toFixed(2) + 'px';
+        particle.style.top = (rect.top + rect.height * (0.2 + Math.random() * 0.54)).toFixed(2) + 'px';
+        particle.style.setProperty('--wpx-x', ((Math.random() * 54) - 27).toFixed(2) + 'px');
+        particle.style.setProperty('--wpx-y', (-14 - Math.random() * 24).toFixed(2) + 'px');
+        particle.style.setProperty('--wpx-y2', (22 + Math.random() * 48).toFixed(2) + 'px');
+        particle.style.setProperty('--wpx-rot', ((Math.random() * 200) - 100).toFixed(2) + 'deg');
+        particle.style.setProperty('--wpx-scale', (0.9 + Math.random() * 0.9).toFixed(2));
+        if (palette && palette.length) particle.style.background = palette[Math.floor(Math.random() * palette.length)];
+        layer.appendChild(particle);
+        window.setTimeout(function (node) {
+          return function () {
+            if (node && node.parentNode) node.parentNode.removeChild(node);
+          };
+        }(particle), 1300);
+      }
+    }
+
+    function emitDustParticles(target) {
+      emitPixelBurst(target, ['rgba(204,192,168,.78)', 'rgba(176,166,142,.66)', 'rgba(154,144,122,.52)'], 12, 'wickle-dust-particle');
+    }
+
+    function emitPurpleScum(target) {
+      emitPixelBurst(target, ['rgba(142,89,220,.92)', 'rgba(188,117,240,.84)', 'rgba(92,46,142,.88)'], 18, 'wickle-scum-particle');
+    }
+
+    function getAccessoryLossName(key) {
+      var labels = WICKLE_EDITABLE.accessoryLossNames || {};
+      return labels[key] || labels.default || 'Hat';
+    }
+
+    function normalizeSplitChunkEnding(line) {
+      var chunk = normalizeLine(line);
+      if (!chunk) return '';
+      if (/\.\.\.\s*$/.test(chunk)) return chunk.replace(/\s*$/, '');
+      if (/[,]\s*$/.test(chunk)) return chunk.replace(/[,]\s*$/, '...');
+      if (/[.!?;:]\s*$/.test(chunk)) return chunk.replace(/[.!?;:]\s*$/, '...');
+      return chunk + '...';
+    }
+
+    function normalizeFinalChunkEnding(line) {
+      var chunk = normalizeLine(line);
+      if (!chunk) return '';
+      if (/[.!?]\s*$/.test(chunk)) return chunk.replace(/\s*$/, '');
+      if (/\.\.\.\s*$/.test(chunk)) return chunk.replace(/\.\.\.\s*$/, '.');
+      if (/[,:;—–-]\s*$/.test(chunk)) return chunk.replace(/[,:;—–-]\s*$/, '.');
+      return chunk + '.';
+    }
+
+    function scheduleSpeechHide(min, max, reschedule) {
+      clearTimer('bubbleTimer');
+      var baseMin = Math.max(7000, min || 0);
+      var baseMax = Math.max(baseMin, max || baseMin);
+      var duration = randomRange(baseMin, baseMax) + (state.currentSpeechIsSplit ? 2000 : 0);
+      state.bubbleTimer = window.setTimeout(function () {
+        hideWickle(reschedule !== false);
+      }, duration);
+    }
+
+    function pickWeightedAccessory(entries) {
+      var total = 0;
+      (entries || []).forEach(function (entry) {
+        total += Math.max(0, entry && entry[1] ? entry[1] : 0);
+      });
+      if (!total) return null;
+      var roll = Math.random() * total;
+      for (var i = 0; i < entries.length; i += 1) {
+        var weight = Math.max(0, entries[i] && entries[i][1] ? entries[i][1] : 0);
+        if (roll < weight) return WICKLE_ACCESSORIES[entries[i][0]] || null;
+        roll -= weight;
+      }
+      return WICKLE_ACCESSORIES[entries[entries.length - 1][0]] || null;
+    }
+
+    function chooseAccessoryForPage() {
+      var chance = 0.12;
+      var entries = [['tea', 1]];
+
+      switch (currentPageKey) {
+        case 'index.html':
+          chance = 0.34;
+          entries = [['beer', 7], ['tea', 6], ['wizardBlue', 2], ['lightBulb', 1]];
+          break;
+        case 'cv.html':
+          chance = 0.3;
+          entries = [['tea', 7], ['wizardBlue', 2], ['lightBulb', 1]];
+          break;
+        case 'design-notes.html':
+        case 'design-essay-simplicity.html':
+        case 'design-game-reviews.html':
+          chance = 0.34;
+          entries = [['beer', 9], ['tea', 3], ['wizardBlue', 2], ['wizardRed', 2], ['pilot', 2], ['diving', 2], ['lightBulb', 2]];
+          break;
+        case 'civitas.html':
+        case 'monster-simulator-3000.html':
+          chance = 0.28;
+          entries = [['wizardRed', 8], ['tea', 2]];
+          break;
+        case 'b17-flying-fortress.html':
+          chance = 0.3;
+          entries = [['pilot', 8], ['tea', 1]];
+          break;
+        case 'the-deep.html':
+          chance = 0.3;
+          entries = [['diving', 8], ['tea', 1]];
+          break;
+        case 'half-rats-parasomnia.html':
+        case 'roll-together.html':
+          chance = 0.28;
+          entries = [['lightBulb', 8], ['tea', 2]];
+          break;
+      }
+
+      if (Math.random() >= chance) return null;
+      return pickWeightedAccessory(entries);
+    }
+
+    function applyAccessoryForAppearance() {
+      var chosen = chooseAccessoryForPage();
+      state.accessoryKey = chosen ? chosen.key : '';
+      state.accessoryPalette = chosen ? chosen.palette.slice() : null;
+      state.accessoryDropped = false;
+      if (!chosen) {
+        accessory.hidden = true;
+        accessory.removeAttribute('src');
+        accessory.style.removeProperty('transform');
+        return;
+      }
+      accessory.src = chosen.src;
+      accessory.hidden = false;
+      accessory.style.transform = sprite.classList.contains('is-flipped') ? 'scaleX(-1)' : '';
+    }
+
+    function dropCurrentAccessory() {
+      if (!state.accessoryKey || accessory.hidden || !accessory.getAttribute('src')) return false;
+      var droppedAccessoryName = getAccessoryLossName(state.accessoryKey);
+      var layer = ensureFxLayer();
+      var rect = accessory.getBoundingClientRect();
+      if (!rect.width && !rect.height) rect = sprite.getBoundingClientRect();
+      var dropped = document.createElement('img');
+      dropped.className = 'wickle-dropped-accessory';
+      dropped.src = accessory.getAttribute('src');
+      dropped.alt = '';
+      dropped.setAttribute('aria-hidden', 'true');
+      dropped.style.left = (rect.left + (rect.width * 0.5)).toFixed(2) + 'px';
+      dropped.style.top = (rect.top + (rect.height * 0.5)).toFixed(2) + 'px';
+      dropped.style.width = rect.width.toFixed(2) + 'px';
+      dropped.style.height = rect.height.toFixed(2) + 'px';
+      dropped.style.setProperty('--drop-x', ((Math.random() * 120) - 60).toFixed(2) + 'px');
+      dropped.style.setProperty('--drop-rot', ((Math.random() * 220) - 110).toFixed(2) + 'deg');
+      if (sprite.classList.contains('is-flipped')) dropped.style.scale = '-1 1';
+      layer.appendChild(dropped);
+      if (dropped.animate) {
+        var flightX = (Math.random() * 170) - 85;
+        var liftX = flightX * 0.38;
+        var bounceX = flightX * 1.08;
+        var spinStart = (Math.random() * 32) - 16;
+        var spinMid = (Math.random() * 220) - 110;
+        var spinEnd = spinMid + ((Math.random() * 180) - 90);
+        dropped.style.transformOrigin = '50% 50%';
+        dropped.animate([
+          { transform: 'translate3d(-50%, -50%, 0) rotate(' + spinStart.toFixed(2) + 'deg)', offset: 0 },
+          { transform: 'translate3d(calc(-50% + ' + liftX.toFixed(2) + 'px), calc(-50% - ' + (32 + Math.random() * 26).toFixed(2) + 'px), 0) rotate(' + spinMid.toFixed(2) + 'deg)', offset: 0.26 },
+          { transform: 'translate3d(calc(-50% + ' + flightX.toFixed(2) + 'px), calc(-50% + ' + (118 + Math.random() * 48).toFixed(2) + 'px), 0) rotate(' + spinEnd.toFixed(2) + 'deg)', offset: 0.82 },
+          { transform: 'translate3d(calc(-50% + ' + bounceX.toFixed(2) + 'px), calc(-50% + ' + (148 + Math.random() * 42).toFixed(2) + 'px), 0) rotate(' + (spinEnd * 0.92).toFixed(2) + 'deg)', opacity: 0.92, offset: 0.92 },
+          { transform: 'translate3d(calc(-50% + ' + (bounceX * 1.04).toFixed(2) + 'px), calc(-50% + ' + (176 + Math.random() * 54).toFixed(2) + 'px), 0) rotate(' + (spinEnd * 0.98).toFixed(2) + 'deg)', opacity: 0, offset: 1 }
+        ], {
+          duration: 2050,
+          easing: 'cubic-bezier(.16,.72,.24,1)',
+          fill: 'forwards'
+        });
+      }
+      window.setTimeout(function () {
+        if (dropped && dropped.parentNode) dropped.parentNode.removeChild(dropped);
+      }, 2100);
+
+      emitPixelBurst(accessory, state.accessoryPalette || ['rgba(222,204,166,.96)', 'rgba(164,126,86,.88)'], 16, 'wickle-scum-particle');
+      playSound(accessoryClickSounds, { volume: 0.8, rate: 0.98 + (Math.random() * 0.08) });
+
+      accessory.hidden = true;
+      accessory.removeAttribute('src');
+      accessory.style.removeProperty('transform');
+      state.accessoryKey = '';
+      state.accessoryPalette = null;
+      state.accessoryDropped = true;
+      return droppedAccessoryName;
+    }
+
+    function maybeDropAccessoryOnClick() {
+      if (!state.accessoryKey || state.accessoryDropped) return '';
+      var chance = Math.min(0.56, 0.08 + (Math.max(0, state.clickStamps.length - 1) * 0.1));
+      if (Math.random() >= chance) return '';
+      return dropCurrentAccessory() || '';
+    }
+
+    function playInnerAnimation(frames, options) {
+      try {
+        if (!inner || !inner.animate) return;
+        inner.animate(frames, options);
+      } catch (e) {}
+    }
+
+    function playSpeechBob() {
+      playInnerAnimation([
+        { transform: 'translate3d(0,0,0) scale(1,1)' },
+        { transform: 'translate3d(0,-2px,0) scale(1.015,.985)', offset: 0.5 },
+        { transform: 'translate3d(0,0,0) scale(1,1)' }
+      ], { duration: 620, easing: 'steps(3,end)' });
+    }
+
+    function playShiver() {
+      playInnerAnimation([
+        { transform: 'translate3d(0,0,0) scale(1,1)' },
+        { transform: 'translate3d(-1px,0,0) scale(1.01,.99)' },
+        { transform: 'translate3d(1px,0,0) scale(.99,1.01)' },
+        { transform: 'translate3d(0,0,0) scale(1,1)' }
+      ], { duration: 320, easing: 'steps(4,end)' });
+    }
+
+    function playAppearAnimation() {
+      playInnerAnimation([
+        { transform: 'translate3d(0,12px,0) scale(.84,1.12)', opacity: 0.0 },
+        { transform: 'translate3d(0,-3px,0) scale(1.06,.94)', opacity: 1, offset: 0.56 },
+        { transform: 'translate3d(0,1px,0) scale(.98,1.03)', offset: 0.8 },
+        { transform: 'translate3d(0,0,0) scale(1,1)', opacity: 1 }
+      ], { duration: 760, easing: 'cubic-bezier(.2,.9,.22,1)' });
+    }
+
+    function playIdleBreath() {
+      playInnerAnimation([
+        { transform: 'translate3d(0,0,0) scale(1,1)' },
+        { transform: 'translate3d(0,-1px,0) scale(1.015,.99)', offset: 0.35 },
+        { transform: 'translate3d(0,0,0) scale(1,1)', offset: 0.7 },
+        { transform: 'translate3d(0,1px,0) scale(.99,1.01)' },
+        { transform: 'translate3d(0,0,0) scale(1,1)' }
+      ], { duration: randomRange(900, 1300), easing: 'ease-in-out' });
+    }
+
+    function scheduleIdleAnimation() {
+      clearTimer('idleAnimTimer');
+      state.idleAnimTimer = window.setTimeout(function () {
+        if (!state.host || !sprite.classList.contains('is-visible')) return;
+        if (Math.random() < 0.82) playIdleBreath();
+        else playShiver();
+        scheduleIdleAnimation();
+      }, randomRange(1200, 2600));
+    }
+
+    function playClickPop() {
+      playInnerAnimation([
+        { transform: 'translate3d(0,0,0) scale(1,1)' },
+        { transform: 'translate3d(0,1px,0) scale(1.08,.88)', offset: 0.24 },
+        { transform: 'translate3d(0,-2px,0) scale(.94,1.08)', offset: 0.58 },
+        { transform: 'translate3d(0,0,0) scale(1,1)' }
+      ], { duration: 520, easing: 'cubic-bezier(.22,.9,.28,1)' });
+    }
+
+    function scheduleShiverIfNeeded() {
+      clearTimer('shiverTimer');
+      if (Math.random() > 0.58) return;
+      state.shiverTimer = window.setTimeout(function () {
+        if (!state.host || !sprite.classList.contains('is-visible')) return;
+        playShiver();
+      }, randomRange(900, 2600));
+    }
+
+    function positionSingleBubble(node, stackIndex, stackCount) {
+      if (!node || !node.classList.contains('is-visible') || !state.host || !sprite.parentNode) return;
+      var rect = sprite.getBoundingClientRect();
+      var margin = 10;
+      node.style.maxWidth = Math.min(320, Math.max(210, window.innerWidth - margin * 2)) + 'px';
+      node.style.left = '0px';
+      node.style.top = '0px';
+      var bw = node.offsetWidth || 220;
+      var bh = node.offsetHeight || 60;
+      var gap = 10;
+      var totalHeight = (bh * stackCount) + (gap * Math.max(0, stackCount - 1));
+      var x = rect.left + rect.width * 0.5 - bw * 0.5;
+      x = clamp(x, margin, Math.max(margin, window.innerWidth - bw - margin));
+      var y = rect.top - totalHeight - 14 + (stackIndex * (bh + gap));
+      var below = false;
+      if (y < margin) {
+        y = Math.min(window.innerHeight - bh - margin, rect.bottom + 14 + (stackIndex * (bh + gap)));
+        below = true;
+      }
+      node.classList.toggle('is-below', below);
+      node.style.setProperty('--wickle-bubble-x', x.toFixed(2) + 'px');
+      node.style.setProperty('--wickle-bubble-y', y.toFixed(2) + 'px');
+      var tail = rect.left + rect.width * 0.5 - x - 6;
+      tail = clamp(tail, 16, Math.max(16, bw - 22));
+      node.style.setProperty('--wickle-tail-x', tail.toFixed(2) + 'px');
+    }
+
+    function positionBubble() {
+      var visibleCount = 0;
+      if (bubble.classList.contains('is-visible')) visibleCount += 1;
+      if (bubbleSecondary.classList.contains('is-visible')) visibleCount += 1;
+      if (!visibleCount) return;
+      var index = 0;
+      if (bubble.classList.contains('is-visible')) {
+        positionSingleBubble(bubble, index, visibleCount);
+        index += 1;
+      }
+      if (bubbleSecondary.classList.contains('is-visible')) {
+        positionSingleBubble(bubbleSecondary, index, visibleCount);
+      }
+    }
+
+    function showBubble(node, line) {
+      node.textContent = normalizeLine(line);
+      node.classList.add('is-visible');
+      sprite.classList.add('is-speaking');
+      positionBubble();
+      playSpeechBob();
+      scheduleShiverIfNeeded();
+    }
+
+    function say(lines) {
+      clearTimer('speechSequenceTimer');
+      var sequence = Array.isArray(lines) ? lines.map(normalizeLine).filter(Boolean) : [normalizeLine(lines)];
+      if (!sequence.length) sequence = [WICKLE_SPECIAL_LINES.fallbackFound];
+      state.currentLine = sequence.join(' ');
+      state.currentSpeechIsSplit = sequence.length > 1;
+      bubbleSecondary.classList.remove('is-visible');
+      bubbleSecondary.classList.remove('is-below');
+      showBubble(bubble, sequence[0]);
+      if (sequence.length > 1) {
+        state.speechSequenceTimer = window.setTimeout(function () {
+          if (!state.host) return;
+          showBubble(bubbleSecondary, sequence[1]);
+        }, randomRange(3200, 3800));
+      }
+    }
+
+    function unsay() {
+      clearTimer('speechSequenceTimer');
+      bubble.classList.remove('is-visible');
+      bubble.classList.remove('is-below');
+      bubbleSecondary.classList.remove('is-visible');
+      bubbleSecondary.classList.remove('is-below');
+      sprite.classList.remove('is-speaking');
+      state.currentLine = '';
+      state.currentSpeechIsSplit = false;
+    }
+
+    function splitDialogueLine(line) {
+      var normalized = normalizeLine(line);
+      if (!normalized) return [WICKLE_SPECIAL_LINES.fallbackFound];
+
+      var words = normalized.split(/\s+/).filter(Boolean);
+      if (words.length < 15) return [normalized];
+
+      function wordCount(text) {
+        return text ? text.split(/\s+/).filter(Boolean).length : 0;
+      }
+
+      var sentenceChunks = normalized.match(/[^.!?]+[.!?]*/g);
+      if (sentenceChunks && sentenceChunks.length > 1) {
+        sentenceChunks = sentenceChunks.map(function (chunk) {
+          return normalizeLine(chunk);
+        }).filter(Boolean);
+
+        if (sentenceChunks.length === 2) {
+          var firstSentence = sentenceChunks[0];
+          var secondSentence = sentenceChunks[1];
+          if (wordCount(firstSentence) >= wordCount(secondSentence)) {
+            return [
+              normalizeSplitChunkEnding(firstSentence),
+              normalizeFinalChunkEnding(secondSentence)
+            ];
+          }
+        }
+
+        if (sentenceChunks.length > 2) {
+          var sentenceSplitIndex = 1;
+          var sentenceLeftWords = 0;
+          for (var s = 0; s < sentenceChunks.length; s += 1) {
+            sentenceLeftWords += wordCount(sentenceChunks[s]);
+            var sentenceRightWords = wordCount(normalizeLine(sentenceChunks.slice(s + 1).join(' ')));
+            if (sentenceLeftWords >= sentenceRightWords) {
+              sentenceSplitIndex = s + 1;
+              break;
+            }
+          }
+
+          if (sentenceSplitIndex > 0 && sentenceSplitIndex < sentenceChunks.length) {
+            return [
+              normalizeSplitChunkEnding(normalizeLine(sentenceChunks.slice(0, sentenceSplitIndex).join(' '))),
+              normalizeFinalChunkEnding(normalizeLine(sentenceChunks.slice(sentenceSplitIndex).join(' ')))
+            ].filter(Boolean);
+          }
+        }
+      }
+
+      var punctuationMatches = [];
+      normalized.replace(/[:;,—–-]/g, function (match, offset) {
+        punctuationMatches.push(offset);
+        return match;
+      });
+
+      if (punctuationMatches.length) {
+        var preferredFirstWords = Math.ceil(words.length * 0.58);
+        var bestIndex = -1;
+        var bestDelta = Infinity;
+
+        punctuationMatches.forEach(function (offset) {
+          var left = normalizeLine(normalized.slice(0, offset + 1));
+          var right = normalizeLine(normalized.slice(offset + 1));
+          var leftWords = wordCount(left);
+          var rightWords = wordCount(right);
+          if (leftWords < 4 || rightWords < 4) return;
+          if (leftWords < rightWords) return;
+          var delta = Math.abs(leftWords - preferredFirstWords);
+          if (delta < bestDelta) {
+            bestDelta = delta;
+            bestIndex = offset;
+          }
+        });
+
+        if (bestIndex !== -1) {
+          var leftChunk = normalizeLine(normalized.slice(0, bestIndex + 1));
+          var rightChunk = normalizeLine(normalized.slice(bestIndex + 1));
+          if (leftChunk && rightChunk) return [normalizeSplitChunkEnding(leftChunk), normalizeFinalChunkEnding(rightChunk)];
+        }
+      }
+
+      if (words.length >= 15) {
+        var splitIndex = Math.ceil(words.length * 0.58);
+        splitIndex = clamp(splitIndex, 8, words.length - 4);
+        return [
+          normalizeSplitChunkEnding(normalizeLine(words.slice(0, splitIndex).join(' '))),
+          normalizeFinalChunkEnding(normalizeLine(words.slice(splitIndex).join(' ')))
+        ].filter(Boolean);
+      }
+
+      return [normalized];
+    }
+
+    function chooseDifferentLine(builder, fallback) {
+      var chosen = normalizeLine(builder());
+      if (!chosen && fallback) chosen = normalizeLine(fallback);
+      if (!chosen) chosen = WICKLE_SPECIAL_LINES.fallbackFound;
+      return splitDialogueLine(chosen);
+    }
+
+    function getContextDialogue(host, clicked, forceTrailer) {
+      return chooseDifferentLine(function () {
+        return getContextLine(host, clicked, forceTrailer);
+      }, chooseFreshLine((WICKLE_DIALOGUE.global[getPageRegion()] || {}).normal || [WICKLE_SPECIAL_LINES.fallbackInspecting]));
+    }
+
+    function getSwitchDialogue(kind) {
+      return chooseDifferentLine(function () {
+        return getSwitchLine(kind);
+      }, chooseFreshLine(WICKLE_DIALOGUE.global.switch.idle || [WICKLE_SPECIAL_LINES.fallbackTooBright]));
+    }
+
+    function getBottomDialogue() {
+      return chooseDifferentLine(function () {
+        if (currentPageKey === 'index.html') {
+          var introPage = WICKLE_DIALOGUE.pages[currentPageKey] || {};
+          if (Array.isArray(introPage.fun) && introPage.fun.length) return chooseFreshLine(introPage.fun);
+        }
+        return chooseFreshLine(WICKLE_DIALOGUE.global.bottomGuard);
+      }, chooseFreshLine((WICKLE_DIALOGUE.global.bottom || {}).fun || ['Committed readers always find the weird crumbs.']));
+    }
+
+    function getLateSwitchDialogue() {
+      return [WICKLE_SPECIAL_LINES.lateSwitch[Math.floor(Math.random() * WICKLE_SPECIAL_LINES.lateSwitch.length)]];
+    }
+
+    function schedulePondering() {
+      clearTimer('ponderTimer');
+      state.ponderTimer = window.setTimeout(function () {
+        var combined = WICKLE_MIND.philosophy.concat(WICKLE_MIND.gameDesign).concat(WICKLE_MIND.history);
+        state.privateThought = combined[Math.floor(Math.random() * combined.length)];
+        schedulePondering();
+      }, randomRange(9000, 18000));
+    }
+
+    function videoEligibleForWickle(video) {
+      if (!video) return false;
+      return !video.paused && !video.ended && !video.muted && Number(video.volume || 0) > 0.01 && video.readyState > 1;
+    }
+
+    function bindTrailerWatchers() {
+      state.trailerVideos = Array.from(document.querySelectorAll('.video-frame video, video')).map(function (video) {
+        return { video: video, section: video.closest('.section') };
+      }).filter(function (entry) { return !!entry.section; });
+
+      state.trailerVideos.forEach(function (entry) {
+        var video = entry.video;
+        if (!video || video.dataset.wickleTrailerBound === 'true') return;
+        video.dataset.wickleTrailerBound = 'true';
+
+        ['play', 'playing', 'volumechange'].forEach(function (eventName) {
+          video.addEventListener(eventName, function () {
+            if (videoEligibleForWickle(video)) scheduleVisitSoon();
+          });
+        });
+
+        ['pause', 'ended'].forEach(function (eventName) {
+          video.addEventListener(eventName, function () {
+            if (state.host && getSectionForHost(state.host) === entry.section) {
+              clearHideTimers();
+              state.bubbleTimer = window.setTimeout(function () {
+                hideWickle(true);
+              }, randomRange(1400, 2400));
+            }
+          });
+        });
+      });
+    }
+
+    function findActiveTrailerContext() {
+      var best = null;
+      state.trailerVideos.forEach(function (entry) {
+        var video = entry.video;
+        var section = entry.section;
+        if (!videoEligibleForWickle(video) || !section || !hostIsVisible(section)) return;
+        if (!best) {
+          best = { video: video, section: section, reason: 'play' };
+          return;
+        }
+        var currentDistance = Math.abs(section.getBoundingClientRect().top);
+        var bestDistance = Math.abs(best.section.getBoundingClientRect().top);
+        if (currentDistance < bestDistance) best = { video: video, section: section, reason: 'play' };
+      });
+      return best || { video: null, section: null, reason: '' };
+    }
+
+    function mergeInto(into, source) {
+      if (!source) return into;
+      ['fact', 'weird', 'fun', 'normal', 'trailer', 'trailerFact'].forEach(function (key) {
+        if (Array.isArray(source[key]) && source[key].length) into[key] = into[key].concat(source[key]);
+      });
+      return into;
+    }
+
+    function collectPools(host, isTrailerHost) {
+      var region = state.hostType === 'bottom' ? 'bottom' : getPageRegion();
+      var output = { fact: [], weird: [], fun: [], normal: [], trailer: [], trailerFact: [] };
+      var page = WICKLE_DIALOGUE.pages[currentPageKey] || {};
+      var heading = getHostHeadingLower(host);
+
+      mergeInto(output, WICKLE_DIALOGUE.global[region] || {});
+      mergeInto(output, page);
+
+      Object.keys(WICKLE_DIALOGUE.global.headings || {}).forEach(function (key) {
+        if (heading.indexOf(key) !== -1) mergeInto(output, WICKLE_DIALOGUE.global.headings[key]);
+      });
+
+      if (state.resurrectLinePending) {
+        output.weird = output.weird.concat(WICKLE_DIALOGUE.global.deathRespawn);
+      }
+
+      if (!isTrailerHost) {
+        output.trailer = [];
+        output.trailerFact = [];
+      }
+
+      return output;
+    }
+
+    function getSwitchLine(kind) {
+      return chooseFreshLine((WICKLE_DIALOGUE.global.switch[kind] || WICKLE_DIALOGUE.global.switch.idle || [WICKLE_SPECIAL_LINES.fallbackTooBright]));
+    }
+
+    function getContextLine(host, clicked, forceTrailer) {
+      if (state.hostType === 'bottom') return chooseFreshLine(WICKLE_DIALOGUE.global.bottomGuard);
+      var trailerContext = findActiveTrailerContext();
+      var isTrailerHost = !!forceTrailer || getHostHeadingLower(host).indexOf('trailer') !== -1 || (trailerContext.section && getSectionForHost(host) === trailerContext.section);
+      var region = getPageRegion();
+      var pools = collectPools(host, isTrailerHost);
+      var roll = Math.random();
+      var choices = [];
+      var page = WICKLE_DIALOGUE.pages[currentPageKey] || {};
+      var heading = getHostHeadingLower(host);
+
+      if (currentPageKey === 'index.html' && !isTrailerHost && Array.isArray(page.fun) && page.fun.length) {
+        return chooseFreshLine(page.fun);
+      }
+
+      if (currentPageKey === 'design-game-reviews.html' && page.sectionFacts) {
+        var sectionFacts = [];
+        Object.keys(page.sectionFacts).forEach(function (key) {
+          if (heading.indexOf(key) !== -1 && Array.isArray(page.sectionFacts[key]) && page.sectionFacts[key].length) {
+            sectionFacts = sectionFacts.concat(page.sectionFacts[key]);
+          }
+        });
+        if (sectionFacts.length) return chooseFreshLine(sectionFacts);
+      }
+
+      if (currentPageKey === 'design-notes.html') {
+        return chooseFreshLine((page.fact || []).slice());
+      }
+
+      if (region === 'middle') {
+        if (clicked) {
+          if (isTrailerHost && roll < 0.5) choices = pools.trailer.concat(pools.trailerFact);
+          else if (roll < 0.78) choices = pools.fact.concat(pools.normal);
+          else choices = pools.fun.concat(pools.weird);
+        } else {
+          if (isTrailerHost && roll < 0.56) choices = pools.trailer.concat(pools.trailerFact);
+          else if (roll < 0.84) choices = pools.fact.concat(pools.normal);
+          else choices = pools.fun.concat(pools.weird);
+        }
+      } else {
+        if (clicked) {
+          if (isTrailerHost && roll < 0.3) choices = pools.trailer.concat(pools.trailerFact);
+          else if (roll < 0.62) choices = pools.weird.concat(pools.fun);
+          else if (roll < 0.86) choices = pools.fact.concat(pools.normal);
+          else choices = pools.normal.concat(pools.fun);
+        } else {
+          if (isTrailerHost && roll < 0.22) choices = pools.trailer.concat(pools.trailerFact);
+          else if (roll < 0.66) choices = pools.weird.concat(pools.fun);
+          else if (roll < 0.88) choices = pools.fact.concat(pools.normal);
+          else choices = pools.normal.concat(pools.weird);
+        }
+      }
+
+      return chooseFreshLine(choices);
+    }
+
+    function chooseSwitchHost() {
+      if (!switchStack || !switchButton) return null;
+      if (pickBroken()) return null;
+      if ((root.getAttribute('data-theme') || pickTheme()) !== 'light') return null;
+      if (Date.now() < state.switchCooldownUntil) return null;
+      if (!hostIsVisible(switchStack)) return null;
+      var switchChance = currentPageKey === 'index.html' ? 0.08 : 0.22;
+      return Math.random() < switchChance ? switchStack : null;
+    }
+
+    function chooseStandardHost() {
+      var trailerContext = findActiveTrailerContext();
+      if (trailerContext.section) {
+        var trailerHost = dividers.find(function (host) {
+          return !isBottomDivider(host) && getSectionForHost(host) === trailerContext.section && hostIsVisible(host);
+        });
+        if (trailerHost && Math.random() < 0.72) return trailerHost;
+      }
+
+      var visible = dividers.filter(function (host) {
+        return !isBottomDivider(host) && hostIsVisible(host);
+      });
+
+      if (currentPageKey === 'index.html') {
+        var vh = window.innerHeight || document.documentElement.clientHeight || 0;
+        visible = visible.filter(function (host) {
+          var rect = host.getBoundingClientRect();
+          return rect.top > (vh * 0.66) || (vh - rect.bottom) < 120;
+        });
+      }
+
+      if (!visible.length) return null;
+
+      var topHost = visible.slice().sort(function (a, b) {
+        return a.getBoundingClientRect().top - b.getBoundingClientRect().top;
+      })[0];
+
+      var viewportMid = (window.innerHeight || document.documentElement.clientHeight || 0) * 0.55;
+      var followHost = visible.slice().sort(function (a, b) {
+        return Math.abs((a.getBoundingClientRect().top + a.getBoundingClientRect().height * 0.5) - viewportMid) -
+          Math.abs((b.getBoundingClientRect().top + b.getBoundingClientRect().height * 0.5) - viewportMid);
+      })[0];
+
+      var chosen = Math.random() < 0.5 ? followHost : topHost;
+
+      if (visible.length > 1 && chosen === state.lastHost) {
+        chosen = chosen === followHost ? topHost : followHost;
+      }
+
+      return chosen || visible[0];
+    }
+
+    function placeWickle(host, hostType) {
+      if (!host) return false;
+      if (!hostIsVisible(host) && hostType !== 'switch' && hostType !== 'bottom') return false;
+
+      detach();
+      resetPresentation();
+      state.host = host;
+      state.hostType = hostType || 'divider';
+      if (state.hostType === 'divider') state.lastHost = host;
+
+      host.appendChild(sprite);
+      sprite.hidden = false;
+
+      if (state.hostType === 'switch') {
+        state.lightAmbushCompletedByWickle = false;
+        sprite.classList.add('is-switch-host');
+        bubble.classList.add('is-switch-host');
+        bubbleSecondary.classList.add('is-switch-host');
+        sprite.style.translate = '-10px 14px';
+      } else if (state.hostType === 'bottom') {
+        sprite.classList.add('is-right');
+        bubble.classList.add('is-right');
+      } else {
+        var preferFollow = Math.random() < 0.5;
+        var side = preferFollow ? (Math.random() < 0.5 ? 'left' : 'right') : 'left';
+        var variant = Math.floor(Math.random() * 3) + 1;
+        sprite.classList.add('is-' + side, 'variant-' + variant);
+        bubble.classList.add('is-' + side);
+        if ((side === 'left' && variant === 2) || (side === 'right' && variant !== 2)) {
+          sprite.classList.add('is-flipped');
+        }
+      }
+
+      applyAccessoryForAppearance();
+      positionBubble();
+      return true;
+    }
+
+    function hideWickle(reschedule) {
+      clearHideTimers();
+      clearTimer('switchTimer');
+      state.lightAmbushArmed = false;
+      state.lightAmbushCompletedByWickle = false;
+      unsay();
+      sprite.classList.remove('is-visible');
+
+      window.setTimeout(function () {
+        detach();
+        sprite.hidden = true;
+        if (reschedule && !state.dead) scheduleVisit();
+      }, 420);
+    }
+
+    function showWickle(hostTypeOverride) {
+      if (document.hidden || state.dead) {
+        if (!state.dead) scheduleVisit();
+        return;
+      }
+
+      var idleFor = Date.now() - state.lastInteraction;
+      var requiredIdle = findActiveTrailerContext().section ? 1800 : 3200;
+
+      if (!hostTypeOverride && idleFor < requiredIdle) {
+        scheduleVisit();
+        return;
+      }
+
+      var hostType = hostTypeOverride || '';
+      var host = null;
+
+      if (hostType === 'bottom') {
+        host = finalDivider;
+      } else if (hostType === 'switch') {
+        host = chooseSwitchHost();
+      } else {
+        host = chooseSwitchHost();
+        hostType = host ? 'switch' : 'divider';
+        if (!host) host = chooseStandardHost();
+      }
+
+      if (!host) {
+        scheduleVisitSoon();
+        return;
+      }
+
+      if (!placeWickle(host, hostType)) {
+        scheduleVisitSoon();
+        return;
+      }
+
+      state.showAt = Date.now();
+      state.hasShownOnce = true;
+      state.clickStamps = [];
+      state.instanceClickLineShown = false;
+
+      window.requestAnimationFrame(function () {
+        sprite.classList.add('is-visible');
+        positionBubble();
+        playAppearAnimation();
+      });
+
+      scheduleShiverIfNeeded();
+      scheduleIdleAnimation();
+
+      if (state.resurrectLinePending && currentPageKey === 'index.html' && state.hostType !== 'switch') {
+        say(chooseDifferentLine(function () {
+          return chooseFreshLine(WICKLE_DIALOGUE.global.deathRespawn);
+        }, chooseFreshLine((WICKLE_DIALOGUE.global.top || {}).weird || [WICKLE_SPECIAL_LINES.resurrectFallback])));
+        state.resurrectLinePending = false;
+        sessionStorage.removeItem(resurrectStorageKey);
+        scheduleSpeechHide(5200, 7200, true);
+        return;
+      }
+
+      if (state.hostType === 'switch') {
+        startLightAmbush();
+        state.hideTimer = window.setTimeout(function () {
+          if (state.host && state.hostType === 'switch' && state.lightAmbushArmed) hideWickle(true);
+        }, 7600);
+        return;
+      }
+
+      if (state.hostType === 'bottom') {
+        say(getBottomDialogue());
+        scheduleSpeechHide(3600, 5200, true);
+        return;
+      }
+
+      var trailerContext = findActiveTrailerContext();
+      if (trailerContext.section && getSectionForHost(host) === trailerContext.section && Math.random() < 0.74) {
+        state.bubbleTimer = window.setTimeout(function () {
+          if (!state.host || state.host !== host) return;
+          say(getContextDialogue(host, false, true));
+        }, randomRange(700, 1600));
+      }
+
+      state.hideTimer = window.setTimeout(function () {
+        hideWickle(true);
+      }, randomRange(5600, 8600));
+    }
+
+    function scheduleVisitSoon() {
+      if (state.dead || state.host) return;
+      clearTimer('visitTimer');
+      state.visitTimer = window.setTimeout(function () {
+        state.visitTimer = 0;
+        if (document.hidden) {
+          scheduleVisit();
+          return;
+        }
+        showWickle();
+      }, randomRange(1300, 2200));
+    }
+
+    function scheduleVisit() {
+      if (state.dead) return;
+      clearTimer('visitTimer');
+      var trailerContext = findActiveTrailerContext();
+      var delay = trailerContext.section ? randomRange(1500, 2800) : (state.hasShownOnce ? randomRange(8200, 13800) : randomRange(2800, 4300));
+      if (currentPageKey === 'index.html' && !trailerContext.section) {
+        delay = state.hasShownOnce ? randomRange(18000, 34000) : randomRange(12000, 20000);
+      }
+      state.visitTimer = window.setTimeout(function () {
+        state.visitTimer = 0;
+        if (document.hidden) {
+          scheduleVisit();
+          return;
+        }
+        showWickle();
+      }, delay);
+    }
+
+    function startLightAmbush() {
+      if (!state.host || state.hostType !== 'switch') return;
+      state.lightAmbushArmed = true;
+      state.switchTimer = window.setTimeout(function () {
+        if (!state.host || state.hostType !== 'switch' || !state.lightAmbushArmed) return;
+        applyTheme('dark');
+        playSound(lightSuccessSounds, { volume: 0.72, rate: 1.0 });
+        playSound(TOGGLE_SOUND, { volume: 0.14, rate: 1.0 });
+        say(getSwitchDialogue('success'));
+        state.lightAmbushArmed = false;
+        state.lightAmbushCompletedByWickle = true;
+        state.switchCooldownUntil = Date.now() + randomRange(28000, 42000);
+        clearHideTimers();
+        scheduleSpeechHide(4200, 5600, true);
+      }, randomRange(2300, 4200));
+
+      state.bubbleTimer = window.setTimeout(function () {
+        if (!state.host || state.hostType !== 'switch') return;
+        say(getSwitchDialogue('idle'));
+      }, randomRange(520, 1200));
+    }
+
+    function handleLightAmbushFail() {
+      if (!state.host || state.hostType !== 'switch') return;
+      state.lightAmbushArmed = false;
+      state.lightAmbushCompletedByWickle = false;
+      clearTimer('switchTimer');
+      playSound(lightFailSounds, { volume: 0.72, rate: 1.0 });
+      say(getSwitchDialogue('fail'));
+      state.switchCooldownUntil = Date.now() + randomRange(18000, 26000);
+      clearHideTimers();
+      scheduleSpeechHide(4200, 5600, true);
+    }
+
+    function handleLightAmbushSuccessFromUser() {
+      if (!state.host || state.hostType !== 'switch' || !state.lightAmbushArmed) return;
+      state.lightAmbushArmed = false;
+      state.lightAmbushCompletedByWickle = false;
+      clearTimer('switchTimer');
+      playSound(lightSuccessSounds, { volume: 0.72, rate: 1.0 });
+      say(getSwitchDialogue('success'));
+      state.switchCooldownUntil = Date.now() + 300000;
+      clearHideTimers();
+      scheduleSpeechHide(4200, 5600, true);
+    }
+
+    function spawnDeathFall() {
+      var layer = ensureFxLayer();
+      var rect = sprite.getBoundingClientRect();
+      var dead = document.createElement('img');
+      dead.className = 'wickle-death-fall';
+      dead.src = deathSpritePath;
+      dead.alt = '';
+      dead.setAttribute('aria-hidden', 'true');
+      dead.style.left = (rect.left + rect.width * 0.5).toFixed(2) + 'px';
+      dead.style.top = (rect.top + rect.height * 0.5).toFixed(2) + 'px';
+      dead.style.width = Math.max(128, rect.width * 3).toFixed(2) + 'px';
+      dead.style.setProperty('--death-x', ((Math.random() * 90) - 45).toFixed(2) + 'px');
+      dead.style.setProperty('--death-rot', ((Math.random() * 140) - 70).toFixed(2) + 'deg');
+      layer.appendChild(dead);
+      window.setTimeout(function () {
+        if (dead && dead.parentNode) dead.parentNode.removeChild(dead);
+      }, 2800);
+    }
+
+    function triggerDeath() {
+      state.dead = true;
+      sessionStorage.setItem(deadStorageKey, '1');
+      sessionStorage.setItem(resurrectStorageKey, '1');
+      cleanupTimers();
+      unsay();
+      playSound(dieSound, { volume: 0.84, rate: 1.0 });
+      spawnDeathFall();
+      sprite.classList.remove('is-visible');
+      sprite.hidden = true;
+      detach();
+    }
+
+    function triggerBottomNotice() {
+      var now = Date.now();
+      if (!finalDivider || state.dead) return;
+      if (now < state.bottomNoticeCooldownUntil) return;
+      if (!nearBottom() || !hostIsVisible(finalDivider)) {
+        state.bottomNoticeAttempts = [];
+        state.bottomNoticeLastAttemptAt = 0;
+        return;
+      }
+
+      if ((now - state.bottomNoticeLastAttemptAt) < 260) return;
+      state.bottomNoticeLastAttemptAt = now;
+      state.bottomNoticeAttempts = state.bottomNoticeAttempts.filter(function (stamp) {
+        return now - stamp < 2600;
+      });
+      state.bottomNoticeAttempts.push(now);
+
+      if (state.bottomNoticeAttempts.length < 3) return;
+
+      state.bottomNoticeAttempts = [];
+      state.bottomNoticeLastAttemptAt = 0;
+      state.bottomNoticeCooldownUntil = now + 2400;
+      clearHideTimers();
+      clearTimer('visitTimer');
+      showWickle('bottom');
+    }
+
+    function handleSpriteClick(ev) {
+      ev.preventDefault();
+      ev.stopPropagation();
+      recordInteraction();
+
+      if (!state.host || state.dead) return;
+
+      emitDustParticles(sprite);
+      playClickPop();
+      if (state.hostType !== 'switch') {
+        playSound(clickSounds, { volume: 0.78 });
+      }
+
+      if (state.hostType === 'switch' && state.lightAmbushCompletedByWickle) {
+        clearHideTimers();
+        state.instanceClickLineShown = true;
+        state.lightAmbushCompletedByWickle = false;
+        say(getLateSwitchDialogue());
+        state.bubbleTimer = window.setTimeout(function () {
+          hideWickle(true);
+        }, 420);
+        return;
+      }
+
+      var noAccessoryScum = !state.accessoryKey && Math.random() < 0.08;
+      if (noAccessoryScum) {
+        playSound(rareClickSound, { volume: 0.72, rate: 1.0 });
+        emitPurpleScum(sprite);
+      }
+
+      var now = Date.now();
+      state.clickStamps = state.clickStamps.filter(function (stamp) { return now - stamp < 900; });
+      state.clickStamps.push(now);
+      var droppedAccessoryName = maybeDropAccessoryOnClick();
+
+      if (!droppedAccessoryName && state.hostType !== 'switch' && state.hostType !== 'bottom' && state.accessoryKey && !state.accessoryDropped && state.clickStamps.length >= 4) {
+        droppedAccessoryName = dropCurrentAccessory() || '';
+        if (droppedAccessoryName) state.clickStamps = [];
+      }
+
+      if (droppedAccessoryName) {
+        if (state.hostType === 'switch') {
+          state.lightAmbushArmed = false;
+          state.lightAmbushCompletedByWickle = false;
+          clearTimer('switchTimer');
+          state.switchCooldownUntil = Date.now() + randomRange(18000, 26000);
+        }
+        state.instanceClickLineShown = true;
+        clearHideTimers();
+        say([WICKLE_SPECIAL_LINES.accessoryLossPrefix + droppedAccessoryName + WICKLE_SPECIAL_LINES.accessoryLossSuffix]);
+        scheduleSpeechHide(4200, 5600, true);
+        return;
+      }
+
+      if (state.hostType !== 'switch' && state.hostType !== 'bottom' && state.clickStamps.length >= 4) {
+        triggerDeath();
+        return;
+      }
+
+      if (state.instanceClickLineShown) return;
+      state.instanceClickLineShown = true;
+      clearHideTimers();
+
+      if (noAccessoryScum) {
+        if (state.hostType === 'switch') {
+          state.lightAmbushArmed = false;
+          state.lightAmbushCompletedByWickle = false;
+          clearTimer('switchTimer');
+          state.switchCooldownUntil = Date.now() + randomRange(18000, 26000);
+        }
+        say([WICKLE_SPECIAL_LINES.scum]);
+        scheduleSpeechHide(4200, 5600, true);
+        return;
+      }
+
+      if (state.hostType === 'switch') {
+        handleLightAmbushFail();
+        return;
+      }
+
+      if (state.hostType === 'bottom') {
+        say(getBottomDialogue());
+        scheduleSpeechHide(3600, 5200, true);
+        return;
+      }
+
+      say(getContextDialogue(state.host, true, false));
+      scheduleSpeechHide(5200, 7200, true);
+    }
+
+    sprite.addEventListener('click', handleSpriteClick);
+    sprite.addEventListener('mouseup', function () {
+      try { sprite.blur(); } catch (e) {}
+    });
+    sprite.addEventListener('mouseleave', function () {
+      try { sprite.blur(); } catch (e) {}
+    });
+
+    if (switchButton && !switchButton.dataset.wickleSwitchBound) {
+      switchButton.dataset.wickleSwitchBound = 'true';
+      switchButton.addEventListener('click', function () {
+        if (!state.host || state.hostType !== 'switch' || !state.lightAmbushArmed) return;
+        window.setTimeout(function () {
+          if (!state.host || state.hostType !== 'switch') return;
+          if (pickBroken()) {
+            triggerDeath();
+            return;
+          }
+          if ((root.getAttribute('data-theme') || pickTheme()) === 'dark') {
+            handleLightAmbushSuccessFromUser();
+          }
+        }, 24);
+      }, true);
+    }
+
+    ['pointerdown', 'keydown', 'scroll', 'touchstart', 'mousemove'].forEach(function (eventName) {
+      window.addEventListener(eventName, recordInteraction, { passive: true });
+    });
+
+    window.addEventListener('wheel', function (ev) {
+      if (ev.deltaY > 0) triggerBottomNotice();
+    }, { passive: true });
+
+    window.addEventListener('keydown', function (ev) {
+      if (ev.key === 'End' || ev.key === 'PageDown' || ev.key === 'ArrowDown' || ev.key === ' ') {
+        triggerBottomNotice();
+      }
+    });
+
+    window.addEventListener('scroll', function () {
+      if (state.host && state.hostType !== 'switch' && !hostIsVisible(state.host)) {
+        hideWickle(false);
+        scheduleVisitSoon();
+        return;
+      }
+      positionBubble();
+    }, { passive: true });
+
+    window.addEventListener('resize', function () {
+      if (state.host && state.hostType !== 'switch' && !hostIsVisible(state.host)) {
+        hideWickle(false);
+        scheduleVisitSoon();
+        return;
+      }
+      positionBubble();
+    });
+
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden) hideWickle(false);
+      else if (!state.dead) scheduleVisit();
+    });
+
+    bindTrailerWatchers();
+    schedulePondering();
+    scheduleVisit();
+  }
+
+
   function init() {
+
+
     setupSafetyResets();
     relocateLocationLine();
+    setupSidebarTightFit();
     setupDividerDecor();
+    setupWickleDividerOverlap();
     applyTheme(pickTheme());
     setupThemeToggle();
+    setupDividerWickle();
     setupLightbox();
     setupVideoPlayback();
     setupIndexAvatarSecret();

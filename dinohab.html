@@ -8,6 +8,61 @@
 <title>DinoHab — Seth Byrnes</title>
 <meta content="Portfolio project page for DinoHab." name="description"/>
 <link href="assets/styles.css" rel="stylesheet"/>
+
+<style>
+.example-media-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,260px));
+  gap:0.75rem;
+  margin-top:0.875rem;
+  justify-content:center;
+  align-items:start;
+}
+.example-media-single{
+  display:flex;
+  justify-content:center;
+  margin-top:0.875rem;
+}
+.example-media-link{
+  display:block;
+  text-decoration:none;
+}
+.example-thumb{
+  display:block;
+  width:100%;
+  max-width:260px;
+  aspect-ratio:16/10;
+  object-fit:cover;
+  object-position:center;
+  border-radius:12px;
+}
+.example-media-single .example-thumb{
+  margin-inline:auto;
+}
+.example-figure{
+  margin:0;
+  width:260px;
+  max-width:100%;
+  text-align:center;
+}
+.example-figure figcaption{
+  margin-top:0.45rem;
+  font-size:0.95em;
+  opacity:0.8;
+}
+</style>
+
+
+<style>
+.example-media-link{display:inline-block;text-decoration:none;color:inherit;cursor:zoom-in;}
+.example-lightbox{position:fixed;inset:0;background:rgba(0,0,0,0.82);display:none;align-items:center;justify-content:center;padding:2rem;z-index:9999;}
+.example-lightbox.is-open{display:flex;}
+.example-lightbox-inner{position:relative;max-width:min(1200px,92vw);max-height:92vh;display:flex;align-items:center;justify-content:center;}
+.example-lightbox img{display:block;max-width:100%;max-height:92vh;width:auto;height:auto;border-radius:14px;box-shadow:0 20px 60px rgba(0,0,0,0.45);}
+.example-lightbox-close{position:absolute;top:-0.75rem;right:-0.75rem;width:2.5rem;height:2.5rem;border:none;border-radius:999px;background:rgba(255,255,255,0.95);color:#111;font-size:1.4rem;line-height:1;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,0.25);}
+.example-lightbox-close:hover{transform:scale(1.03);}
+</style>
+
 </head>
 <body>
 <div class="layout">
@@ -17,20 +72,17 @@
 <p class="site-role">Game Designer</p>
 <p class="site-location">Milwaukee, Wisconsin</p>
 <a aria-label="LinkedIn" class="sidebar-linkedin-button" href="https://www.linkedin.com/in/seth-byrnes-85003268/" rel="noopener noreferrer" target="_blank"><img alt="LinkedIn" src="assets/ui/linkedin-button-bgDark.png"/></a>
-<nav class="sidebar-nav">
-<a href="index.html">Home</a><a href="cv.html">CV / Resume</a><a href="the-deep.html">The Deep: Beyond the Reef</a><a class="active" href="dinohab.html">DinoHab</a><a href="monster-simulator-3000.html">Monster Simulator 3000</a><a href="civitas.html">Civitas / Civatlas</a><a href="battle-cry-of-freedom.html">Battle Cry of Freedom</a><a href="b17-flying-fortress.html">B-17: Flying Fortress The Bloody 100th</a><a href="dune-sea.html">Dune Sea</a><a href="roll-together.html">Roll Together / CritterBall / CritterBox</a><a href="half-rats-parasomnia.html">Half-Rats: Parasomnia</a><a href="mount-and-blade-community-maps.html">Mount &amp; Blade Community Maps</a><a href="red-meat-games.html">First Impact / Onslaught</a>
-</nav>
+<nav class="sidebar-nav"><a href="index.html">Home</a><a href="cv.html">CV / Resume</a><p class="nav-group-title">Featured Work</p><a href="the-deep.html">The Deep: Beyond the Reef</a><a class="active" href="dinohab.html">DinoHab</a><a href="monster-simulator-3000.html">Monster Simulator 3000</a><p class="nav-group-title">Additional Work</p><a href="civitas.html">Civatlas</a><a href="battle-cry-of-freedom.html">Battle Cry of Freedom</a><a href="b17-flying-fortress.html">B-17: Flying Fortress The Bloody 100th</a><a href="dune-sea.html">Dune Sea</a><a href="roll-together.html">Roll Together</a><a href="half-rats-parasomnia.html">Half-Rats: Parasomnia</a><a href="mount-and-blade-community-maps.html">Mount &amp; Blade Community Maps</a><a href="red-meat-games.html">First Impact / Onslaught</a></nav>
 <button aria-label="Toggle light and dark mode" aria-pressed="false" class="theme-toggle" type="button"><img alt="Dark mode" class="theme-toggle-image" src="assets/ui/theme-toggle-dark.png"/></button><div class="sidebar-meta"></div>
 </div>
 </aside>
 <main class="content">
 <div class="page">
 <header class="project-hero no-banner">
-
 <div class="hero-copy">
 <p class="eyebrow">Dark Slope</p>
 <h1>DinoHab</h1>
-<p class="lead">Game Designer · April 2023 – October 2025</p>
+<p class="lead">Game Designer · April 2023 – October 2025</p><div class="project-skill-row"><ul class="skill-chips compact"><li>Systems Design</li><li>VR / MR Design</li><li>Onboarding</li><li>Behavior Design</li><li>Wireframing</li><li>Documentation</li><li>Tuning</li><li>QA</li></ul></div>
 </div>
 </header><section class="section">
 <h2>Trailer</h2>
@@ -57,13 +109,167 @@
 </dl>
 </section>
 <section class="section">
-<h2>Position Summary</h2>
-<p>Mixed reality and VR ecosystem management project centered on habitat restoration, creature care, progression, and readable player feedback. My role sat between systems design, onboarding design, milestone planning, wireframing, and production support. I designed core ecology-facing features, oversaw their implementation, tested them in-engine, and configured them before release.</p></section>
+<h2>Ownership and Outcome</h2>
+<p>DinoHab was a mixed reality and VR ecosystem management project built around the challenge of making a living habitat feel legible, reactive, and worth caring for without reducing it to disconnected meters. I owned the plant, fungi, waste, and harmony feature set, contributed creature interaction and buddy behaviour rules, and supported onboarding, wireframing, milestone planning, implementation review, testing, and configuration across production. The work focused on turning broad ecosystem concepts into readable player-facing systems and implementation-ready documentation that could survive iteration. That contribution shipped as part of the public 2024 Meta release.</p></section>
 <section class="section">
 <h2>Responsibilities</h2>
-<ul class="list-tight"><li>Owned the plant, fungi, and waste-harmony feature set from design through implementation oversight, testing, and release configuration.</li><li>Authored dinosaur trust, acknowledgement, satisfaction, levelling, and reward rules for player-animal interaction.</li><li>Mapped tutorial flow, player tools, onboarding beats, and feature introduction for MR and VR play.</li><li>Supported milestone planning, wireframes, implementation review, and iteration from playtest and QA feedback.</li></ul></section>
+<ul class="list-tight"><li>Owned the plant, fungi, waste, and harmony feature set from design through implementation oversight, testing, and release configuration.</li><li>Authored a 27-page plant systems design document covering growth states, propagation, nutrient logic, cover, dormancy, and implementation requirements.</li><li>Co-developed the project balancing workbook, programming roughly half of the logic across a shared 9-tab sheet with approximately 355 formulas for ecosystem, species, and progression tuning.</li><li>Authored dinosaur trust, acknowledgement, satisfaction, levelling, and reward rules for player-animal interaction.</li><li>Mapped tutorial flow, player tools, onboarding beats, and feature introduction for both MR and VR play.</li><li>Supported milestone planning, wireframes, implementation review, and iteration from playtest and QA feedback.</li></ul></section>
+<section class="section"><h2>Examples</h2><p>These samples show the work from two angles. The cards below explain the design problems I was trying to solve and why I approached them the way I did. The PDF examples that follow are the implementation-facing documents behind that work.</p>
+<div style="display:grid;gap:1rem;margin:1.25rem 0 1.5rem;">
+<article style="padding:1rem 1.125rem;border:1px solid rgba(127,127,127,0.22);border-radius:18px;">
+<h3>Built creature and buddy behaviours that taught the game naturally</h3>
+<p>One of the risks in a habitat game like this is leaning too hard on UI and losing the fantasy of caring for living creatures. I wanted the dinosaurs to feel readable, but I did not want them to feel like vending machines with moods attached. That pushed me toward explicit state logic for hunger, water, rest, social, satisfaction, trust, growth, and player interaction, so the creatures could react consistently without feeling scripted in a flat way.</p>
+<p>The buddy was especially useful because it let me solve onboarding more organically. Instead of relying on constant prompts, I used follow behaviour, playful hops, objective-leading, and special MR rules so the companion could pull the player toward the next useful action and stay emotionally present across transitions. I liked this because it made guidance feel like part of the relationship rather than a layer floating on top of the game.</p>
+<div class="example-media-grid">
+<figure class="example-figure">
+<a class="example-media-link" href="assets/media/dinohab/anecdote-creature-hatchling.png" rel="noopener noreferrer" target="_blank">
+<img alt="Baby dinosaur hatching in DinoHab" class="example-thumb" loading="lazy" src="assets/media/dinohab/anecdote-creature-hatchling.png"/>
+</a>
+<figcaption>Early creature life stages helped the habitat feel inhabited rather than purely simulated.</figcaption>
+</figure>
+<figure class="example-figure">
+<a class="example-media-link" href="assets/media/dinohab/anecdote-creature-adult.png" rel="noopener noreferrer" target="_blank">
+<img alt="In-game dinosaur behaviour screenshot" class="example-thumb" loading="lazy" src="assets/media/dinohab/anecdote-creature-adult.png"/>
+</a>
+<figcaption>Readable creature posture and proximity cues helped player care actions feel grounded.</figcaption>
+</figure>
+<figure class="example-figure">
+<a class="example-media-link" href="assets/media/dinohab/anecdote-buddy-state-tree-crop.png" rel="noopener noreferrer" target="_blank">
+<img alt="Buddy behaviour tree design diagram" class="example-thumb" loading="lazy" src="assets/media/dinohab/anecdote-buddy-state-tree-crop.png"/>
+</a>
+<figcaption>Buddy behaviour tree for need checks, trust, social response, and player interaction.</figcaption>
+</figure>
+</div>
+</article>
+<article style="padding:1rem 1.125rem;border:1px solid rgba(127,127,127,0.22);border-radius:18px;">
+<h3>Made plant placement readable instead of decorative</h3>
+<p>Plants had to do more than fill out the world. If players were going to make meaningful habitat decisions, they needed to understand why one planting choice worked and another failed. I used placement radii, occupied space, cover values, growth stages, and propagation rules to make plants behave like gameplay objects rather than background dressing. That gave players something they could reason about instead of just spam.</p>
+<p>What I found effective here was making the logic visible enough that players could build intuition quickly. Scanning, placement feedback, and clear relationships between growth, cover, and surrounding objects helped the habitat read as a system. It also gave us better tuning hooks, because the same plant feature could support progression, creature needs, and visual recovery at the same time.</p>
+<div class="example-media-single">
+<figure class="example-figure">
+<a class="example-media-link" href="assets/media/dinohab/anecdote-plant-placement-ui.png" rel="noopener noreferrer" target="_blank">
+<img alt="Plant inventory and placement screenshot" class="example-thumb" loading="lazy" src="assets/media/dinohab/anecdote-plant-placement-ui.png"/>
+</a>
+<figcaption>Inventory, tooltip, and placement feedback that made plant choices readable at a glance.</figcaption>
+</figure>
+</div>
+</article>
+<article style="padding:1rem 1.125rem;border:1px solid rgba(127,127,127,0.22);border-radius:18px;">
+<h3>Turned harmony, fungi, and waste into one visible ecosystem loop</h3>
+<div class="example-media-single" style="margin:0.875rem 0 1rem;">
+<figure class="example-figure">
+<a class="example-media-link" href="assets/media/dinohab/anecdote-harmony-loop.gif" rel="noopener noreferrer" target="_blank">
+<img alt="DinoHab harmony loop gameplay gif" class="example-thumb" loading="lazy" src="assets/media/dinohab/anecdote-harmony-loop.gif"/>
+</a>
+</figure>
+</div>
+<p>A lot of ecology games end up abstracting the interesting part away. Waste becomes a cleanup chore, harmony becomes a mystery number, and the player is left guessing which action actually matters. I wanted DinoHab to make that loop legible. Fungi and waste were where I spent a lot of that effort, because they let me close the circle between what dinosaurs consume, what they produce, and how the habitat recovers.</p>
+<p>By making mycelium ranges, compost transfer, and harmony feedback visible, I could give the player a clear read on why the ecosystem was healthy or unstable. The nice part was that this solved both a design problem and a UX problem at once: it made dung strategically useful instead of just gross, and it gave the player a fast way to understand whether they needed more flora, more fungi, or a different layout.</p>
 
-<section class="section"><h2>Design Work Samples</h2><p>These samples show the feature work I designed, oversaw through implementation, tested, and configured before release. I owned the plant, fungi, and waste-harmony side of the project, while also contributing onboarding, behavior, and product-structure material.</p><div class="sample-list"><article class="sample-card"><h3>Plants &amp; Fungi System Overview</h3><p>Core systems work covering the ecology-facing features I owned and carried through implementation.</p><p class="note"><a href="assets/docs/dinohab/Dino-Hab-Plants-and-Fungi.pdf" rel="noopener noreferrer" target="_blank">Open file</a></p></article><article class="sample-card"><h3>Plants Feature Document</h3><p>Implementation-facing plant design work tied to habitat readability, placement, and progression.</p><p class="note"><a href="assets/docs/dinohab/DH-Plants.pdf" rel="noopener noreferrer" target="_blank">Open file</a></p></article><article class="sample-card"><h3>Fungi Feature Document</h3><p>Supporting design for fungi behaviour, player-facing clarity, and system interaction.</p><p class="note"><a href="assets/docs/dinohab/DH-Fungi.pdf" rel="noopener noreferrer" target="_blank">Open file</a></p></article><article class="sample-card"><h3>Plant Lushness Tuning</h3><p>Tuning-oriented material used to shape how the habitat visually and mechanically responded over time.</p><p class="note"><a href="assets/docs/dinohab/DH-Plant-Lushness.pdf" rel="noopener noreferrer" target="_blank">Open file</a></p></article><article class="sample-card"><h3>Buddy Behavior Tree</h3><p>Behaviour support sample showing how player guidance and companion logic were structured.</p><p class="note"><a href="assets/docs/dinohab/Dino-Hab-Buddy-Behavior-Tree.pdf" rel="noopener noreferrer" target="_blank">Open file</a></p></article><article class="sample-card"><h3>Pre-Alpha Wireframe</h3><p>Wireframe sample illustrating broader planning and flow support alongside systems ownership.</p><p class="note"><a href="assets/docs/dinohab/Dinohab-Pre-Alpha-Wireframe.pdf" rel="noopener noreferrer" target="_blank">Open file</a></p></article></div></section><section class="section keyart-section"><div class="hero-image">
+<div class="example-media-grid">
+<figure class="example-figure">
+<a class="example-media-link" href="assets/media/dinohab/anecdote-compost-loop.png" rel="noopener noreferrer" target="_blank">
+<img alt="Compost loop diagram linking plants, fungi, dinos, nutrients, and waste" class="example-thumb" loading="lazy" src="assets/media/dinohab/anecdote-compost-loop.png"/>
+</a>
+<figcaption>A simple loop showing how plants, fungi, dinos, waste, and nutrients fed back into each other.</figcaption>
+</figure>
+<figure class="example-figure">
+<a class="example-media-link" href="assets/media/dinohab/anecdote-mycelium-diagram.png" rel="noopener noreferrer" target="_blank">
+<img alt="Mycelium range and compost flow diagram" class="example-thumb" loading="lazy" src="assets/media/dinohab/anecdote-mycelium-diagram.png"/>
+</a>
+<figcaption>Mycelium range and compost transfer made the fungi layer concrete instead of abstract.</figcaption>
+</figure>
+</div>
+</article>
+<article style="padding:1rem 1.125rem;border:1px solid rgba(127,127,127,0.22);border-radius:18px;">
+<h3>Used disruptors to test resilience instead of just waiting for harmony</h3>
+<p>Once the habitat started working, there was a danger that the game could become too passive. If players only had to hit the minimum requirements once, harmony risked turning into a solved machine. I used disruptors to break that pattern. Weather and predator-style events let the game ask whether the player had built a habitat that could absorb stress, not just one that looked balanced for a moment.</p>
+<p>I liked this approach because it pushed preparation back onto the player in a readable way. Shelter, water access, plant mix, and habitat layout suddenly mattered under pressure, and progression stayed active instead of becoming a waiting game. That made the ecosystem feel less like a static puzzle and more like something the player had to maintain.</p>
+<div class="example-media-single">
+<figure class="example-figure">
+<a class="example-media-link" href="assets/media/dinohab/anecdote-disruptors.gif" rel="noopener noreferrer" target="_blank">
+<img alt="Disruptor event gameplay gif" class="example-thumb" loading="lazy" src="assets/media/dinohab/anecdote-disruptors.gif"/>
+</a>
+<figcaption>Disruptor events tested whether the habitat could survive stress, not just reach a target state.</figcaption>
+</figure>
+</div>
+</article>
+</div>
+<div class="evidence-grid">
+<article class="evidence-card">
+<a class="evidence-preview" href="assets/docs/dinohab/Dino-Hab-Plants-and-Fungi.pdf" rel="noopener noreferrer" target="_blank"><img alt="Preview for Plants &amp; Fungi System Overview" loading="lazy" src="assets/evidence-previews/dinohab/Dino-Hab-Plants-and-Fungi-preview.png"/></a>
+<div class="evidence-copy">
+<p class="evidence-type">PDF</p>
+<h3>Plants &amp; Fungi System Overview</h3>
+<p>System overview for plant, fungi, waste, and resource flow.</p>
+<p class="entry-card-actions"><a class="button button-small" href="assets/docs/dinohab/Dino-Hab-Plants-and-Fungi.pdf" rel="noopener noreferrer" target="_blank">Open File</a></p>
+</div>
+</article>
+<article class="evidence-card">
+<a class="evidence-preview" href="assets/docs/dinohab/DH-Plants.pdf" rel="noopener noreferrer" target="_blank"><img alt="Preview for Plants Feature Document" loading="lazy" src="assets/evidence-previews/dinohab/DH-Plants-preview.png"/></a>
+<div class="evidence-copy">
+<p class="evidence-type">PDF</p>
+<h3>Plants Feature Document</h3>
+<p>Plant placement, growth, cover, and propagation rules.</p>
+<p class="entry-card-actions"><a class="button button-small" href="assets/docs/dinohab/DH-Plants.pdf" rel="noopener noreferrer" target="_blank">Open File</a></p>
+</div>
+</article>
+<article class="evidence-card">
+<a class="evidence-preview" href="assets/docs/dinohab/DH-Fungi.pdf" rel="noopener noreferrer" target="_blank"><img alt="Preview for Fungi Feature Document" loading="lazy" src="assets/evidence-previews/dinohab/DH-Fungi-preview.png"/></a>
+<div class="evidence-copy">
+<p class="evidence-type">PDF</p>
+<h3>Fungi Feature Document</h3>
+<p>Compost conversion, network range, and fungi behaviour.</p>
+<p class="entry-card-actions"><a class="button button-small" href="assets/docs/dinohab/DH-Fungi.pdf" rel="noopener noreferrer" target="_blank">Open File</a></p>
+</div>
+</article>
+<article class="evidence-card">
+<a class="evidence-preview" href="assets/docs/dinohab/DH-Plant-Lushness.pdf" rel="noopener noreferrer" target="_blank"><img alt="Preview for Plant Lushness Tuning" loading="lazy" src="assets/evidence-previews/dinohab/DH-Plant-Lushness-preview.png"/></a>
+<div class="evidence-copy">
+<p class="evidence-type">PDF</p>
+<h3>Plant Lushness Tuning</h3>
+<p>Visual response tuning for habitat growth and recovery.</p>
+<p class="entry-card-actions"><a class="button button-small" href="assets/docs/dinohab/DH-Plant-Lushness.pdf" rel="noopener noreferrer" target="_blank">Open File</a></p>
+</div>
+</article>
+<article class="evidence-card">
+<a class="evidence-preview" href="assets/docs/dinohab/Dino-Hab-Buddy-Behavior-Tree.pdf" rel="noopener noreferrer" target="_blank"><img alt="Preview for Buddy Behavior Tree" loading="lazy" src="assets/evidence-previews/dinohab/Dino-Hab-Buddy-Behavior-Tree-preview.png"/></a>
+<div class="evidence-copy">
+<p class="evidence-type">PDF</p>
+<h3>Buddy Behavior Tree</h3>
+<p>Companion follow, guidance, and player-response logic.</p>
+<p class="entry-card-actions"><a class="button button-small" href="assets/docs/dinohab/Dino-Hab-Buddy-Behavior-Tree.pdf" rel="noopener noreferrer" target="_blank">Open File</a></p>
+</div>
+</article>
+
+<article class="evidence-card">
+<a class="evidence-preview" href="assets/docs/dinohab/DinoHab_Team_Design_Document_Binder.pdf" rel="noopener noreferrer" target="_blank"><img alt="Preview for DinoHab Team Design Document Binder" loading="lazy" src="assets/evidence-previews/dinohab/DinoHab_Team_Design_Document_Binder-preview.png"/></a>
+<div class="evidence-copy">
+<p class="evidence-type">PDF</p>
+<h3>DinoHab Team Design Document Binder</h3>
+<p>Consolidated DinoHab design binder replacing the Harmony System example.</p>
+<p class="entry-card-actions"><a class="button button-small" href="assets/docs/dinohab/DinoHab_Team_Design_Document_Binder.pdf" rel="noopener noreferrer" target="_blank">Open File</a></p>
+</div>
+</article>
+<article class="evidence-card">
+<a class="evidence-preview" href="assets/docs/dinohab/DH-Disruptors.pdf" rel="noopener noreferrer" target="_blank"><img alt="Preview for Disruptors" loading="lazy" src="assets/evidence-previews/dinohab/DH-Disruptors-preview.png"/></a>
+<div class="evidence-copy">
+<p class="evidence-type">PDF</p>
+<h3>Disruptors</h3>
+<p>Weather and raid events used to test habitat resilience.</p>
+<p class="entry-card-actions"><a class="button button-small" href="assets/docs/dinohab/DH-Disruptors.pdf" rel="noopener noreferrer" target="_blank">Open File</a></p>
+</div>
+</article>
+<article class="evidence-card">
+<a class="evidence-preview" href="assets/docs/dinohab/Dinohab-Pre-Alpha-Wireframe.pdf" rel="noopener noreferrer" target="_blank"><img alt="Preview for Pre-Alpha Wireframe" loading="lazy" src="assets/evidence-previews/dinohab/Dinohab-Pre-Alpha-Wireframe-preview.png"/></a>
+<div class="evidence-copy">
+<p class="evidence-type">PDF</p>
+<h3>Pre-Alpha Wireframe</h3>
+<p>Early flow, feature ordering, and interaction planning.</p>
+<p class="entry-card-actions"><a class="button button-small" href="assets/docs/dinohab/Dinohab-Pre-Alpha-Wireframe.pdf" rel="noopener noreferrer" target="_blank">Open File</a></p>
+</div>
+</article>
+</div></section><section class="section keyart-section"><div class="hero-image">
 <img alt="DinoHab key art" src="assets/media/dinohab/keyart.jpg"/>
 </div></section><section class="section">
 <h2>Gallery</h2>
@@ -74,5 +280,54 @@
 </div>
 </main>
 </div>
+
+<div class="example-lightbox" id="example-lightbox" aria-hidden="true" role="dialog" aria-label="Expanded example image">
+  <div class="example-lightbox-inner">
+    <button class="example-lightbox-close" id="example-lightbox-close" type="button" aria-label="Close expanded image">×</button>
+    <img id="example-lightbox-image" alt="" src=""/>
+  </div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const lightbox = document.getElementById('example-lightbox');
+  const lightboxImg = document.getElementById('example-lightbox-image');
+  const closeBtn = document.getElementById('example-lightbox-close');
+  const links = document.querySelectorAll('.example-media-link');
+  let lastActive = null;
+
+  function closeLightbox() {
+    lightbox.classList.remove('is-open');
+    lightbox.setAttribute('aria-hidden', 'true');
+    lightboxImg.src = '';
+    lightboxImg.alt = '';
+    document.body.style.overflow = '';
+    if (lastActive) lastActive.focus();
+  }
+
+  links.forEach(function (link) {
+    link.addEventListener('click', function (e) {
+      e.preventDefault();
+      const img = link.querySelector('img');
+      if (!img) return;
+      lastActive = link;
+      lightboxImg.src = img.getAttribute('src');
+      lightboxImg.alt = img.getAttribute('alt') || '';
+      lightbox.classList.add('is-open');
+      lightbox.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      closeBtn.focus();
+    });
+  });
+
+  closeBtn.addEventListener('click', closeLightbox);
+  lightbox.addEventListener('click', function (e) {
+    if (e.target === lightbox) closeLightbox();
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && lightbox.classList.contains('is-open')) closeLightbox();
+  });
+});
+</script>
+
 <script defer="True" src="assets/site.js"></script></body>
 </html>
