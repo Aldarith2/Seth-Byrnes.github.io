@@ -110,14 +110,14 @@
 </section>
 <section class="section">
 <h2>Ownership and Outcome</h2>
-<p>DinoHab was a mixed reality and VR ecosystem management project built around the challenge of making a living habitat feel legible, reactive, and worth caring for without reducing it to disconnected meters. I owned the plant, fungi, waste, and harmony feature set, contributed creature interaction and buddy behaviour rules, and supported onboarding, wireframing, milestone planning, implementation review, testing, and configuration across production. The work focused on turning broad ecosystem concepts into readable player-facing systems and implementation-ready documentation that could survive iteration. That contribution shipped as part of the public 2024 Meta release.</p></section>
+<p>DinoHab is a mixed reality plus VR ecosystem management game. It was built around the challenge of making a living habitat feel reactive and worth caring for without being a chore, as well as educate young players about the paleolothic period. I was tasked with and owned the central ecological systems. I designed a 'Harmony' feature that required to manage plant, fungi and waste while contributing to buddy pet and creature interaction through behavioural state tree design. I also supported tutorialization, minigame design,narrative wireframing, milestone planning,implementation review and QA testing across the entire production. My contributions shipped as part of the public 2024 Meta release and the game is available on the Quest2 and 3 headsets.</p></section>
 <section class="section">
 <h2>Responsibilities</h2>
-<ul class="list-tight"><li>Owned the plant, fungi, waste, and harmony feature set from design through implementation oversight, testing, and release configuration.</li><li>Authored a 27-page plant systems design document covering growth states, propagation, nutrient logic, cover, dormancy, and implementation requirements.</li><li>Co-developed the project balancing workbook, programming roughly half of the logic across a shared 9-tab sheet with approximately 355 formulas for ecosystem, species, and progression tuning.</li><li>Authored dinosaur trust, acknowledgement, satisfaction, levelling, and reward rules for player-animal interaction.</li><li>Mapped tutorial flow, player tools, onboarding beats, and feature introduction for both MR and VR play.</li><li>Supported milestone planning, wireframes, implementation review, and iteration from playtest and QA feedback.</li></ul></section>
-<section class="section"><h2>Examples</h2><p>These samples show the work from two angles. The cards below explain the design problems I was trying to solve and why I approached them the way I did. The PDF examples that follow are the implementation-facing documents behind that work.</p>
+<ul class="list-tight"><li>Owned the ecology (plant, fungi, waste, and harmony) feature set from design through implementation, testing, and balancing through to release.</li><li>Authored a 27-page plant systems design document complete with implementation specs covering growth states, plant propagation, nutrient logic, ground cover and dormancy.</li><li>Co-developed the project balancing workbook, programming roughly half of the balancing across a shared 9-tab spreadsheet with approximately 355 formulas governing ecosystem, species, and progression.</li><li>Authored pet dinosaur state trees and wrote spec documents outlining functions surrounding trust, player acknowledgement, needs based satisfaction, growth stages, and reward rules for player-animal interaction.</li><li>Contributed to the design of the players core multitool and interaction mechanics.</li><li>Mapped tutorial flow, teaching player tools and feature introduction for both MR and VR play.</li><li>Supported milestone planning through extensive wireframing for both gameplay and narrative progression</li><li> Performed implementation review and iteration throughout the projects lifespan.</li></ul></section>
+<section class="section"><h2>Examples</h2><p>As a hybrid edutainment ecological and pet raising simulator,DinoHab had interesting project considerations.</p>
 <div style="display:grid;gap:1rem;margin:1.25rem 0 1.5rem;">
 <article style="padding:1rem 1.125rem;border:1px solid rgba(127,127,127,0.22);border-radius:18px;">
-<h3>Turned harmony, fungi, and waste into one visible ecosystem loop</h3>
+<h3>Creating a visible ecosystem loop</h3>
 <div class="example-media-single" style="margin:0.875rem 0 1rem;">
 <figure class="example-figure">
 <a class="example-media-link" href="assets/media/dinohab/anecdote-harmony-loop.gif" rel="noopener noreferrer" target="_blank">
@@ -125,42 +125,40 @@
 </a>
 </figure>
 </div>
-<p>A lot of ecology games end up abstracting the interesting part away. Waste becomes a cleanup chore, harmony becomes a mystery number, and the player is left guessing which action actually matters. I wanted DinoHab to make that loop legible. Fungi and waste were where I spent a lot of that effort, because they let me close the circle between what dinosaurs consume, what they produce, and how the habitat recovers.</p>
+<p>The game needed a core ecological loop that was visible to the player. Plants would not grow on their own, they needed time and ideal conditions. Waste would not only be a cleanup chore - it was a resource and a fertilizer. I wanted DinoHab to make that loop legible. Connecting Fungi and Plants was where I spent a lot of that effort - they let me close the circle between what dinosaurs consume, what they produce, and how the habitat recovers from grazing and weather.</p>
 <div class="example-media-single">
 <figure class="example-figure">
 <a class="example-media-link" href="assets/media/dinohab/anecdote-creature-hatchling.png" rel="noopener noreferrer" target="_blank">
 <img alt="Baby dinosaur hatching in DinoHab" class="example-thumb" loading="lazy" src="assets/media/dinohab/anecdote-creature-hatchling.png"/>
 </a>
-<figcaption>Early creature life stages helped the habitat feel inhabited rather than purely simulated.</figcaption>
+<figcaption>At its core, the ecosystem only had four stages that all the resources passed between.</figcaption>
 </figure>
 </div>
-<p>By making mycelium ranges, compost transfer, and harmony feedback visible, I could give the player a clear read on why the ecosystem was healthy or unstable. The nice part was that this solved both a design problem and a UX problem at once: it made dung strategically useful instead of just gross, and it gave the player a fast way to understand whether they needed more flora, more fungi, or a different layout.</p>
+<p>Plants were simple entities that appeared complex. When planted, they started life as a sapling and progressed through 4 stages of life. Over time they generated 'Nutrients' - a resource that the Dinosaurs require to be happy. The nutrient valuer stored in a plant dictates its size and stage of life, therefore allowing it to move between states while dinosaurs graze. Without enough plants in the ecosystem, all would be grazed to nothing by hungry Dinos - giving the player incentive to earn DinoPoints to plant more. By making life stages, interactions between fungi and waste compost transfer visible, the harmony system could be understood as a closed loop. I could give the player a clear read on why the ecosystem was healthy or unhealthy. The best part was that this solved both a design problem and a UX problem at the same time: it made plant and waste resources strategically useful instead of just a chore, and it gave the player a fast read on whether they needed more flora, more fungi, or a different layout.</p>
 
 <div class="example-media-grid">
 <figure class="example-figure">
 <a class="example-media-link" href="assets/media/dinohab/anecdote-plant-lifecycle.png" rel="noopener noreferrer" target="_blank">
 <img alt="Plant lifecycle diagram showing planted, seedling, immature, and mature nutrient stages" class="example-thumb" loading="lazy" src="assets/media/dinohab/anecdote-plant-lifecycle.png"/>
 </a>
-<figcaption>Plant lifecycle thresholds clarified how nutrient generation pushed flora from planted to mature states.</figcaption>
+<figcaption>Plant life stages were governed by nutrient generation. This meant planted flora progressed from sapling to mature status if cared for.</figcaption>
 </figure>
 <figure class="example-figure">
 <a class="example-media-link" href="assets/media/dinohab/anecdote-growth-regression.png" rel="noopener noreferrer" target="_blank">
 <img alt="Plant growth and regression diagram showing dinosaur interaction and nutrient flow" class="example-thumb" loading="lazy" src="assets/media/dinohab/anecdote-growth-regression.png"/>
 </a>
-<figcaption>Growth and regression loop showing how plant stages respond to dinosaur interaction and nutrient flow.</figcaption>
+<figcaption>Growth and regression diagram showing how plant stages respond when dinosaurs consme nutriends, and how nutrients flow through the ecosystem.</figcaption>
 </figure>
 <figure class="example-figure">
 <a class="example-media-link" href="assets/media/dinohab/anecdote-mycelium-diagram.png" rel="noopener noreferrer" target="_blank">
 <img alt="Mycelium range and compost flow diagram" class="example-thumb" loading="lazy" src="assets/media/dinohab/anecdote-mycelium-diagram.png"/>
 </a>
-<figcaption>Mycelium range and compost transfer made the fungi layer concrete instead of abstract.</figcaption>
+<figcaption>Mycelium range and compost transfer made the fungi an important consideration in laying out an ecosystem.</figcaption>
 </figure>
 </div>
 </article>
 <article style="padding:1rem 1.125rem;border:1px solid rgba(127,127,127,0.22);border-radius:18px;">
-<h3>Made plant placement readable instead of decorative</h3>
-<p>Plants had to do more than fill out the world. If players were going to make meaningful habitat decisions, they needed to understand why one planting choice worked and another failed. I used placement radii, occupied space, cover values, growth stages, and propagation rules to make plants behave like gameplay objects rather than background dressing. That gave players something they could reason about instead of just spam.</p>
-<p>What I found effective here was making the logic visible enough that players could build intuition quickly. Scanning, placement feedback, and clear relationships between growth, cover, and surrounding objects helped the habitat read as a system. It also gave us better tuning hooks, because the same plant feature could support progression, creature needs, and visual recovery at the same time.</p>
+<h3>Making placement more than decorative</h3>
 <div class="example-media-single">
 <figure class="example-figure">
 <a class="example-media-link" href="assets/media/dinohab/anecdote-plant-placement-ui.png" rel="noopener noreferrer" target="_blank">
@@ -169,38 +167,52 @@
 <figcaption>Inventory, tooltip, and placement feedback that made plant choices readable at a glance.</figcaption>
 </figure>
 </div>
+<p>Eating, making waste and recycling can only be so exciting. Planting the same thing over and over was not a sustainable core loop - and we needed to make the player to do more than just fill out the world with ferns. To give players meaningful habitat decisions, they needed to see that planting worked in some locations and in others failed. I designed a system where each plant had a placement radii, cover values, growth stages, and propagation rules. This made plants feel alive rather than just background dressing. This also gave me something to tie in to another feature...</p>
+<p>I designed plants to have needs, much like dinosaurs. Each category of plant had likes and dislikes, and preferred to be planted in proximity to environmental features that benefited it.
+This meant we could now teach players about not only the relationship between animals and their sources of food, but also of plants and their relationship with the environment itself.</p>
+<div class="example-media-single">
+<figure class="example-figure">
+<a class="example-media-link" href="assets/media/dinohab/anecdote-plant-placement.png" rel="noopener noreferrer" target="_blank">
+<img alt="Plant stages and statuses screenshot" class="example-thumb" loading="lazy" src="assets/media/dinohab/anecdote-plant-placement.png"/>
+</a>
+<figcaption>Plants would react poorly if placed in an unsustainable environment.</figcaption>
+</figure>
+</div>
+
+<p>What I found to be effective  was to make the systems logic visible enough that players could build intuition around what was happening. Scanning the plants and animals would give a synopsis of their needs, coupled with visible states and placement feedback, and an obvious relationships between growth and consumption, the environment suddenly became readable and manageable. It also gave me as a designer better tuning hooks, because the same plant feature set could support progression, interaction, and visuals all at the same time.</p>
 </article>
 <article style="padding:1rem 1.125rem;border:1px solid rgba(127,127,127,0.22);border-radius:18px;">
-<h3>Built creature and buddy behaviours that taught the game naturally</h3>
-<p>One of the risks in a habitat game like this is leaning too hard on UI and losing the fantasy of caring for living creatures. I wanted the dinosaurs to feel readable, but I did not want them to feel like vending machines with moods attached. That pushed me toward explicit state logic for hunger, water, rest, social, satisfaction, trust, growth, and player interaction, so the creatures could react consistently without feeling scripted in a flat way.</p>
-<p>The buddy was especially useful because it let me solve onboarding more organically. Instead of relying on constant prompts, I used follow behaviour, playful hops, objective-leading, and special MR rules so the companion could pull the player toward the next useful action and stay emotionally present across transitions. I liked this because it made guidance feel like part of the relationship rather than a layer floating on top of the game.</p>
+<h3>Trying to teach through observation and state trees</h3>
+<p>One of the risks in a habitat game like this is leaning too hard on UI and numerical feedback, which can kill the fantasy of caring for a living creature. I wanted the dinosaurs and plants both to feel alive, but I did not want them to feel like vending machines with all the numbers attached. Explicit state logic for hunger, water, rest, social interaction, satisfaction, and growth had to be plotted so the creatures could perform their life cycle in a way that the player would observe naturally.</p>
+<p>The buddy creature was especially useful because it gave the player somebody to observe during onboarding. Instead of relying on constant prompts, I could use the buddy to guide the player through it's needs by telegraphing with playful hops to the thing which it wanted most. This way the player could discover what the dinosaurs wanted organically, reinforcing whatever the tutorial had to say about the ecosystem through observable state change. </p>
 <div class="example-media-grid">
 <figure class="example-figure">
 <a class="example-media-link" href="assets/media/dinohab/anecdote-creature-adult.png" rel="noopener noreferrer" target="_blank">
 <img alt="In-game dinosaur behaviour screenshot" class="example-thumb" loading="lazy" src="assets/media/dinohab/anecdote-creature-adult.png"/>
 </a>
-<figcaption>Readable creature posture and proximity cues helped player care actions feel grounded.</figcaption>
+<figcaption>Readable Dino posture and proximity cues helped players understand need and state.</figcaption>
 </figure>
 <figure class="example-figure">
 <a class="example-media-link" href="assets/media/dinohab/anecdote-buddy-state-tree-crop.png" rel="noopener noreferrer" target="_blank">
 <img alt="Buddy behaviour tree design diagram" class="example-thumb" loading="lazy" src="assets/media/dinohab/anecdote-buddy-state-tree-crop.png"/>
 </a>
-<figcaption>Buddy behaviour tree for need checks, trust, social response, and player interaction.</figcaption>
+<figcaption>The extensive buddy behaviour tree that became the state tree. The buddy was designed to have need checks, trust, social responses, and just enough gumption to pester the player.</figcaption>
 </figure>
 </div>
 </article>
 <article style="padding:1rem 1.125rem;border:1px solid rgba(127,127,127,0.22);border-radius:18px;">
-<h3>Used disruptors to test resilience instead of just waiting for harmony</h3>
-<p>Once the habitat started working, there was a danger that the game could become too passive. If players only had to hit the minimum requirements once, harmony risked turning into a solved machine. I used disruptors to break that pattern. Weather and predator-style events let the game ask whether the player had built a habitat that could absorb stress, not just one that looked balanced for a moment.</p>
-<p>I liked this approach because it pushed preparation back onto the player in a readable way. Shelter, water access, plant mix, and habitat layout suddenly mattered under pressure, and progression stayed active instead of becoming a waiting game. That made the ecosystem feel less like a static puzzle and more like something the player had to maintain.</p>
+<h3>Shaking things up for the dinos</h3>
+<p>Once the habitat loop was working, the game could became very passive. Players only had to hit the minimum requirements once and then they entered a positive feedback loop that never ended. We needed some way to shake the system up occasionally and so I proposed we create some kind of environmental calamity. I called these 'Disruptors' internally, and used them to break the positive feedback loop. Inclement weather could kill plants and animals, and predator events forced the player to try to build a habitat that could absorb stress.</p>
 <div class="example-media-single">
 <figure class="example-figure">
 <a class="example-media-link" href="assets/media/dinohab/anecdote-disruptors.gif" rel="noopener noreferrer" target="_blank">
 <img alt="Disruptor event gameplay gif" class="example-thumb" loading="lazy" src="assets/media/dinohab/anecdote-disruptors.gif"/>
 </a>
-<figcaption>Disruptor events tested whether the habitat could survive stress, not just reach a target state.</figcaption>
+<figcaption>Disruptor events tested whether the habitat could survive stress, and broke an infinite positive feedback loop that the core mechanics had established.</figcaption>
 </figure>
 </div>
+<p>The ground cover threshold that Dinosaurs required for sleep also became a mechanic that hid them from predators, incentivizing players to ensure that every dinosaur had a safe place to hide in every area should a hungry tyrannosaur stumble into the level. I liked this approach because it continued to be education - predation exists in nature, and shelter, water access, and habitat layout suddenly matterred under pressure just as in the real world. That closed one of the last loops required to make the ecosystem feel less like a static puzzle and more like something alive and changing where the player had a special role as a steward.</p>
+
 </article>
 </div>
 <div class="evidence-grid">
@@ -210,7 +222,7 @@
 <div class="evidence-copy">
 <p class="evidence-type">PDF</p>
 <h3>Plants Feature Document</h3>
-<p>Plant placement, growth, cover, and propagation rules.</p>
+<p>My feature document governeing implementation for plant placement, growth, cover, and propagation rulesets. I am very proud of this feature.</p>
 <p class="entry-card-actions"><a class="button button-small" href="assets/docs/dinohab/DH-Plants.pdf" rel="noopener noreferrer" target="_blank">Open File</a></p>
 </div>
 </article>
@@ -220,7 +232,7 @@
 <div class="evidence-copy">
 <p class="evidence-type">PDF</p>
 <h3>Plant Lushness Tuning</h3>
-<p>Visual response tuning for habitat growth and recovery.</p>
+<p>A set of additional layers I added in order to make tuning a habitats growth and recovery a sort of secondary game.</p>
 <p class="entry-card-actions"><a class="button button-small" href="assets/docs/dinohab/DH-Plant-Lushness.pdf" rel="noopener noreferrer" target="_blank">Open File</a></p>
 </div>
 </article>
@@ -230,7 +242,7 @@
 <div class="evidence-copy">
 <p class="evidence-type">PDF</p>
 <h3>DinoHab Team Design Document Binder</h3>
-<p>Consolidated DinoHab design binder replacing the Harmony System example.</p>
+<p>A consolidated DinoHab design binder showing many of the internal documents. This gives a broader sense of the underlying systems beyond just plants.</p>
 <p class="entry-card-actions"><a class="button button-small" href="assets/docs/dinohab/DinoHab_Team_Design_Document_Binder.pdf" rel="noopener noreferrer" target="_blank">Open File</a></p>
 </div>
 </article>
@@ -240,7 +252,7 @@
 <div class="evidence-copy">
 <p class="evidence-type">PDF</p>
 <h3>Plants &amp; Fungi System Overview</h3>
-<p>System overview for plant, fungi, waste, and resource flow.</p>
+<p>'Paper' prototypes of my system overview for plant, fungi, waste, and resource flow.</p>
 <p class="entry-card-actions"><a class="button button-small" href="assets/docs/dinohab/Dino-Hab-Plants-and-Fungi.pdf" rel="noopener noreferrer" target="_blank">Open File</a></p>
 </div>
 </article>
@@ -250,7 +262,7 @@
 <div class="evidence-copy">
 <p class="evidence-type">PDF</p>
 <h3>Buddy Behavior Tree</h3>
-<p>Companion follow, guidance, and player-response logic.</p>
+<p>This 'paper' prototype was used to make the actual state machine in-engine.</p>
 <p class="entry-card-actions"><a class="button button-small" href="assets/docs/dinohab/Dino-Hab-Buddy-Behavior-Tree.pdf" rel="noopener noreferrer" target="_blank">Open File</a></p>
 </div>
 </article>
@@ -260,7 +272,7 @@
 <div class="evidence-copy">
 <p class="evidence-type">PDF</p>
 <h3>Pre-Alpha Wireframe</h3>
-<p>Early flow, feature ordering, and interaction planning.</p>
+<p>This was my early flow, feature organization and interaction planning document. I used this to help the producer and stakeholders understand the scope and needs of the project.</p>
 <p class="entry-card-actions"><a class="button button-small" href="assets/docs/dinohab/Dinohab-Pre-Alpha-Wireframe.pdf" rel="noopener noreferrer" target="_blank">Open File</a></p>
 </div>
 </article>
