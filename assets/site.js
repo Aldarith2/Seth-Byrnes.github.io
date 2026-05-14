@@ -16,9 +16,9 @@
       if (pickBroken()) return 'dark';
       var stored = localStorage.getItem(STORAGE_KEY);
       if (stored === 'light' || stored === 'dark') return stored;
-      return 'dark';
+      return 'light';
     } catch (e) {
-      return 'dark';
+      return 'light';
     }
   }
 
@@ -1231,281 +1231,13 @@
     },
     special: {
       fallbackFound: 'Oh. You found Wickle.',
-      fallbackInspecting: 'Wickle was inspecting this bit.',
-      fallbackTooBright: 'Too bright.',
-      resurrectFallback: 'Wickle returned with notes.',
+      fallbackInspecting: 'Wickle was inspecting this code a little.',
+      fallbackTooBright: 'Too bright!',
+      resurrectFallback: 'Wickle remembers falling... and pain. All better now!',
       lateSwitch: ['Too late!', 'Wickle was faster than you!'],
       scum: 'Ack! My scum!',
       accessoryLossPrefix: 'Ack! My ',
       accessoryLossSuffix: '!'
-    },
-    headingContexts: {
-      trailer: {
-        normal: [
-          'Wickle watches the moving picture from the seam. Safer there.',
-          'Do not tell the trailer Wickle is here. Wickle is being subtle.'
-        ],
-        affirming: [
-          'The Pagekeeper lets the work move for itself here. Good instinct.',
-          'The Maker knew motion would sell this better than a wall of boasting.'
-        ],
-        weird: [
-          'The little lights in this trailer taste electric.',
-          'Wickle likes when the moving picture notices him back.'
-        ],
-        factoids: [
-          'This is the fast proof section. Wickle respects fast proof.',
-          'A good trailer says what the page does before the eyes get tired.'
-        ],
-        trailer: [
-          'Wickle waits for the good cuts.',
-          'Wickle likes the moving bits. They make the divider purr.'
-        ],
-        trailerFactoids: [
-          'The Pagekeeper put playable truth here, not just shiny noise.',
-          'Wickle approves when the trailer and the page tell the same story.'
-        ]
-      },
-      'design work samples': {
-        normal: [
-          'Wickle likes pages with receipts.',
-          'These sample bits smell like actual production.'
-        ],
-        affirming: [
-          'The Pagekeeper leaves tracks builders can follow.',
-          'The Maker shows the work under the polish. Wickle likes that.'
-        ],
-        weird: [
-          'The paper bits whisper softer than the shiny bits.',
-          'These samples keep their warm little secrets folded inward.'
-        ],
-        factoids: [
-          'Wickle likes when the proof lives next to the claims.',
-          'This is where the Pagekeeper shows the bones, not just the feathers.'
-        ],
-        trailer: [],
-        trailerFactoids: []
-      },
-      responsibilities: {
-        normal: [
-          'Wickle likes when ownership is named plainly.',
-          'This is the bit where the claws get counted.'
-        ],
-        affirming: [
-          'The Pagekeeper sounds like a lead here, not a passenger.',
-          'The Maker follows the feature clear through implementation.'
-        ],
-        weird: [
-          'Responsibility sections weigh more than they look.',
-          'This divider goes very still around ownership words.'
-        ],
-        factoids: [
-          'Wickle trusts pages that say who held the sharp end.',
-          'This part tells Wickle whether the Maker merely visited or actually built.'
-        ],
-        trailer: [],
-        trailerFactoids: []
-      },
-      'project information': {
-        normal: [
-          'Wickle appreciates clean framing.',
-          'This part is easy for a tiny inspector to parse.'
-        ],
-        affirming: [
-          'The Pagekeeper saves visitors time by setting the table first.',
-          'The Maker frames the work before asking anyone to admire it.'
-        ],
-        weird: [
-          'Facts stack themselves neatly here after dark.',
-          'This section clicks into place all by itself at night.'
-        ],
-        factoids: [
-          'Years, studio, role. Wickle likes a page that says what it is.',
-          'This is the quick compass bit. Good. Wickle dislikes getting lost.'
-        ],
-        trailer: [],
-        trailerFactoids: []
-      },
-      'professional summary': {
-        normal: [
-          'Wickle is checking the through-line.',
-          'This is the quick bones part.'
-        ],
-        affirming: [
-          'The Pagekeeper reads like someone who can own work and steer creatures.',
-          'The Maker sounds steady here. Wickle approves.'
-        ],
-        weird: [
-          'Summary sections get louder on the second visit.',
-          'This part keeps tiny echoes between the lines.'
-        ],
-        factoids: [
-          'Wickle likes when the quick version still says something true.',
-          'A good summary points at the real labor instead of fog. This one does.'
-        ],
-        trailer: [],
-        trailerFactoids: []
-      },
-      'experience snapshot': {
-        normal: [
-          'Wickle is checking the through-line.',
-          'This is the quick bones part.'
-        ],
-        affirming: [
-          'The Pagekeeper reads like someone who can own work and steer creatures.',
-          'The Maker sounds steady here. Wickle approves.'
-        ],
-        weird: [
-          'Summary sections get louder on the second visit.',
-          'This part keeps tiny echoes between the lines.'
-        ],
-        factoids: [
-          'Wickle likes when the quick version still says something true.',
-          'A good summary points at the real labor instead of fog. This one does.'
-        ],
-        trailer: [],
-        trailerFactoids: []
-      },
-      'position summary': {
-        normal: [
-          'Wickle is checking the through-line.',
-          'This is the quick bones part.'
-        ],
-        affirming: [
-          'The Pagekeeper reads like someone who can own work and steer creatures.',
-          'The Maker sounds steady here. Wickle approves.'
-        ],
-        weird: [
-          'Summary sections get louder on the second visit.',
-          'This part keeps tiny echoes between the lines.'
-        ],
-        factoids: [
-          'Wickle likes when the quick version still says something true.',
-          'A good summary points at the real labor instead of fog. This one does.'
-        ],
-        trailer: [],
-        trailerFactoids: []
-      },
-      'primary strengths': {
-        normal: [
-          'Wickle is counting the useful claws.',
-          'Plenty of sharp little tools in this bit.'
-        ],
-        affirming: [
-          'The Pagekeeper stays readable across disciplines.',
-          'The Maker keeps range without turning muddy. Hard trick.'
-        ],
-        weird: [
-          'Tool lists make tiny tidy noises.',
-          'This section has the straightest corners in the whole house.'
-        ],
-        factoids: [
-          'Wickle likes when a page says what hands can actually do.',
-          'Useful range is nicer than decorative range. The Pagekeeper knows that.'
-        ],
-        trailer: [],
-        trailerFactoids: []
-      },
-      tools: {
-        normal: [
-          'Wickle is counting the useful claws.',
-          'Plenty of sharp little tools in this bit.'
-        ],
-        affirming: [
-          'The Pagekeeper stays readable across disciplines.',
-          'The Maker keeps range without turning muddy. Hard trick.'
-        ],
-        weird: [
-          'Tool lists make tiny tidy noises.',
-          'This section has the straightest corners in the whole house.'
-        ],
-        factoids: [
-          'Wickle likes when a page says what hands can actually do.',
-          'Useful range is nicer than decorative range. The Pagekeeper knows that.'
-        ],
-        trailer: [],
-        trailerFactoids: []
-      },
-      welcome: {
-        normal: [
-          'Wickle likes the welcoming bits.',
-          'This is where polite gremlins would begin.'
-        ],
-        affirming: [
-          'The Pagekeeper knows how to greet without wasting the visitor.',
-          'The Maker keeps the first steps clear. Good manners.'
-        ],
-        weird: [
-          'Greeting sections remember who came through first.',
-          'This part stays awake longer than the others.'
-        ],
-        factoids: [
-          'Wickle likes when the front door actually works.',
-          'The first page tells Wickle whether the house has a keeper. This one does.'
-        ],
-        trailer: [],
-        trailerFactoids: []
-      },
-      'how to use this site': {
-        normal: [
-          'Wickle likes the welcoming bits.',
-          'This is where polite gremlins would begin.'
-        ],
-        affirming: [
-          'The Pagekeeper knows how to greet without wasting the visitor.',
-          'The Maker keeps the first steps clear. Good manners.'
-        ],
-        weird: [
-          'Greeting sections remember who came through first.',
-          'This part stays awake longer than the others.'
-        ],
-        factoids: [
-          'Wickle likes when the front door actually works.',
-          'The first page tells Wickle whether the house has a keeper. This one does.'
-        ],
-        trailer: [],
-        trailerFactoids: []
-      },
-      contact: {
-        normal: [
-          'Wickle likes the welcoming bits.',
-          'This is where polite gremlins would begin.'
-        ],
-        affirming: [
-          'The Pagekeeper knows how to greet without wasting the visitor.',
-          'The Maker keeps the first steps clear. Good manners.'
-        ],
-        weird: [
-          'Greeting sections remember who came through first.',
-          'This part stays awake longer than the others.'
-        ],
-        factoids: [
-          'Wickle likes when the front door actually works.',
-          'The first page tells Wickle whether the house has a keeper. This one does.'
-        ],
-        trailer: [],
-        trailerFactoids: []
-      },
-      gallery: {
-        normal: [
-          'Wickle likes a page that shows the goods.',
-          'Pictures help tiny brains. Wickle has one.'
-        ],
-        affirming: [
-          'The Pagekeeper knows that proof should look back at the visitor.',
-          'The Maker put the visual receipts where they belong.'
-        ],
-        weird: [
-          'Some screenshots keep moving after Wickle blinks.',
-          'The gallery bits hum in little rectangles.'
-        ],
-        factoids: [
-          'Wickle checks whether the page can support its own claims. Pictures help.',
-          'Good galleries do real labor. This one is not just wallpaper.'
-        ],
-        trailer: [],
-        trailerFactoids: []
-      }
     },
     mind: {
       philosophy: [
@@ -1570,35 +1302,34 @@
       global: {
         top: {
           weird: [
-            'Wickle prefers the odd bits near the top, before the page settles.',
+            'Pixels, all of them!!',
             'The upper seams always feel less certain.',
-            'Wickle arrived before the scroll position did.',
-            'Wickle was here before this scroll position existed.',
+            'Wickle arrived before your scroll position did.',
+            'Wickle waits.',
             'Wickle checks that the page is still breathing.',
             'Refreshing hurts Wickle.',
-            'I likes when the page breathes.',
-            'Wickle keeps the seams together.'
+		    'Responsibility weighs more than it looks like.',
+            'Its actually a bit chilly behind the divider.'
           ],
           fun: [
-            'The best nonsense is front-loaded.',
-            'Wickle saves the straight-backed professionalism for later.'
+            'The best nonsense is front-loaded nonsense.',
+			'Check your headers before they check you.',
+            'With big ownership comes big responsibility - Spiderman.', '...actually Wickle thinks it was Voltaire...',
+			'‘I must do something’ always solves more problems than ‘Something must be done.',
+          'Make a plan & just do it.'
           ],
           fact: [
-            'A page earns trust quickly when the structure is legible.',
-            'Wickle likes when the top of a page tells you what sort of labor follows.',
+            'It took him a while to write this - I know, I was there.',
             'This site has many works!',
-            'The section headers tell all.',
-            'There are four sections per project page.'
+            'There are four sections per project page.',
+			'Its tough being in charge, but he can do it.'
           ],
           normal: [
             'Oh. You found Wickle.',
-            'Wickle was inspecting this bit.',
+            'Wickle was inspecting.',
             'This seems like a useful ledge.',
-            'I want to understand you.',
+            'Wickle seeks to understand you.',
             'Eek - Just looking!',
-            'Wickle recommends reading.',
-            'Don\'t look at me!',
-            'Wickle likes it when a page says what it is doing.',
             'Wickle!'
           ],
           trailer: [
@@ -1610,85 +1341,64 @@
         },
         middle: {
           weird: [
-            'The middle is where the page stops posing and starts proving.',
-            'Wickle can hear the structure clicking together here.'
+            'The middle!',
+            'Wickle can hear page elements clicking together here.'
           ],
           fun: [
             'This is the meat of it.',
             'Middle sections are for serious little goblins.'
           ],
-          fact: [
-            'The middle of a project page is usually where ownership, process, and examples become verifiable.',
-            'Readable production work leaves traces: scope, implementation notes, tuning, and proof.',
-            'Wickle likes when the facts arrive before the page asks for admiration.'
-          ],
-          normal: [
-            'This is where the page gets properly useful.',
-            'Wickle prefers the parts with teeth.'
-          ],
-          trailer: [
-            'Wickle is watching the trailer quietly.',
-            'The moving picture makes me warm.',
-            'Wickle watches this one often.'
-          ],
-          trailerFact: []
+          fact: [],
+          normal: [],
+          trailer: [],
+          trailerFact: [],
         },
         bottom: {
-          weird: [
-            'The lower seams remember every visitor.',
-            'This is where pages get stranger and more honest.',
-            'Wickle keeps a few odd thoughts below the fold.'
-          ],
+          weird: [],
           fun: [
-            'You scrolled far enough to earn the peculiar bits.',
-            'Committed readers always find the weird crumbs.',
+            'You scrolled far!',
+            'Committed readers always find the weirdest crumbs at the bottom.',
             'Wickle trusts a visitor who reads to the end.',
-            'If you made it this far, you are patient!',
-            'There are crumbs at the bottom.'
+            'If you made it this far, you are patient!'
           ],
-          fact: [
-            'The bottom of a page usually carries the sharpest proof or the last structural note.',
-            'Late-page material often says more about process than the opening summary.'
-          ],
+          fact: [],
           normal: [
             'Still here. Good.',
             'Wickle knew someone would keep going.',
-            'This is where the page usually stops.'
+            'This is about where the page stops.'
           ],
-          trailer: [
-            'Wickle is watching the trailer quietly.',
-            'The moving picture makes me warm.',
-            'Wickle watches this one often.'
-          ],
+          trailer: [],
           trailerFact: []
         },
         switch: {
           idle: [
-            'Too bright. Wickle objects.',
-            'The light comes through the seams.',
+            'Too bright. Wickle objects!',
+            'The light comes through the seams. Trying to sleep!',
             'Wickle would prefer the dark, please.'
           ],
           success: [
-            'There. Better.',
-            'Good. The bright stopped.',
+            'There. Better!',
+            'Victory!',
             'People always forget the lights.',
-            'Wickle wins.'
+            'Wickle wins!'
           ],
           fail: [
-            'No. Still bright.',
-            'No overhead lights.',
-            'Wickle nearly had it.',
+            'Ach, Wickle laments.',
+            'Ouch! No more light!',
+            'Wickle nearly had it...',
             'Unfortunate that the light survives.'
           ]
         },
         bottomGuard: [
           'This is the bottom.',
+		  'That\'s all, folks.',
+		  'C\'est finis.',
           'This is the end.'
         ],
         deathRespawn: [
-          'Wickle died, reflected briefly, and returned with notes.',
+          'Wickle died, reflected briefly, and returned with a new strategy.', 'Like any good player!',
           'Mortality is inefficient, but apparently not permanent.',
-          'Wickle remembers the floor. Poorly.'
+          'Wickle remembers the floor...', 'Painfully...'
         ],
         headings: {
           'project information': {
@@ -1699,87 +1409,58 @@
           },
           'responsibilities': {
             fact: [
-              'Responsibilities blocks tell Wickle who actually carried the work.',
-              'A good responsibilities section distinguishes ownership from proximity.'
+              'With big ownership comes big responsibility - Spiderman.', '...actually Wickle thinks it was Voltaire...',
+              'Wickle will vouch for him!'
             ]
           },
           'design work samples': {
             fact: [
-              'Samples matter more when they sit close to the claims they support.',
-              'Work samples are strongest when they show process as well as output.'
+		  'Examples for you to read!',
+          'These are some prime examples right here.',
+          'You can really see he was up to something here.',
+		  'These example bits smell of production.',
+          'If you look long enough, they will look back at you...'
             ]
           },
           'gallery': {
             fact: [
-              'A gallery should clarify the work, not merely decorate it.',
-              'Screenshots pull their weight when they prove how the thing feels or reads.'
+              'Much to see here.',
+              'Screenshots - every sales pitch needs em..'
             ]
           },
           'trailer': {
             fact: [
-              'A trailer should support the page, not argue with it.',
-              'The best footage communicates loop, feel, and stakes before the viewer has time to drift.'
+           'Wickle waits.',
+           'Wickle finds the trailers warming.'
             ]
           }
         }
       },
       pages: {
         'index.html': {
-          fact: [
-            'In Thief: The Dark Project, Looking Glass built stealth around light and sound, not just vision cones, so carpet, tile, metal, and marble all play differently. Clever little floorses.',
-            'The Thief developers called it a \'first-person sneaker,\' and that still explains the series better than most genre labels, yes.',
-            'Thief II: The Metal Age kept the stealth core but pushed the city, machines, and security fiction harder than the first game. More gears, more watchers, more trouble.',
-            'In Unreal Tournament, the famous shock combo works because the secondary projectile can be detonated with the primary beam, turning weapon mastery into bright, readable spectacle for all the little players to see.',
-            'Epic\'s Unreal Tournament postmortem talks about maps in terms of look, flow, and broad appeal, which is why levels like Facing Worlds still read so cleanly at speed. Honest spaces, precious.',
-            'Valve\'s Half-Life documentary makes it plain that the opening tram ride was doing real onboarding work: teaching place, tone, and foreshadowing before the player even gets a gun.',
-            'Half-Life keeps stopping for scripted environmental moments, and that sequencing is a big part of why Black Mesa feels inhabited instead of merely full of targets. The world teaches, yes it does.',
-            'The Morrowind team\'s retrospective interviews describe The Elder Scrolls III: Morrowind as a passion project made by a relatively small, still-forming team, which makes its confidence even more impressive.',
-            'In The Elder Scrolls III: Morrowind, Vvardenfell feels alien on purpose: giant mushrooms, insect-shell buildings, and directions that assume the player can read. No hand-holding for the little wanderer.',
-            'Omikron: The Nomad Soul had David Bowie writing music and appearing in the game as Boz, which remains one of the stranger and more specific celebrity collaborations of that era. Very odd. Very real.',
-            'Omikron: The Nomad Soul mixes adventure exploration, body-hopping, shooting, and fighting systems, which is why it feels less like a clean genre piece and more like a fever project with too many lovely ideas.',
-            'David Brevik has said Diablo started as a turn-based concept before becoming real-time, and that one change did an enormous amount of work for the final game\'s tension. Quick little danger instead of waiting.',
-            'The original Diablo only gives you three classes—Warrior, Rogue, and Sorcerer—which is a large part of why its loot and role language stay so legible. Fewer classes, clearer reads.',
-            'Amy Hennig said Legacy of Kain: Soul Reaver had been over-designed and then split against time and data limits, which helps explain both its ambition and its cliffhanger edge. Too much dream, not enough disc space, precious.',
-            'In Legacy of Kain: Soul Reaver, shifting between the material and spectral realms is not a gimmick. It is the level design. The whole trick of the place.',
-            'Legacy of Kain: Soul Reaver spends an unusual amount of effort on voice, writing, and theatrical timing, which is why people still quote it like a play. Dramatic little beast, yes.',
-            'Masters of Doom is one of the clearest records of how much competitive pressure sat behind Doom, and the game still feels built by people trying to outrun each other.',
-            'Classic Doom gives the player eight weapons, from fists to the BFG 9000, and almost every one has a clean tactical identity. Good sharp tool language.',
-            'Classic Doom\'s monsters are readable enough that encounter design can get brutal without becoming visually muddy. Nasty, but fair to the eyes.',
-            'Age of Empires II shipped with thirteen civilizations in the base game, but it stays readable because villagers, military, and tech progression all broadcast their roles clearly. Busy, but not messy.',
-            'Ensemble postmortems on Age of Empires keep circling back to AI, pathfinding, and historical framing, which is exactly where strategy games earn their keep. That is where the hard work lives, yes.',
-            'Star Wars Jedi Knight: Dark Forces II used live-action cutscenes, while Star Wars Jedi Knight: Jedi Academy later pushed saber expression much harder; they are related games, but they solve different fantasy problems.',
-            'Star Wars Jedi Knight: Jedi Academy lets the player choose single, dual, or staff lightsabers, which did a great deal for player fantasy before many action games offered that kind of stance identity. Many ways to swish the glow-stick, precious.',
-            'Rune is one of the clearer examples of late-1990s melee weight: axes, hammers, thrown weapons, and even severed limbs all matter. Brutish little thing.',
-            'Rune runs on Unreal technology but uses it for blunt force rather than gun ballet, which gives it a very different kind of readability. Less dance, more clobbering.',
-            'Unreal Tournament, Jedi Academy, and Age of Empires are good reminders that readability is not garnish; it is what lets speed, expression, and strategy survive contact with the player.',
-            'Thief, Morrowind, and Soul Reaver are reminders too: tone is not decoration, precious. Very often it is the structure holding the memory of the game together.',
-            'Wickle keeps citing Thief, Doom, Half-Life, Diablo, and Age of Empires because their development histories are unusually well documented and very useful in design arguments, yes yes.',
-            'Books like Masters of Doom, old postmortems, and anniversary documentaries matter because they show that many famous mechanics were production decisions before they became design doctrine.',
-            'Thief fan missions are one of the strongest arguments for authored systemic design: the official games ended, but the mission scene kept extending the form for decades. Sneaky little afterlife.'		  
+          fact: [	'This is just the start page.',  
 
           ],
           weird: [
-            'The house page notices when somebody lingers. It does, precious.',
-            'Wickle keeps the stranger crumbs near the front door. Just in case.'
+           
           ],
           fun: [
-            'This front page is a route finder, yes yes: range first, then quick little paths into the proof.',
-            'Wickle likes it when the landing page gets visitors to the real work quickly, not all lost and wandering.'
+            'This front page is a route finder..',
+            'Wickle likes it when the landing page gets new visitors!'
           ],
           trailer: [],
           trailerFact: []
         },
         'cv.html': {
           fact: [
-            'This page is a map of roles, years, ownership, and range; the project pages do the proving. The proofs matter, yes.',
-            'Wickle reads the CV as an index of shipped labor, not a decorative little timeline.'
+            'This page is a map of experience! Make sure to see the project pages, too.',
+            'CV\'s are a lot of text but the project pages have pretty pictures!'
           ],
           weird: [
-            'Résumé pages sit very straight when nobody is looking. Much too proper.'
+            'CV pages sit very straight when nobody is looking. Much too proper.'
           ],
           fun: [
-            'Wickle trusts a CV page more when it reads like a good postmortem: problem, contribution, shipped result, and what changed. Nice honest structure.',
-            'A proper CV page should point back toward the work itself, much like a good Thief fan mission readme. Scope first, then the proof, yes.'
+            'Wickle wishes he could read a good postmortem right now instead of this.'
           ],
           trailer: [],
           trailerFact: []
@@ -1787,34 +1468,12 @@
 
         "design-notes.html": {
           "fact": [
-            "This page is the short-form version of the design writing: quick philosophy notes, mod opinions, and routes to the longer pages.",
-            "Wickle keeps mostly to facts here because the page is meant to be skimmed rather than haunted.",
-            "The main claims here are blunt on purpose: clarity matters, simplicity saves money, and vibe can make or break the commercial read of a game.",
-            "This page also argues that strong production needs central decision-making, clean promises, and sound design considered early instead of bolted on at the end.",
-            "Wickle likes that this section is honest about market fit. Somebody at market wants your game, but only if the game knows what it is."
+            "Here is what the Pagemaker thinks.",
+            "This page is meant to be skimmed rather than haunted.",
+            "If Wickle can be blunt: clarity matters, simplicity saves money, and vibe can make or break a game.",
+            "Sound design must be considered early on instead of bolted on at the end.",
+            "Wickle thinks somebody at market wants your game, but only if the game knows what it is."
           ],
-          "sectionFacts": {
-            "field notes": [
-              "This opening bit exists to frame the secret page cleanly and route the visitor toward the longer writing without clutter.",
-              "Wickle approves of the direct framing here: short notes on this page, essay on its own page, games on theirs."
-            ],
-            "philosophy and lessons": [
-              "One of the strongest points here is that games only need to be complex enough for the fun they want to deliver, not complex for prestige.",
-              "The manual-first idea matters because it forces verbs, goals, and player-facing language to stabilize early.",
-              "This section is also very blunt about production reality: centralized decision-making tends to ship better games than committee drift.",
-              "The sound note is useful because it distinguishes early intentional planning from late expensive polish panic.",
-              "Wickle strongly approves of the line that the vibe is everything. Many teams under-budget that truth.",
-              "The launch-quality note here is harsh but correct: charm and stability usually buy more goodwill than feature bloat.",
-              "A sequel point sits near the top for a reason. Reusing hard-won production knowledge is often the sanest investment a studio can make."
-            ],
-            "favorite mods": [
-              "This section treats mods as proof of authorship left open, not as disposable bonus content.",
-              "The Battle Grounds matters because its combat rhythm outlived its ugliness and even survived a tech migration.",
-              "Insurgency matters in mod form because focused lethality and atmosphere created value long before it became a commercial product.",
-              "Sven Co-op is a reminder that cooperative extension can be a platform for years of authorship rather than an afterthought.",
-              "Thief fan missions remain one of the clearest arguments for stealth spaces as a long-term creative medium."
-            ]
-          },
           "weird": [
 
           ],
@@ -1830,42 +1489,10 @@
         },
         "design-essay-simplicity.html": {
           "fact": [
-            "This page hosts the long essay so it can breathe without crowding the shorter notes and mod sections.",
-            "Its core argument is that simplicity is not a lack of ambition. It is often the condition that makes readability, moddability, and production sanity possible.",
-            "Wickle keeps to essay facts here because the page is about one sustained argument rather than quick scattered remarks."
+            "This page talks too much.",
+            "Simplicity is not a lack of ambition.",
+            "Blah blah blah... Wickle wants a Tea."
           ],
-          "sectionFacts": {
-            "what we lost": [
-              "The opening claim is that we gained fidelity and convenience but lost clarity, authorship, and some of the social energy that made older PC games feel alive."
-            ],
-            "the loss of shared play": [
-              "This section argues that LAN ritual mattered because physical co-presence changes the emotional texture of play in ways online convenience does not fully replace."
-            ],
-            "why thief was so easy to understand": [
-              "This is the clearest communication argument in the essay: Thief tells the player what they are and how they win before the game even starts."
-            ],
-            "why specific mods still matter": [
-              "These paragraphs anchor the essay in concrete examples rather than nostalgia: The Battle Grounds, Insurgency, Sven Co-op, Thief fan missions, and Unreal Tournament communities."
-            ],
-            "sdks create unlimited value": [
-              "This section is really a production argument disguised as a cultural one: tools extend lifespan, deepen community, and improve the value proposition of the original game."
-            ],
-            "simplicity is not a lack of ambition": [
-              "This is the practical center of the essay: simple art improves readability, focused mechanics teach faster, and stylization often survives memory better than fidelity."
-            ],
-            "closed products and defensive thinking": [
-              "The criticism here is that defensive publishing logic treats players as consumers to be managed instead of collaborators to be enabled."
-            ],
-            "signs of life": [
-              "This section points to Ravenfield, VR constraints, Nintendo, and New Blood as evidence that clarity and extensibility are still viable values now."
-            ],
-            "what we should reexamine": [
-              "The closing production question is whether a system deepens play or merely prolongs engagement while inflating cost."
-            ],
-            "conclusion": [
-              "The conclusion is not anti-innovation. It argues for remembering that constraints can be artistically productive, mechanically clarifying, and financially sane."
-            ]
-          },
           "weird": [
 
           ],
@@ -1881,141 +1508,146 @@
         },
         "design-game-reviews.html": {
           "fact": [
-            "This page is where the favorite games writing lives, with each title separated so Wickle can stay specific to the section at hand.",
-            "The list is less about canon and more about recurring standards: readability, authored space, player trust, pacing, and strong mechanical language.",
-            "Wickle mostly delivers game facts here and keeps the ambient chatter out of the way."
+            "Wickle may delivers game facts here and there."
           ],
           "sectionFacts": {
             "favorite games": [
-              "The framing section is important because it establishes that these games are here as working design references rather than nostalgia props.",
-              "Most of the games on this page earned their place by teaching the player clearly while still leaving room for mastery and atmosphere."
+              "These games are here as working design references rather than exhibitions of nostalgia.",
+              "The games on this page earned their place by teaching the player clearly without compromising mastery and atmosphere.",
+			  "Unreal Tournament, Jedi Academy, and Age of Empires are good reminders that readability is not garnish; it is what lets speed, expression, and strategy survive contact with the player.",
+            "Thief, Morrowind, and Soul Reaver are reminders too: tone is not decoration, precious. Very often it is the structure holding the memory of the game together.",
+            "Wickle keeps citing Thief, Doom, Half-Life, Diablo, and Age of Empires because their development histories are unusually well documented and very useful in design arguments, yes yes.",
+            "Books like Masters of Doom, old postmortems, and anniversary documentaries matter because they show that many famous mechanics were production decisions before they became design doctrine."
+        
             ],
             "thief: the dark project": [
               "Looking Glass described Thief as a first-person sneaker, which is still one of the cleanest genre labels any game ever got.",
-              "The first Thief teaches stealth through light, sound, and surface material rather than through abstract awareness meters alone.",
-              "Thief Gold added bonus missions, but the base achievement remains the same: the title, fantasy, and mechanics all point in one direction.",
-              "DromEd later extended the game's life dramatically, which is one reason Thief fan missions remain such a persuasive example of tools extending value.",
-              "The first game's pagan and horror material also gives it a strange tonal texture the sequels only partly keep."
+              "The first Thief teaches stealth emergently through accidental brushes with light, sound, and surface material. Clever little floorses.",
+              "Thief Gold added bonus missions, but some players hate them. Proof that cuts are sometimes justified!",
+              "DromEd later extended the game's life dramatically, Thief fan missions remain such a persuasive example of amateurs-turned-masters.",
+              "The first game's pagan and horror material gives it a strange tonal texture the sequels only partly kept.",
+			  "Thief fan missions are one of the strongest arguments for authored systemic design: the official games ended, but the mission scene kept extending the game indefinitely. Sneaksie little afterlife."
             ],
             "thief ii": [
-              "Thief II pushes the city, the mechanists, and machine paranoia much harder than the first game, which gives it a cleaner industrial identity.",
-              "Its stealth is often more readable because the spaces are less mythic and more infrastructural: streets, mansions, security routes, and patrol logic.",
-              "The sequel also helped cement Garrett as a character who works best when the mission structure stays systemic and the commentary stays dry.",
-              "Looking Glass also shipped more official documentation around the toolset era, which helped keep the mission scene alive."
+              "Thief II pushes the city, the mechanists, and machine paranoia much harder than the first game, which gives it a cleaner industrial identity. More gears, more watchers, more trouble.",
+              "Theif II's stealth is often more readable because the spaces are less mythic and more familiar: streets, mansions, civic buildings, and a little MCM flair.",
+              "The sequel helped cement Garrett as a character who works best with dry commentary and selfish intentions.",
+              "Looking Glass shipped new official documentation around the toolset in the TII era, which helped keep the mission scene alive."
             ],
             "deadly shadows": [
-              "Deadly Shadows preserved the series by translating it into a more physically intimate city while still protecting the thief fantasy.",
-              "The Cradle dominates discussion for a reason, but the broader achievement is how well the game keeps social stealth, exploration, and theft in conversation.",
-              "Former Looking Glass talent helped give Deadly Shadows continuity of tone even under Ion Storm and console-era constraints.",
-              "Its loading zones are the obvious compromise, but the authored atmosphere still lands."
+              "Deadly Shadows tried to preserve the series by translating it into a freeroam city while still protecting the thief mission structure. Success was debatable.",
+              "The Cradle mission dominates discussion of the game, but the broader achievement is how well the game kept stealth, exploration, and atmosphere together in spite of the problems.",
+              "Former Looking Glass talent leant Deadly Shadows continuity of tone even under Ion Storm and console-era constraints.",
+              "TDS' loading zones are an obvious hardware compromise, but the authored atmosphere still lands."
             ],
             "deus ex": [
-              "Deus Ex remains a benchmark because it gives the player several routes through a problem without making the space feel like a toy puzzle box.",
-              "Its strongest spaces are grounded in believable politics, architecture, and faction tension rather than pure mechanical abstraction.",
-              "The game also proved that written density and systemic choice could reinforce each other instead of competing for attention.",
-              "Even its stiffness is instructive: authored space can outlive mechanical awkwardness if the decisions remain meaningful."
+              "Deus Ex remains a benchmark because it gives the player several routes through every problem without making the game a toy puzzle box.",
+              "The game is grounded in believable politics, architecture, and modern tension rather than pure mechanics. Time proved the story a prophecy.",
+              "DX proved that narrative density and mechanical choice could reinforce each-other instead of competing."
             ],
             "morrowind": [
-              "Morrowind is still one of the best examples of an open world trusting the player to read directions and observe landmarks instead of following marker rails.",
-              "Its alien architecture, giant fungi, and ash-blown mood make Vvardenfell feel authored rather than generic.",
+              "Morrowind is still one of the best examples of an open world trusting the player to read directions and observe landmarks instead of following a HUD.No hand-holding for the little wanderer.",
+              "Vvardenfell feels alien on purpose: giant mushrooms, insect-shell buildings, and dialogues that assume the player can read.",
               "The game also demonstrates how much memory can be carried by atmosphere and culture rather than by cinematic staging alone.",
-              "Its opacity creates some friction, but the setting is distinctive enough to make the friction worth discussing."
+              "Morrowinds opacity creates some friction, but the setting is distinctive enough to make the friction worth discussing.",
+			  "The Morrowind team\'s retrospective interviews describe The Elder Scrolls III: Morrowind as a passion project made by a relatively small, still-forming team, which makes its confidence even more impressive."
             ],
             "ut2004": [
-              "UT2004 keeps speed readable through extremely strong weapon identities, movement language, announcer feedback, and map flow.",
-              "Onslaught mattered because it turned large-scale tug-of-war vehicle combat into something arcade-readable instead of military sludge.",
-              "The series' shock combo remains one of the cleanest examples of expressive mechanical spectacle staying legible under pressure.",
-              "UT2004 also benefited from a huge mutator and custom-map culture, which extended its life the way good tool ecosystems usually do."
+              "UT2004 keeps speed and flow with extremely well defined weapon identities, crisp movement, obvious announcer feedback, and map flow.",
+              "UT2k4s Onslaught mode mattered because it created one of the first large-scale tug-of-war vehicle combat gamemodes playable online.",
+              "The UT series' shock combo remains one of the cleanest examples of expressive mechanical spectacle being used to generate pressure and ask mastery of the player.",
+              "UT2004 benefited from a huge mutator and custom-map culture, which extended its life the way good tool ecosystems usually do."
             ],
             "half-life": [
-              "Half-Life's tram ride is still one of the clearest onboarding sequences in shooters because it establishes place, tone, and unease before direct danger.",
-              "Black Mesa works because scripting is usually used to teach context, not merely to wrest control away from the player.",
-              "The game also demonstrates how environmental sequencing can make a linear experience feel discovered rather than escorted.",
+              "Half-Life's tram ride is still one of the most memorable onboarding sequences in FPS history because it establishes place, tone, and unease before there is any danger.",
+              "Half-Life's narrative works because scripting is usually used to teach context withput wrestling control away from the player.",
+              "Half-Life demonstrated how environmental sequencing can make a linear experience feel discovered rather than guided.",
               "Its legacy is not just FPS pacing but player education through space."
             ],
             "doom ii": [
-              "Doom II's super shotgun changed the feel of the whole sandbox and remains one of the most satisfying weapon additions any sequel has made.",
-              "Adding monsters like the Revenant, Mancubus, and Arch-vile dramatically expanded mapper encounter vocabulary.",
-              "The official guide era also helped codify Doom as a game people studied, mapped, and extended rather than merely finished.",
-              "Its campaign is uneven, but its sandbox became the real long-term product."
+              "Doom II's super shotgun changed the feel of FPS gaming forever. It remains one of the most satisfying weapon additions any sequel has made.",
+              "Doom II's monsters - the Revenant, Mancubus, and Arch-vile - dramatically expanded mapper encounter vocabulary. Another example of the multiplying power and superiority of the SDK on market value.",
+              "The official DOOM II mapping scene helped codify Doom as a game people studied, designed for, and extended rather than merely finished.",
+              "DOOM IIs campaign is uneven, but its sandbox became the real long-term product because of the SDK."
             ],
             "doom": [
-              "Classic Doom is a masterclass in enemy silhouette, weapon clarity, and readable combat escalation.",
-              "Its keycard-and-door language is almost embarrassingly efficient: the player understands progression instantly.",
-              "Doom also shows how much atmosphere can be carried by texture, sound, and pace without heavy exposition.",
-              "Its mod scene later became one of the strongest arguments for open community authorship in PC history."
+              "Classic Doom is a masterclass in enemy silhouette, weapon identity, and combat escalation.",
+              "Dooms keycard-and-door language is almost embarrassingly efficient: the player understands progression without thinking too much.",
+              "Doom shows how much atmosphere can be carried by texture, sound, and pace without heavy resources.",
+              "Dooms mod scene later became one of the strongest arguments for open community authorship in PC history. Carmack, you are a legend!",
+			 "Masters of Doom is one of the clearest records of how much competitive pressure sat behind Doom, and the game still feels built by people trying to outrun each other.",
+            "Classic Doom gives the player eight weapons, from fists to the BFG 9000, and almost every one has a clean tactical identity. Good sharp tool language."
             ],
             "age of empires ii": [
-              "Age of Empires II refined the original with better interface language, stronger villager management, formations, and clearer civ readability.",
-              "The idle villager button and other usability improvements sound minor until you try going back without them.",
-              "Its historical framing gives texture, but the real durability comes from how cleanly information and counters are communicated.",
-              "The game also became a long-lived competitive platform because its readability held up under serious play."
+              "Age of Empires II refined the original with cleaner interface language, expanded villager management, military formations, and clearer civ readability through expanded spritework.",
+              "AOE II's idle villager button and other usability improvements sound minor until you try going back to the first game without them.",
+              "AOEII became a long-lived competitive platform because its readability held up under serious play."
             ],
             "age of empires": [
-              "The first Age of Empires sells the pleasure of technological progression with a very clean age-up fantasy from Stone to Iron.",
-              "Its structure is less polished than the sequel, but the core loop is easy to grasp and difficult to exhaust immediately.",
-              "It also demonstrates how historical theming can give strategy games identity without requiring heavy narrative staging.",
-              "The original laid down the readability that the sequel later perfected."
+              "The first Age of Empires sells the pleasure of technological progression with a very clean power fantasy of a ruler lording over subjects.",
+              "AOE\'s structure is less polished than it\'s sequel, but the core loop is easy to grasp and this is why the game stuck to people.",
+              "AOE demonstrated how historical theming can give strategy games identity without requiring heavy narrative staging.",
+              "AOE original laid down the readability queues that AOEII later perfected."
             ],
             "empire earth": [
-              "Empire Earth turns absurd historical span into its selling point, carrying the player from ancient warfare through futuristic nonsense while keeping familiar RTS grammar.",
-              "The epoch ladder is part of the fantasy: escalation itself becomes the reward.",
-              "Its identity can blur under that scale, but the game is still memorable because it commits to extravagance completely.",
-              "It is a strong example of a game being fun partly because it is a bit too much."
+              "Empire Earth turned its absurd historical span into its selling point, carrying the player from ancient warfare through futuristic robot nonsense.",
+              "The epoch ladder was part of the fantasy: the race through time becomes the games core loop.",
+              "Empire Earths identity blurred under that scale, but the game is still memorable because it commited to extravagance completely.",
+              "Emepire Earth is a strong example of a game being fun partly because it is a bit too much."
             ],
             "rune by human head studios": [
-              "Rune makes melee readable by embracing weight, severing, thrown weapons, and a very blunt sense of impact.",
-              "It is one of the clearer late-1990s examples of a combat game understanding that ugliness can be part of the appeal.",
-              "Even severed limbs becoming improvised weapons fits the game's cruel comic tone.",
+              "Rune made melee readable and fun by embracing the absurd in the late-1990s. Oversized swords and axes, gory dismemberment, weapons hurled through the air, and a very blunt sense of impact made the game invincible.",
+              "Rune is one of the clearer late-1990s examples of a combat game understanding that ugliness can be part of the appeal.",
+              "In Rune, severed limbs become improvised weapons that fit the game's cruel comic tone.",
               "Human Head used Unreal technology for clobbering rather than gun ballet, which gave the game a very different feel from its peers."
             ],
             "diablo i": [
-              "The original Diablo is extraordinarily compact: one town hub, one cathedral, and one downward progression that feels instantly understandable.",
-              "David Brevik has said the project began as turn-based before shifting to real time, and that change is one reason the final tension feels so immediate.",
-              "Three classes also keep the fantasy and loot language unusually legible.",
-              "Its simplicity is structural, not shallow. That is a large part of why it still reads so cleanly."
+              "The original Diablo was extraordinarily compact: one town hub, one initial entrance to the dungeon, and one downward progression. This made the game feel instantly understandable and gave it mass appeal.",
+              "David Brevik has said the project began as turn-based before shifting to real time, and that change is one reason the games tension feels good.",
+              "Diablos scant three classes kept the fantasy and loot language unusually legible compared to successors.",
+              "Diablo's simplicity was structural, not shallow. That is a large part of why it still reads so cleanly."
             ],
             "soul reaver ii": [
-              "Soul Reaver II narrows the action and increases narrative precision, pushing harder into time, prophecy, and character revelation.",
-              "Its strength is not sandbox breadth but controlled dramatic architecture.",
-              "The game also shows Amy Hennig's interest in making exposition feel theatrical rather than merely informational.",
-              "It is a useful example of a sequel deliberately trading some exploratory freedom for narrative focus."
+              "Soul Reaver II narrowed the action and focused more on narrative, leaning harder into its themes of time, prophecy, and revelation for a story that stuck with audiences.",
+              "SRII's strength was controlled dramatic architecture. The narrative revelations felt like rewards in concert with the environmental changes.",
+              "Amy Hennig's interest in making exposition feel theatrical rather than merely informational gave the Legacy of Kain series a lot of weight.",
+              "Soul Reaver II is a useful example of a sequel deliberately trading exploratory freedom for narrative focus with a clear payoff - player investment."
             ],
             "soul reaver": [
-              "The original Soul Reaver is built around the material and spectral realms reshaping space itself, not merely recoloring it.",
-              "Amy Hennig discussed how ambitious the project was and how some of that ambition was visibly cut against time and technical limits.",
-              "Even with that incompleteness, the game's voice acting, atmosphere, and realm-shift level design remain striking.",
-              "It is one of the best examples of mood and architecture reinforcing each other."
+              "The original Soul Reaver is built around the material and spectral realms reshaping platforming space itself. This was an unfathomably cool concept for the PS1 era. It felt like the future at the time.",
+              "Amy Hennig discussed how ambitious Soul Reaver was and how some of that ambition was visibly cut against time and technical limits.",
+              "Soul Reaver's voice acting, atmosphere, and realm-shift level design remain striking to this day.",
+              "Soul Reaver is one of the best examples of mood and architecture reinforcing each other through a mechanical link."
             ],
             "defiance": [
-              "Defiance finally puts Kain and Raziel into one shared mechanical frame, which is a large part of its appeal.",
-              "It is more direct and combat-driven than the earlier entries, sometimes at the cost of their more contemplative exploration.",
-              "The split-protagonist structure still gives it a satisfying saga-convergence energy.",
-              "It reads like a series trying to pull its branches back into one trunk."
+              "Legacy of Kain: Defiance finally puts Kain and Raziel into one shared mechanical framework, which was appealing to audiences who had waited a decade for the showdown.",
+              "Defiance is more direct and combat-driven than the earlier entries, often at the cost of their more contemplative exploration.",
+              "The split-protagonist structure gave Defiance a satisfying saga-convergence that carried the game in the end.",
+              "Defiance read like a branching narrative series trying to pull all its branches back into one trunk."
             ],
             "blood omen 2": [
-              "Blood Omen 2 leans hard into Kain as a predator, which gives the game a very specific tone even when the mechanics are rough.",
-              "Feeding, domination, and urban vampire cruelty are doing more identity work here than elegant systems are.",
-              "It is not the neatest Legacy of Kain game, but it is one of the most unapologetic about who Kain is.",
-              "That commitment to attitude is part of why it remains memorable."
+              "Blood Omen 2 leaned hard into vicious combo-based combat which gives the game a very specific tone even when the mechanics are rough.",
+              "BO2's narrative may have been trite but the visual design and gameplay still gave it an identity players noticed.",
+              "While B02 is not the neatest Legacy of Kain game, it is an unapologetically experimental entry.",
+              "The commitment to aesthetic and pacing is part of why Blood Omen 2 remains memorable."
             ],
             "omikron: the nomad soul": [
-              "Omikron remains memorable because it is overambitious in a very specific way: body-hopping, open-city adventure, gunplay, martial arts, and David Bowie all at once.",
-              "David Bowie and Reeves Gabrels contributed original music, and Bowie also appears in the game as Boz.",
-              "The body-transfer premise helps the city feel stranger and less stable than a conventional hero-led structure would.",
-              "Its messiness is inseparable from its identity. Wickle respects that kind of dangerous ambition."
+              "Omikron is memorable because it is overambitious in a very specific way:a body-hopping, open-city adventure with gunplay, martial arts, and David Bowie all happening at once.",
+              "For Omikron's soundtrack both David Bowie and Reeves Gabrels contributed original music, and Bowie also appears in the game as several characters while promoting his latest album.",
+              "Omikron's body-transfer mechanic helped explain the games environment by forcing the player to adapt to different extremes of skill proficiency. You could not get too comfortable with one style.",
+              "Omikron's messiness is inseparable from its identity. Players respected it's brand of dangerous ambition - something many games lack today."
             ],
             "dark forces ii": [
-              "Dark Forces II mixes shooter action with Force progression and live-action cutscenes, which gives it a melodramatic scale many FPS games of the period lacked.",
-              "Its manual frames the Force powers as light, dark, and neutral, with alignment shaping progression in a very readable way.",
-              "The lightsaber fantasy matters here because the game catches the moment when FPS combat starts colliding with Star Wars myth power.",
-              "It is awkward, but authorially awkward in the good way."
+              "Star Wars: Dark Forces II mixed FPS shooter action with perk style Force progression,platforming sequences and live-action cutscenes - all with a toggleable 1st to 3rd person camera. It had a melodramatic scale many FPS games before and since lacked.",
+              "DFIIs manual frames the Force powers as light, dark, and neutral, with  the playes in-game choices (albeit few of them) shaping narrative progression.",
+              "The lightsaber fantasy was core to the design - this was the first Star Wars title that gave the player access to the iconic blade. This matters because this game captures the moment when FPS combat collided with Star Wars mythic power for the first time.",
+              "DFII is awkward, but awkward in a classic way. Players still jump into online matches using AIM and Discord"
             ],
             "dwarf fortress": [
-              "Dwarf Fortress is built as a story engine as much as a management sim: world generation, history generation, injuries, moods, and social details all feed anecdote.",
-              "Bay 12's talks make it clear that history generation is foundational rather than ornamental to the design.",
-              "The phrase \"losing is fun\" became attached to the game for a reason: catastrophe is part of the authored pleasure.",
-              "Its readability can be hard-won, but the depth of simulation gives players unusual freedom to tell stories back to themselves."
+              "Dwarf Fortress is built as a story engine as much as a management simulation: its world and history generation,deep injury simulation,character moods, and social details all basically become a fanfiction generation machine that players love.",
+              "Bay 12's Zach and Tarn Adams talks make it clear that history generation is foundational to the rest of the games design. This shows that random generation can indeed be important in todays market.",
+              "The phrase \"losing is fun\" became attached to the game for a reason: unexpected catastrophe is part of the pleasure - whether intentionally authored or not.",
+              "Dwarf Fortress' readability was be hard-won, it took literal years to release the STEAM version. The depth of DF's simulation gave players an unusual freedom to tell stories back to themselves like no other title before or since."
             ]
           },
           "weird": [
@@ -2034,318 +1666,186 @@
         'the-deep.html': {
           fact: [
             'The Deep centers on exploration, cleanup, discovery, and transformation.',
-            'This project kept changing during testing and level work, so the page has to carry both concept intent and live adjustment.',
-            'The design work covers loop, tools, onboarding, HUD thinking, and production-facing documentation.',
-            'This page was designed to read best when the loop came first and the evidence came second.',
-            'The fastest read on this page was feel, loop, ownership, then samples.',
-            'One cave wireframe was designed to teach movement by making the player clean plugged jets, then dodge timed blasts through a slalom.',
-            'Yellow Cave used a false statue piece so players could learn grabbing by making a harmless mistake first.',
-            'Some contamination trails were meant to stay invisible until the scanner revealed them.',
-            'One reef plan only needed about sixty-five percent of contamination cleaned to unlock the next level, so full cleanup was rewarded but not required.',
-            'Cleaning certain contamination points was planned to pay out energy crystals, turning cleanup into both progress and refill.',
-            'The cave exit was meant to be backlit the instant the Green Laser artifact was claimed.',
-            'The production template asked designers to track enemy paths, contamination totals, hazards, artifacts, and even the reward for one-hundred-percent completion.',
-            'One planned cave cue was a deep resonant chime when the statue puzzle snapped back together.',
-            'Early mixed-reality plans turned the player\'s room into the Nautilus and expected four walls, a table, and about five square metres of space.',
-            'The suit-up fantasy originally began in the room-sized base before the dive even started.',
-            'Yellow Cave was designed to teach movement, sprint timing, cleaning, grabbing, and hostile evasion in one sequence.',
-            'The sample docs also planned false puzzle pieces so players could learn the rules by making a safe mistake first.',
-            'The cave brief explicitly wanted soft bioluminescence, a clear focal pedestal, and a dramatic backlit exit once the artifact was won.'
+            'This projects requirements kept changing during live production, so Seth had to pivot both concept and design intent to ensure it shipped.',
+            'Seths design work spanned the entire project - he pitched it!',
+            'One of the levels wireframes was designed to teach movement by making the player clean plugged volcanic jets, then dodge timed blasts through a slalom.',
+            'One level used a broken statue in pieces as a reconstruction puzzle so players could learn grabbing by making harmless mistakes early.',
+            'An early design had contamination stay invisible until the players scanner revealed them. This made the game harder to read, so it was dropped.',
+            'Cleaning contamination efficiently was designed to pay out energy crystals, turning cleanup into both progress and a health refill.',
+            'The suit-up fantasy originally began in the room-sized base before the dive even started - early mixed-reality plans turned the player\'s room into a submarine but expected four walls, a table, and about five square metres of space. This feature didn\'t make the cut.',
+            'The Yellow Cave level was designed to test movement, dodge timing, cleaning, grabbing, and hostile evasion in one connected sequence.',
+            'The design brief for the cave levels explicitly asked for soft bioluminescence so that we could use brigher lights to highlight important spaces in the gloom.'
           ],
           weird: [
-            'Wickle respects the water from a safe architectural distance.',
+            'Wickle respects the water from a safe and architecturally sound distance.',
             'The lower parts of this page are damp.',
             'Wickle fears going deeper.'
           ],
-          fun: [
-            'I remember the satisfaction when the reef started reading cleanly again instead of just looking messy.',
-            'The best moments here are when cleanup changes the space, not when the player merely points a tool at dirt.'
-          ],
-          trailer: [
-            'Wickle only watches this trailer when the sound is on. Mood is half the read.',
-            'I remember the loop reading best when cleanup, discovery, and environmental recovery all landed in the same breath.'
-          ],
-          trailerFact: [
-            'The footage works when the environment visibly transforms instead of merely sparkling.',
-            'One cave wireframe taught movement by making the player clean blocked jets and dodge timed blasts through a slalom.'
-          ]
+          fun: [],
+          trailer: [],
+          trailerFact: [],
         },
         'b17-flying-fortress.html': {
           fact: [
-            'This B-17 work is research assembled for production utility, not just atmosphere.',
-            'Rows of bicycle plinths, clogs, issue records, and checklists matter because ordinary base life sells the setting.',
-            'The pilot material split flying into distinct phases instead of treating a mission as one long blur.',
-            'This page was built to show whether the research went deep enough to be production-usable.',
-            'The quickest value here was in seeing how the references supported artists and modellers.',
-            'The B-17 material here was gathered to support layouts, material culture, and usable visual reference.',
-            'This is reference work aimed at production utility, not just mood.',
-            'Rows of bicycle plinths were kept as reference because ordinary base traffic mattered to believable airfield layouts.',
+            'Seth feels his B-17 work on research was one of his favorite projects to work on.',
+            'The pilot manual split flying missions into distinct phases instead of treating a mission as one long blur, so the game was designed this was as well.',
+            'Photographs of rows of bicycle plinths were used as reference because replicating base infrastructure and foot traffic mattered to a believable airfield setting.',
             'The clothing brief notes that W.A.A.F. kitchen staff wore wooden-soled clogs to save regular shoes.',
-            'One pilot checklist split flying into six phases instead of treating a mission as one long blur.',
-            'The pilot information file was originally loose-leaf on purpose so new safety pages could be signed and inserted over time.',
-            'Issue records gave artists stock numbers, issue counts, and role-specific gear instead of hazy memory.',
-            'One pilot file says crews should mark their route every twenty minutes on the chart.',
-            'The same safety material says more than half of aircraft accidents happened on the ground.',
-            'A radio operator report form is essentially wartime paperwork for saying that a set is broken.',
-            'One combat manual ties good bombing results directly to training time.',
-            'The production support brief says the goal was to help anchor everyday life on base, not just aircraft and mission scenes.',
-            'That is why this page cares about shoes, bikes, forms, and support spaces as much as rivets and engines.',
-            'Historical environments usually feel real once the ordinary background life becomes visible.',
-            'The clothing brief treats issue forms like evidence of what people really wore and stored, not what later memory romanticized.',
-            'W.A.A.F. clogs matter because they show how mundane economy shaped the look of people on base.',
-            'The checklist pack divides flight into before start, warm-up, takeoff, flight, landing, and after landing.',
-            'It was built as crew discipline, not optional paperwork.',
-            'Material culture here mostly means the everyday objects that made Thorpe Abbotts feel inhabited: bikes, footwear, personal kit, and paperwork.',
-            'Those background objects are often what sell the illusion of real use.',
-            'One warning in the checklist is basically never trust memory, because the live list may have changed.',
-            'That is a useful reminder of how procedural bomber flying really was.',
-            'One pilot safety note says that if the weather turns doubtful, a plain one-hundred-eighty-degree turn is often the right answer.',
-            'Another keeps hammering the point that oxygen loss can wreck judgment long before a crewman feels dramatic about it.',
-            'The B-17 manual is most revealing when it quietly shows all the systems a crew had to manage every flight: fuel, oxygen, communications, and more.',
-            'One of the clearest takeaways is that a bomber was a network of jobs and systems, not just four engines and a target.',
-            'The radio paperwork makes constant listening watch sound like a real operational duty, not background waiting.',
-            'It also shows the paper trail for defects, which is a useful reminder that communications gear failed in very ordinary bureaucratic ways.',
-            'One combat manual says the job is to put the greatest number of bombs on target with the minimum losses to your own force.'
+            'The pilots information file was originally loose-leaf on purpose so new safety pages could be signed and inserted over time as operational needs changed.',
+            'Issue records gave artists stock numbers, issue counts, and role-specific gear loadouts to target.',
+            'One pilot file says crews should mark their route every twenty minutes on the chart, so this was how checkpoints were saved ingame.',
+            'The pilots safety material asserted more than half of aircraft accidents happened on the ground, and playtesting the game had the team believing it.',
+            'A radio operator report form was essentially just wartime paperwork for saying that \'The headset is broken.\'',
+            'One combat manual ties good bombing results directly to training time, so we tried to give the player a tutorial that reflected real military training of the period.',
+            'The production support brief directed artists to help anchor everyday life on base in objects, vignettes and visual storytelling, not just aircraft and narrative cutscenes. A Historical environment would only feel real once the ordinary background life became visible.',
+            'One warning in the pilots checklist was basically \'never trust memory\', because real life circumstances may change.This is a useful reminder of how procedural bomber flying really was.',
+            'One pilot safety note says that if the weather turns doubtful, a plain one-hundred-eighty-degree turn is often the right answer. Another keeps hammering the point that oxygen loss can wreck judgment long before a crewman feels dramatic about it. Life and death were always close on the mission.',
+            'The weartime B-17 manual shows all the systems a crew had to manage every flight: fuel, oxygen, communications, and more. We made sure players could interact with each of these.',
+            'One of the clearest takeaways from studying period manuals is that a bomber was a network of jobs and systems held together by people. We made sure the gameplay reflected that reality.',
+            'One combat manual says the job is to put the greatest number of bombs on target with the minimum losses to your own force. This was basically the goal for the players as well.'
           ],
-          weird: [
-            'Archive pages always collect odd little truths.'
-          ],
-          fun: [
-            'Wickle likes historical work that remembers paperwork, footwear, and traffic flow instead of worshipping only hardware.'
-          ],
+          weird: [],
+          fun: [],
           trailer: [],
-          trailerFact: []
+          trailerFact: [],
         },
         'battle-cry-of-freedom.html': {
-          fact: [
-            'Readable battle spaces depend on routes, cover, sightlines, and pressure more than smoke alone.',
-            'Historical multiplayer ground needs to communicate where danger gathers and where momentum can be stolen.'
-          ],
-          weird: [
-            'Battlefield pages always feel like ambush country lower down.'
-          ],
+          fact: [],
+          weird: [],
           fun: [
-            'I remember how the better spaces in this kind of game make you choose between cover, angle, and momentum almost immediately.',
             'Wickle stays behind hard cover on this page.'
           ],
           trailer: [
-            'I watch this for the ground first. Smoke is easy. Honest terrain is harder.',
-            'I remember the nicest battlefield reads being the ones where landmarks and lanes stayed legible under pressure.',
-            'Wickle finds gunsmoke acrid.'
+            'Wickle finds the gunsmoke acrid.'
           ],
-          trailerFact: [
-            'A wide battlefield trailer fails fast if the terrain stops communicating.'
-          ]
+          trailerFact: [],
         },
         'civitas.html': {
           fact: [
-            'The Civitas sample is valuable because it is a live mid-production document, not a tidied trophy.',
-            'Plots are the core unit: parcel land, assign purpose, then grow structures and upgrades from that logic.',
-            'Boros, Hamlets, and larger settlement tiers step upward through a clear three-of-a-kind structure.',
-            'The Civitas sample is a live mid-production snapshot rather than a polished after-the-fact summary.',
-            'World generation was meant to use plate tectonics on sixteen-square-kilometre tiles.',
-            'Plots are the core unit: parcel land, give it a purpose, then grow it with structures, upgrades, and decorations.',
-            'A Boro is formed from three plots, then three Boros make a Hamlet, and the same three-of-a-kind rule keeps stacking upward.',
-            'Patrons are generated from the mix of plot types in an area and can partially automate their specialty.',
-            'Civvies were meant to live, work, learn, and age through Shakespeare\'s seven ages.',
-            'If upkeep is ignored long enough, buildings decay into derelicts until repaired.',
-            'The art direction aimed for Renaissance map art brought to life, not generic medieval city-builder mush.',
-            'Menu sound plans even called for paper, quills, and books on a cartographer\'s desk.',
-            'The opening pitch ties Civitas directly to Renaissance bird\'s-eye maps by John Speed, Georg Braun, and Frans Hogenberg.',
-            'That is why the project reads like both a city-builder and a living atlas.',
-            'The design pillars were blunt about priorities: simple UI, easy building, and an economy that keeps moving.',
-            'One line says it plainly: people build cities, they do not build themselves.',
-            'Plotting was designed to be gridless: click out the corners, close the shape, then choose the plot purpose and primary structure.',
-            'Once the settlement reached City status, plots could even be subdivided into smaller ones.',
-            'The project also planned Civvies in UI and cutscenes as Terry Gilliam-style cutouts while the in-world version stayed 3D for performance.',
-            'That mix says a great deal about how the team wanted the game to feel like a storybook map without giving up playability.'
+            'In Civatlas \'plots\' were the core unit: The player could parcel land, assign it a purpose, then grow structures and city upgrades from that land over time. A \'Boro\' plot was formed from three grouped plots, then three Boros could be grouped make a Hamlet, and the same three-of-a-kind rule keeps stacking upward until the player hit Metropolis level.',
+            'In Civatlas world generation was meant to use plate tectonics on sixteen-square-kilometre tiles to create realistic landforms.',
+            '\'Patrons\' were a special class of NPC generated from the mix of labour designations in an area and would partially automate their specialty trade in their home district.',
+            'The base unit in Civatlas was \'Civvies\' who were meant to live, work, learn, and age through Shakespeare\'s seven ages.',
+            'If players ignored building upkeep costs long enough, buildings decayed into derelicts until repaired. This caused NPC\s to become homeless and disenfranchised with their management.',
+            'The art direction aimed for Renaissance map art brought to life. We didn\'t want to mimic other 3D games - instead we wanted to go back to our inspiration.',
+            'Design direction for the menu sound called for paper, quills, and books on a cartographer\'s desk to have accompanying audio queues to make it feel like the player was drawing their world from a cozy nook.',
+            'The games pitch directly referenced Renaissance bird\'s-eye maps drawn up by John Speed, Georg Braun, and Frans Hogenberg.',
+            'The design pillars were blunt about the games priorities: a bone-simple UI, automated building, and an economy that keeps moving - but at every step the NPC characters had to be in the spotlight. One line said it plainly: people build cities, they do not build themselves.',
+            'The project also planned Civvies in UI and cutscenes as Terry Gilliam-style cutouts. That says a great deal about how the team wanted the game to feel like a storybook map without giving up playability.'
           ],
-          weird: [
-            'Blueprint pages dream in straight lines.'
-          ],
-          fun: [
-            'I remember the parceling fantasy being most satisfying when the rules stayed readable and the city felt authored instead of stamped.',
-            'Renaissance map-art ambition only works if the economy and growth logic remain clean underneath it.'
-          ],
-          trailer: [
-            'I remember this reading best when the footage showed both city rhythm and system clarity.',
-            'Pretty roofs are pleasant, but the rules need to breathe on screen.'
-          ],
+          weird: [],
+          fun: [],
+          trailer: [],
           trailerFact: [
-            'The project aimed for Renaissance bird\'s-eye map art brought to life rather than generic city-builder mush.'
+            'The project aimed for Renaissance bird\'s-eye map art brought to life.'
           ]
         },
         'dinohab.html': {
           fact: [
-            'DinoHab\'s harmony is deliberately three-way: plants feed dinosaurs, dinosaurs make waste, and fungi turn waste into compost.',
-            'The macro loop was built around short daily check-ins rather than marathon sessions.',
-            'The multitool was meant to scan, heal, place, remove, and replant without exploding into gadget clutter.',
-            'Harmony is three-way: plants feed dinosaurs, dinosaurs make waste, and fungi turn waste into compost.',
-            'The first buddy hatches when the player scans the egg, not by simply waiting.',
-            'Only parent plants propagate, which stops the habitat from multiplying forever without player input.',
-            'In the alpha harmony rules, one fungus unit was budgeted to support about three plants.',
-            'Scanned mycelium links were supposed to show as purple lines with bright points moving through the network.',
-            'Removing dead leaves was part of gameplay because dead growth was meant to slow the plant down.',
-            'Buddies could be hand-fed, petted for Dino Points, and taken back to the lab, but only one buddy could be active at a time.',
-            'Full harmony was meant to make new dinosaurs more likely to arrive, which then disrupted the balance again.',
-            'Lushness was a visible recovery ladder from barren ground to fully restored habitat.',
-            'The harmony meter only really means something when plant health, dino satisfaction, and fungi support are all pulling together.',
-            'The player-planted version of a plant is the important one in the logic, because it acts as the parent that can seed more life nearby.',
-            'The fungi spec treats mushrooms like living compost silos that eat waste, store compost, and feed it back to plants.',
-            'The plant spec treats one number, nutrients, as food, health, and growth progression all at once.',
-            'A valid dinosaur rest patch could be something as simple as three nearby plants whose cover values add up high enough.',
-            'Some plants were allowed to go dormant and come back instead of simply dying forever.'
+            'DinoHab\'s ecology was designed like a real ecosystem: plants feed dinosaurs, dinosaurs make waste, and fungi turn that waste into compost which goes back to the plants.',
+            'DinoHabs macro loop was built around quick daily check-ins rather than marathon sessions. We wanted the playyer in the long game.',
+            'We had to make some definitions on the fly - parent plants placed by the player may propagate, but their offspring cannot. This stopped the habitat from multiplying forever without player input. It was an amusing bug to see the first time on an accellerated timescale.',
+            'Removing dead leaves was initially designed to be part of gameplay because dead growth was meant to slow the plant down. This was cut because players did not find grooming their plants fun.',
+            'Pet dinosaurs could be hand-fed, pet, played with or taken back to the players room for an MR experience.',
+            'Achieving ecological harmony was designed to make new dinosaurs more likely to arrive, which then disrupted the ecological balance again. This created a repeating loop where the player had to chase success.',
+            'The game was designed with a visible recovery ladder where the player could take an environment from barren and scorched plants to a fully restored and lush green habitat.',
+            'The plant spec treats one number - nutrients - as food, health, and growth progression all at once. This clever recycling of a feature took the game a lot farther on a budget than it might have gone otherwise.',
           ],
           weird: [
-            'The habitat pages make Wickle want to overwater something.'
+            'This habitat pages make Wickle want to overwater something.'
           ],
-          fun: [
-            'I remember the loop clicking once fungi, waste, and plants started feeding one another visibly.',
-            'Visible ecological feedback does most of the teaching here.'
-          ],
-          trailer: [
-            'I watch this for readable cause and effect before the cute parts try to steal the scene.',
-            'I remember lushness working best when the recovery ladder was obvious at a glance.'
-          ],
+          fun: [],
+          trailer: [],
           trailerFact: [
-            'At full recovery the design called for cleaner air, more insects, healthier cover, and clearer signs that the habitat had turned around.',
             'This project was designed so visible ecological feedback would do as much teaching as the UI.'
           ]
         },
         'monster-simulator-3000.html': {
           fact: [
-            'Monster Simulator 3000 depends on readable chaos: boss tells, throwable objects, objectives, rage gain, and perk effects all have to stay legible.',
-            'The boss blimp, helicopter, and tank briefs are built around readable tells instead of cheap surprise damage.',
-            'Throw assist was intentionally stronger up close so VR throws landed where players meant them to.',
-            'Monster Simulator 3000 work here includes enemy-design features and close balance attention.',
-            'Power plants were multi-step objectives: open the stack, carry cores, and force an overheat.',
-            'Throw assist was intentionally stronger up close so heavy VR throws landed where players meant them to.',
-            'Rage came from wrecking things, killing enemies, and even taking damage.',
-            'Perks are temporary run upgrades and disappear on death.',
-            'The boss blimp flies a figure-eight and drops bombs with blinking fuses that the player can grab or crush.',
-            'The boss helicopter tries to stay between the player and the nearest spawner, and clever players can bait it into hitting its own side.',
-            'The boss tank teaches shield timing: wind-up, reticle lock, shield drop, then the volley.',
-            'Knocking out all the buddy tanks was meant to leave the boss exposed.',
-            'Boom perks create chain explosions, while Stone perks can destroy enemy projectiles as well as enemies.',
-            'The level process was expected to stay playable through whitebox, production, and balance passes.',
+            'The boss briefs were designed around readable tells so that the player could earn their sense of achievement by interacting with them in real time.',
+            'In designing the physics system, the throw assist was intentionally configured to be stronger up close to compensate for the warping that can happen when the system got confused about hand position. This guaranteed thrown objects landed where players intended them to.',
+            'The Rage power bar was filled by wrecking things, killing enemies, and even taking damage. This gave the player ongoing incentive to move fast to get the highest benefit, keeping with the arcade intentions of the game.',
+            'Taking the Boom perks enabled the player to chain explosions, a feature that clever players used to maximise their high scores.',
+            'The level process document was written to keep the in-process levels playable through whitebox, production, and balance passes. This was important to the projects timeline.',
             'Spawn pressure was designed to get meaner near objectives and ease off when the player was hurt or farther away.',
-            'A lot of the systems work here was about making that chaos readable instead of random.',
-            'The configuration docs exposed exactly how adjustable the combat was, right down to rage gain, shockwave costs, projectile behavior, and enemy fire rates.',
-            'That means this page is not only concept work; it is also tuning-knob work.',
-            'The boss tank, helicopter, and blimp briefs were all built around player-readable tells, not cheap surprise damage.',
-            'The throw feature page even added coyote timing and aim help so grabbing and hurling would feel intentional in VR.',
-            'The strongest images on this page should show scale, target clarity, and the difference between throwables, threats, and objectives.',
-            'Monster chaos only really works once the city still reads as a place and not just a debris cloud.'
+            'The configuration docs expose exactly how adjustable the games combat was, right down to rage gain, shockwave costs, projectile behavior, and enemy fire rates.',
+            'The throw feature page specified added coyote timing and aim help so grabbing and hurling would feel more intentional in VR.'
           ],
           weird: [
-            'Wickle is definitely not the monster.'
+            'Wickle is definitely not a monster. Definitely.'
           ],
           fun: [
-            'I remember baiting the helicopter into its own side and feeling very clever about it.',
-            'Big destruction only feels good when the player can still tell why a plan worked.'
+            'I remember baiting the helicopters into buildings and feeling very clever about it.'
           ],
-          trailer: [
-            'I watch this for silhouette and intention. Big things go muddy fast.',
-            'I remember the best reads being the ones where the city, the targets, and the threats all stayed distinct.'
-          ],
+          trailer: [],
           trailerFact: [
-            'Spawn pressure was designed to increase near objectives and ease off when the player was hurt or farther away.',
-            'The best footage here should make boss tells, throwable objects, and objective logic readable at the same time.',
-            'A kaiju game can be messy, but the player still needs to understand why a plan worked.'
-          ]
+            'Spawn pressure was designed to increase near objectives and ease off when the player was hurt or farther away.' ]
         },
         'dune-sea.html': {
-          fact: [
-            'This work is strongest where pacing, player-facing read, and encounter pressure stay clear.'
-          ],
-          weird: [
-            'Dry pages always whisper louder.'
-          ],
-          fun: [
-            'Wide horizons are only useful when the player still knows what matters.'
-          ],
+          fact: [],
+          weird: [],
+          fun: [],
           trailer: [
-            'I remember this reading cleanly when the interface stayed calm and the space kept its pressure lines.'
+            'I love a good breeze, but a geese I can do without.'
           ],
           trailerFact: []
         },
         'half-rats-parasomnia.html': {
-          fact: [
-            'Mood only holds when the interaction read stays disciplined.',
-            'Good QA notes capture not only what broke, but what the break did to the player.'
+          fact: [ 'Good QA notes capture not only what broke, but what the break did to the players momentum.'
           ],
-          weird: [
-            'This page still feels like it is listening back.'
-          ],
-          fun: [
-            'I remember the best horror reads being the ones that stayed legible while unsettling me.'
-          ],
+          weird: [],
+          fun: [],
           trailer: [
-            'I only watch this with sound. Silence cheats the mood.',
-            'I remember the strongest passages being the ones where silhouette, space, and pacing kept the dread coherent.'
+            'I remember the feeling that this game would have a unique character.. and it did. It achieved cult status all on its own.'
           ],
           trailerFact: []
         },
         'mount-and-blade-community-maps.html': {
           fact: [
-            'This page is route craft first: lanes, sightlines, pressure points, and readable movement.',
-            'Long-form community map work is mostly sustained tuning rather than one heroic gesture.'
+            'The best community work is sustained over a long period rather than individual releases - a multiplayer games spirit has to be kept alive to be worth playing..'
           ],
           weird: [
-            'Route pages carry tiny winds in them.'
+            'It\'s funny how your early work defines your later outputs.'
           ],
           fun: [
-            'I remember good multiplayer spaces revealing their intent in the first ten seconds of movement.'
+            'I remember how good it felt for musketballs to pass through players and explode on obstacles behind them - that informed many of the design choices and backdropping.'
           ],
-          trailer: [
-            'I watch this for path honesty. If the terrain lies, the fight lies.'
-          ],
+          trailer: [],
           trailerFact: []
         },
         'red-meat-games.html': {
           fact: [
-            'Early studio work is often where breadth shows up most plainly: level work, production support, QA, and design all sharing the same day.',
-            'Arena and progression work read best when pressure steps upward cleanly.'
+            'The lights were often off during production hours, and so Wickle thinks the designers got myopic.',
+
           ],
-          weird: [
-            'Early-work pages always feel like crowded toolboxes.'
-          ],
+          weird: [],
           fun: [
-            'Practical hands matter more than grand speeches at this stage.'
+            'Practical hands matter more than grand speeches.'
           ],
-          trailer: [
-            'I remember arena rhythm being the real story here once the sparks settled.'
-          ],
+          trailer: [],
           trailerFact: []
         },
         'roll-together.html': {
           fact: [
-            'Playful systems still need rigid clarity under the surface.',
-            'Co-op obstacle work succeeds when timing and communication read without friction.'
+            'Players instantly understood they were working together instead of competing. It was kind of beautiful to see in motion.',
           ],
-          weird: [
-            'Circular pages never fully stop moving.'
-          ],
-          fun: [
-            'Whimsy benefits from clean edges more than almost anything.'
-          ],
-          trailer: [
-            'I remember the playful bits working best once the obstacle language stayed consistent at speed.'
-          ],
+          weird: [],
+          fun: [],
+          trailer: [],
           trailerFact: []
         },
         '404.html': {
           fact: [
-            'Even a fallback page is doing route work.'
+            'Even a fallback page is a designed page, after all is said and done.'
           ],
           weird: [
-            'Lost pages drift a little at night.'
+            'I don\'t know how you got here but now I can\'t let you leave.'
           ],
           fun: [
-            'A good dead end still points home.'
+            'A good deed will not go unpunished.'
           ],
-          trailer: [],
-          trailerFact: []
+          trailer: [ 'There is no trailer here.'],
+          trailerFact: ['There is no trailer here.']
         }
       }
     }
