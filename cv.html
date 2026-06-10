@@ -312,6 +312,17 @@ body.is-dark .resume-graphic .cv-soft-skills h3,
     margin: .05rem .12rem;
   }
 }
+/* CV page only: hide Wickle if the shared site script tries to inject it here. */
+[id*="wickle" i],
+[class*="wickle" i],
+[data-wickle],
+[aria-label*="Wickle" i],
+[title*="Wickle" i] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
 @media print {
   .sidebar, .theme-toggle {
     display: none !important;
@@ -528,80 +539,34 @@ body.is-dark .resume-graphic .cv-soft-skills h3,
 </div>
 <script>
 (function () {
-  var REQUIRED_TOGGLE_COUNT = 3;
-  var TOGGLE_COUNT_KEY = 'sb-cv-wickle-switch-toggle-count';
-  var rectPatchKey = '__sbCvWickleSwitchGateRectPatched';
+  window.SB_DISABLE_WICKLE = true;
+  window.DISABLE_WICKLE = true;
+  window.__disableWickle = true;
 
-  function readToggleCount() {
-    try {
-      return Number(localStorage.getItem(TOGGLE_COUNT_KEY) || '0') || 0;
-    } catch (e) {
-      return 0;
-    }
-  }
+  var wickleSelector = '[id*="wickle" i], [class*="wickle" i], [data-wickle], [aria-label*="Wickle" i], [title*="Wickle" i]';
 
-  function writeToggleCount(value) {
-    try {
-      localStorage.setItem(TOGGLE_COUNT_KEY, String(value));
-    } catch (e) {}
-  }
-
-  function wickleSwitchReady() {
-    return readToggleCount() >= REQUIRED_TOGGLE_COUNT;
-  }
-
-  function refreshWickleSwitchGate() {
-    var ready = wickleSwitchReady();
-    document.querySelectorAll('.theme-toggle-stack').forEach(function (stack) {
-      stack.dataset.wickleLightSwitchReady = ready ? 'true' : 'false';
+  function removeWickle() {
+    document.querySelectorAll(wickleSelector).forEach(function (node) {
+      node.remove();
     });
   }
 
   document.addEventListener('click', function (ev) {
     var target = ev.target && ev.target.closest ? ev.target.closest('.theme-toggle') : null;
-    if (!target) return;
-
-    if (ev.isTrusted) {
-      writeToggleCount(readToggleCount() + 1);
-      refreshWickleSwitchGate();
-      return;
-    }
-
-    if (!wickleSwitchReady()) {
+    if (target && !ev.isTrusted) {
       ev.preventDefault();
       ev.stopImmediatePropagation();
     }
   }, true);
 
-  if (window.Element && !window[rectPatchKey]) {
-    var nativeGetBoundingClientRect = Element.prototype.getBoundingClientRect;
-    window[rectPatchKey] = true;
-    Element.prototype.getBoundingClientRect = function () {
-      if (!wickleSwitchReady() && this.classList && this.classList.contains('theme-toggle-stack')) {
-        return {
-          x: 0,
-          y: 0,
-          top: 0,
-          right: 0,
-          bottom: 0,
-          left: 0,
-          width: 0,
-          height: 0,
-          toJSON: function () { return this; }
-        };
-      }
-      return nativeGetBoundingClientRect.apply(this, arguments);
-    };
-  }
+  removeWickle();
 
   if (window.MutationObserver) {
-    new MutationObserver(refreshWickleSwitchGate).observe(document.documentElement, {
+    new MutationObserver(removeWickle).observe(document.documentElement, {
       childList: true,
       subtree: true
     });
   }
-
-  refreshWickleSwitchGate();
 }());
 </script>
 <script defer="True" src="assets/site.js"></script></body>
