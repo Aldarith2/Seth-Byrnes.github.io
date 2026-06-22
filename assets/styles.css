@@ -1429,7 +1429,8 @@ body{background-color:var(--bg);background-repeat:repeat;background-size:192px 1
 }
 
 .wickle-dust-particle,
-.wickle-scum-particle{
+.wickle-scum-particle,
+.avatar-secret-particle{
   position:fixed;
   width:5px;
   height:5px;
@@ -1486,6 +1487,7 @@ body{background-color:var(--bg);background-repeat:repeat;background-size:192px 1
 @media (prefers-reduced-motion: reduce){
   .wickle-dust-particle,
   .wickle-scum-particle,
+  .avatar-secret-particle,
   .wickle-dropped-accessory{
     animation:none !important;
   }
@@ -2225,4 +2227,23 @@ body{background-color:var(--bg);background-repeat:repeat;background-size:192px 1
 
 .theme-toggle-stack{
   padding-top:0;
+}
+
+
+/*
+ * WICKLE DISABLED SITE-WIDE — 2026-06-22
+ * Reversible change: remove this block and uncomment the Wickle setup calls in assets/site.js.
+ * This hides any Wickle DOM left by cache, old session state, or accidental runtime injection.
+ */
+.wickle-peek,
+.wickle-bubble,
+.wickle-death-fall,
+.wickle-dropped-accessory,
+[data-wickle],
+[aria-label*="Wickle" i],
+[title*="Wickle" i] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
 }

@@ -11,6 +11,17 @@
   var root = document.documentElement;
   var body = document.body;
 
+  /*
+   * WICKLE DISABLED SITE-WIDE — 2026-06-22
+   * Reversible change: set this to false, remove the early returns in the two
+   * Wickle setup functions below, and uncomment the two Wickle calls in init().
+   */
+  var WICKLE_DISABLED_SITE_WIDE = true;
+
+  function wickleIsDisabled() {
+    return WICKLE_DISABLED_SITE_WIDE || window.SB_DISABLE_WICKLE === true || window.DISABLE_WICKLE === true || window.__disableWickle === true;
+  }
+
   function pickTheme() {
     try {
       if (pickBroken()) return 'dark';
@@ -920,7 +931,7 @@
         clickTimer = 0;
       }, 1800);
 
-      emitPixelBurst(avatar, secretPalette, 6 + (clickCount * 6), 'wickle-dust-particle');
+      emitPixelBurst(avatar, secretPalette, 6 + (clickCount * 6), 'avatar-secret-particle');
 
       var existing = host.querySelector('.avatar-secret-message');
       if (existing) existing.remove();
@@ -1013,6 +1024,8 @@
 
 
   function setupWickleDividerOverlap() {
+    /* WICKLE DISABLED SITE-WIDE — remove this guard to restore Wickle divider overlap styling. */
+    if (wickleIsDisabled()) return;
     var styleId = 'sb-wickle-divider-overlap-style';
     if (document.getElementById(styleId)) return;
     var style = document.createElement('style');
@@ -1878,6 +1891,8 @@
 
 
   function setupDividerWickle() {
+    /* WICKLE DISABLED SITE-WIDE — remove this guard to restore Wickle runtime injection. */
+    if (wickleIsDisabled()) return;
     var dividers = Array.from(document.querySelectorAll('.section-divider'));
     var finalDivider = document.getElementById('final-page-divider');
     if (finalDivider && dividers.indexOf(finalDivider) === -1) dividers.push(finalDivider);
@@ -3283,10 +3298,18 @@
     relocateLocationLine();
     setupSidebarTightFit();
     setupDividerDecor();
-    setupWickleDividerOverlap();
+    /*
+     * WICKLE DISABLED SITE-WIDE — 2026-06-22
+     * Re-enable by uncommenting these calls after removing the Wickle guards above
+     * and deleting the CSS kill-switch block in styles.css.
+     *
+     * setupWickleDividerOverlap();
+     */
     applyTheme(pickTheme());
     setupThemeToggle();
-    setupDividerWickle();
+    /*
+     * setupDividerWickle();
+     */
     setupLightbox();
     setupMediaPriming();
     setupVideoPlayback();

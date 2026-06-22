@@ -70,7 +70,9 @@
 
 <p>You can see the full CV or visit one of the featured works to see galleries of my projects as well as examples of work. Note that examples are compiled from webpages or formats which do not translate well to PDFs, and the formatting is not as clean as it was when it was designed.</p>
 
-<p>The infrastructure of this site is a little old-fashioned, but I feel it has a tactile charm to it. The Lightswitch is at the bottom left - <em>Please remember to turn it off when you leave!</em></p><p>Minor PSA// (A26/2026)</p><p>The site appears to have taken on a rather permanent guest.</p><p>Inspection of the code shows an errant character is moving between the pages and causing some disruption.</p><p>I apologize, it seems mostly benevolent but does not like bright lights.</p></section>
+<p>The infrastructure of this site is a little old-fashioned, but I feel it has a tactile charm to it. The Lightswitch is at the bottom left - <em>Please remember to turn it off when you leave!</em></p><!-- WICKLE DISABLED SITE-WIDE — hidden Wickle PSA, reversible by uncommenting.
+<p>Minor PSA// (A26/2026)</p><p>The site appears to have taken on a rather permanent guest.</p><p>Inspection of the code shows an errant character is moving between the pages and causing some disruption.</p><p>I apologize, it seems mostly benevolent but does not like bright lights.</p>
+--></section>
 </div>
 </main>
 </div>
@@ -119,7 +121,7 @@
       var colors = ['#ff4d6d', '#ff9f1c', '#ffe066', '#2ec4b6', '#3a86ff', '#8338ec'];
       for (var i = 0; i < 28; i += 1) {
         var particle = document.createElement('span');
-        particle.className = 'wickle-dust-particle';
+        particle.className = 'avatar-secret-particle';
         particle.style.left = (rect.left + rect.width * (0.18 + Math.random() * 0.64)).toFixed(2) + 'px';
         particle.style.top = (rect.top + rect.height * (0.18 + Math.random() * 0.64)).toFixed(2) + 'px';
         particle.style.setProperty('--wpx-x', ((Math.random() * 120) - 60).toFixed(2) + 'px');
